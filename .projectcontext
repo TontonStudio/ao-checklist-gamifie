@@ -1,0 +1,123 @@
+# Contexte du projet : AO Checklist Gamifié
+Dernière mise à jour : 10 avril 2025
+
+## Vue d'ensemble
+Un outil web autonome de style Game Boy (8-bit) permettant de suivre l'avancement des réponses aux appels d'offres de Tonton Studio de manière ludique et engageante. Le projet utilise uniquement HTML, CSS et JavaScript vanilla pour une portabilité maximale.
+
+## Architecture technique
+- **Type d'application** : Application web front-end autonome
+- **Langages** : HTML5, CSS3, JavaScript ES6+
+- **Stockage de données** : localStorage (browser)
+- **Dépendances externes** : Aucune (sauf la police Google Font "Press Start 2P")
+- **Compatibilité cible** : Navigateurs modernes (Chrome, Firefox, Safari, Edge)
+
+## Structure des fichiers
+```
+/__CHECKLIST__/
+├── index.html        # Structure HTML principale
+├── style.css         # Feuille de style Game Boy
+├── script.js         # Logique interactive et effets
+├── tasks.js          # Configuration des livrables et sous-tâches
+├── img/              # Images et logo
+│   ├── TTS_Logo.png           # Logo standard
+│   └── TTS_Logo_Checked.png   # Logo pour mode victoire
+└── audio/            # Effets sonores
+    ├── success.mp3   # Son de complétion d'un livrable
+    ├── check.mp3     # Son de cochage d'une tâche
+    ├── uncheck.mp3   # Son de décochage d'une tâche
+    └── finish.mp3    # Son de finalisation complète
+```
+
+## Modèle de données
+1. **Format des tâches** (tasks.js) :
+```javascript
+const tasks = [
+  {
+    label: 'Nom du livrable',
+    filename: 'Nom_de_fichier_attendu.pdf',
+    subtasks: [
+      'Sous-tâche 1',
+      'Sous-tâche 2',
+      ...
+    ]
+  },
+  ...
+];
+```
+
+2. **Format de stockage** (localStorage) :
+```javascript
+// Clé : tontonAoProgress
+// Valeur (exemple) :
+{
+  "0": [0, 1, 3], // Indices des sous-tâches complétées pour le livrable 0
+  "1": [0, 1, 2], // Indices des sous-tâches complétées pour le livrable 1
+  ...
+}
+```
+
+## Fonctionnalités principales
+1. **Gestion des livrables**
+   - Affichage sous forme d'accordéons avec sous-tâches
+   - Sauvegarde automatique de la progression
+   - Interaction complète (clic partout pour cocher/décocher)
+
+2. **Comportement dynamique**
+   - Repli automatique des livrables complétés
+   - Effets visuels et sonores à la complétion
+   - Affichage du nom de fichier attendu avec bouton de copie
+
+3. **Barre de progression**
+   - Affichage du pourcentage total de complétion
+   - Mise à jour en temps réel
+
+4. **Mode "Victoire" (doré)**
+   - Activation à 100% de complétion
+   - Changement complet de thème visuel
+   - Effets spéciaux (flash, feux d'artifice)
+   - Message de félicitation
+
+5. **Réinitialisation**
+   - Bouton pour remettre à zéro la progression
+   - Confirmation avant réinitialisation
+
+## Direction artistique
+- **Style visuel** : Game Boy rétro (8-bit)
+- **Palette de couleurs** : 
+  - Mode standard : Dégradés de verts typiques Game Boy
+  - Mode doré : Dégradés d'or et beige
+- **Police** : "Press Start 2P" (Google Fonts)
+- **Animations** : Transitions, particules, flash, feux d'artifice
+- **Sons** : Effets 8-bit pour interactions et récompenses
+
+## État du développement
+- **Version actuelle** : 1.0.0
+- **État** : Déployé sur GitHub (TontonStudio/ao-checklist-gamifie)
+- **Dernières modifications** : 
+  1. Initialisation du dépôt Git
+  2. Création des fichiers de documentation standard
+  3. Ajout et centrage du logo dans le README
+
+## Prochaines améliorations possibles
+1. Ajout de dates limites pour les livrables
+2. Mode multi-utilisateur avec synchronisation cloud
+3. Export PDF de l'état d'avancement
+4. Ajout de notes ou commentaires sur les tâches
+5. Filtres pour voir uniquement les tâches à faire
+6. Personnalisation des thèmes par l'utilisateur
+7. Notifications pour rappeler les tâches en retard
+
+## Notes techniques importantes
+- L'application est conçue pour fonctionner entièrement côté client
+- Les animations utilisent requestAnimationFrame pour optimiser les performances
+- La taille des effets de particules est limitée pour éviter le lag sur machines moins puissantes
+- L'application n'est pas optimisée pour mobile (usage prévu sur ordinateur)
+
+## Décisions techniques
+- **Choix de JavaScript vanilla** : Pour éviter toute dépendance et garantir la portabilité
+- **localStorage vs IndexedDB** : Simplicité d'implémentation et besoins limités en stockage
+- **Conception modulaire** : Pour faciliter l'extension et la maintenance future
+
+## Guide de dépannage
+- **Son ne joue pas** : Certains navigateurs bloquent la lecture automatique. Solution : ajouter une interaction utilisateur avant de jouer le son.
+- **localStorage non disponible** : En mode navigation privée, localStorage peut être désactivé. Solution : vérifier sa disponibilité et proposer une alternative.
