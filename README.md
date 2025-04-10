@@ -2,7 +2,9 @@
 
 Un outil web gamifié au style Game Boy pour suivre l'avancement des réponses aux appels d'offres de Tonton Studio.
 
-<img src="img/TTS_Logo.png" alt="Tonton Studio Logo" width="250" height="250"/>
+<p align="center">
+  <img src="img/TTS_Logo.png" alt="Tonton Studio Logo" width="250" height="250"/>
+</p>
 
 ## Description
 
