@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AO Checklist - Tonton Studio</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="gameboy-container">
+    <header>
+      <div class="logo-container">
+        <img src="img/TTS_Logo.png" alt="Tonton Studio Logo" class="logo">
+      </div>
+      <h1>AO Checklist</h1>
+      <div id="completion-message" class="completion-message">
+        T'as plus qu'à envoyer ton dossier ! Bonne chance !!!
+      </div>
+      <div class="progress-container">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <div class="progress-text" id="progress-text">0%</div>
+      </div>
+    </header>
+    
+    <main id="task-list">
+      <!-- Les tâches seront injectées ici via JavaScript -->
+    </main>
+    
+    <footer>
+      <div class="controls">
+        <button id="reset-btn" class="pixel-btn">Reset Progress</button>
+      </div>
+      <div class="credits">
+        <p>TONTON STUDIO © 2025</p>
+      </div>
+    </footer>
+  </div>
+  
+  <div id="particles-container" class="particles-container"></div>
+  
+  <audio id="success-sound" src="audio/success.mp3" preload="auto"></audio>
+  <audio id="check-sound" src="audio/check.mp3" preload="auto"></audio>
+  <audio id="uncheck-sound" src="audio/uncheck.mp3" preload="auto"></audio>
+  <audio id="finish-sound" src="audio/finish.mp3" preload="auto"></audio>
+  
+  <div id="flash-overlay" class="flash-overlay"></div>
+  <div id="fireworks-container" class="fireworks-container"></div>
+  
+  <script src="tasks.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

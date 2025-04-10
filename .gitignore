@@ -1,0 +1,27 @@
+# Fichiers système
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Fichiers d'éditeur
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Logs
+*.log
+npm-debug.log*
+
+# Dépendances (si ajoutées à l'avenir)
+/node_modules
+/vendor
+
+# Fichiers de build (si ajoutés à l'avenir)
+/dist
+/build
+
+# Fichiers de sauvegarde
+*~
+*.bak
+*.swp
