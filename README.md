@@ -15,11 +15,14 @@ Cet outil offre une expérience ludique pour gérer les tâches liées à la pr�
 - Suivi des livrables et sous-tâches pour les appels d'offres
 - Interface interactive au style Game Boy rétro
 - Checkbox principale permettant de cocher/décocher toutes les sous-tâches d'un livrable en un seul clic
+- Visualisation intuitive avec symboles de coche (✓) pour les tâches complétées
+- Mise en évidence visuelle des tâches cochées (couleur de fond différente)
 - Effets visuels et sonores de récompense
 - Sauvegarde automatique de la progression (localStorage)
 - Mode "Victoire" avec thème doré lorsque 100% des tâches sont complétées
 - Défilement automatique vers le haut lors de la complétion totale
-- Conception responsive adaptée aux appareils mobiles
+- Conception responsive optimisée pour mobile et desktop
+- Fonction de copie du nom de fichier pour chaque livrable
 - Fonctionne entièrement côté client, sans dépendance serveur
 
 ## Installation
@@ -64,13 +67,20 @@ Pour adapter l'outil à vos besoins :
 2. Ajustez les styles dans `style.css` pour changer l'apparence
 3. Remplacez les sons dans le dossier `audio/` par vos propres effets sonores
 
-## Compatibilité
+## Compatibilité et accessibilité
 
 Compatible avec les navigateurs modernes :
 - Chrome (recommandé)
 - Firefox
 - Safari
 - Edge
+
+Fonctionnalités d'accessibilité et UX :
+- Contraste optimisé pour une meilleure lisibilité
+- Interactions tactiles améliorées sur appareils mobiles
+- Retours visuels clairs des actions utilisateur
+- Taille d'interface adaptative selon les appareils
+- Sélection intuitive par catégorie (checkbox principale)
 
 ## Crédits
 
