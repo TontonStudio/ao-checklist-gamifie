@@ -57,8 +57,14 @@ document.addEventListener('DOMContentLoaded', function() {
       const taskHeader = document.createElement('div');
       taskHeader.className = 'task-header';
       
+      // Vérifier si toutes les sous-tâches sont complétées pour déterminer l'état de la checkbox principale
+      const allChecked = subtaskCount > 0 && savedSubtasks.length === subtaskCount;
+      
       taskHeader.innerHTML = `
-        <h2>${task.label}</h2>
+        <div class="task-title-container">
+          <input type="checkbox" class="task-main-checkbox" ${allChecked ? 'checked' : ''}>
+          <h2>${task.label}</h2>
+        </div>
         <span class="task-progress">0/${subtaskCount}</span>
       `;
       
@@ -71,9 +77,35 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       
       // Gestionnaire d'événement pour l'accordéon
-      taskHeader.addEventListener('click', () => {
+      taskHeader.addEventListener('click', (e) => {
+        // Ne pas déclencher l'accordéon si on clique sur la checkbox principale
+        if (e.target.classList.contains('task-main-checkbox')) {
+          return;
+        }
         // Permettre de déplier même si complété
         taskElement.classList.toggle('open');
+      });
+      
+      // Gestionnaire d'événement pour la checkbox principale
+      const mainCheckbox = taskHeader.querySelector('.task-main-checkbox');
+      mainCheckbox.addEventListener('change', function(e) {
+        // Empêcher la propagation pour éviter le déclenchement de l'accordéon
+        e.stopPropagation();
+        
+        const isChecked = this.checked;
+        const checkboxes = taskElement.querySelectorAll('.subtask-checkbox');
+        
+        // Cocher/décocher toutes les sous-tâches
+        checkboxes.forEach(checkbox => {
+          // Seulement changer l'état si nécessaire pour éviter des événements inutiles
+          if (checkbox.checked !== isChecked) {
+            checkbox.checked = isChecked;
+            
+            // Déclencher manuellement l'événement change
+            const changeEvent = new Event('change', { bubbles: true });
+            checkbox.dispatchEvent(changeEvent);
+          }
+        });
       });
       
       // Création du contenu de la tâche
@@ -240,13 +272,14 @@ document.addEventListener('DOMContentLoaded', function() {
    * Active le mode doré (quand tout est complété)
    */
   function activateGoldenMode() {
-    // Faire défiler vers le haut de la page en douceur
+    // Assurer que l'écran défile en douceur vers le haut en premier
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
     });
     
     // Attendre que le défilement soit terminé avant d'activer le mode doré
+    // Délai plus long pour s'assurer que l'animation de défilement est terminée
     setTimeout(() => {
       // Changer le logo
       const logo = document.querySelector('.logo');
@@ -262,7 +295,7 @@ document.addEventListener('DOMContentLoaded', function() {
       if (completionMessage) {
         completionMessage.style.display = 'block';
       }
-    }, 500); // Délai pour permettre le défilement avant les animations
+    }, 800); // Délai augmenté pour permettre au défilement de se terminer complètement
   }
   
   /**
@@ -412,6 +445,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Mise à jour du compteur
     const progressElement = taskElement.querySelector('.task-progress');
     progressElement.textContent = `${completedCount}/${subtaskCount}`;
+    
+    // Mise à jour de la checkbox principale
+    const mainCheckbox = taskElement.querySelector('.task-main-checkbox');
+    mainCheckbox.checked = (completedCount === subtaskCount && subtaskCount > 0);
     
     // Vérification si la tâche est complète
     if (completedCount === subtaskCount) {
