@@ -142,6 +142,20 @@ document.addEventListener('DOMContentLoaded', function() {
           }
         });
         
+        // Ajouter une classe pour les tâches cochées (pour les navigateurs qui ne supportent pas :has)
+        const checkbox = subtaskItem.querySelector('.subtask-checkbox');
+        if (checkbox.checked) {
+          subtaskItem.classList.add('checked-subtask');
+        }
+        
+        checkbox.addEventListener('change', function() {
+          if (this.checked) {
+            subtaskItem.classList.add('checked-subtask');
+          } else {
+            subtaskItem.classList.remove('checked-subtask');
+          }
+        });
+        
         subtasksList.appendChild(subtaskItem);
       });
       
