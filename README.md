@@ -14,9 +14,12 @@ Cet outil offre une expérience ludique pour gérer les tâches liées à la pr�
 
 - Suivi des livrables et sous-tâches pour les appels d'offres
 - Interface interactive au style Game Boy rétro
+- Checkbox principale permettant de cocher/décocher toutes les sous-tâches d'un livrable en un seul clic
 - Effets visuels et sonores de récompense
 - Sauvegarde automatique de la progression (localStorage)
 - Mode "Victoire" avec thème doré lorsque 100% des tâches sont complétées
+- Défilement automatique vers le haut lors de la complétion totale
+- Conception responsive adaptée aux appareils mobiles
 - Fonctionne entièrement côté client, sans dépendance serveur
 
 ## Installation
