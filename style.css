@@ -277,13 +277,16 @@ h1 {
 }
 
 .task-main-checkbox:checked::after {
-  content: "";
+  content: "✓"; /* Symbole de coche */
   position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 12px;
-  height: 12px;
-  background-color: var(--gb-darkest); /* Marque intérieure plus contrastée */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--gb-darkest); /* Couleur de la coche */
+  font-size: 16px; /* Taille de la coche légèrement plus grande */
+  font-weight: bold;
+  text-shadow: 0 0 2px rgba(255, 255, 255, 0.5); /* Ombre claire pour augmenter la visibilité */
+  line-height: 1;
 }
 
 .task-header h2 {
@@ -411,14 +414,16 @@ h1 {
 }
 
 .subtask-checkbox:checked::after {
-  content: "";
+  content: "✓"; /* Symbole de coche */
   position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 10px;
-  height: 10px;
-  background-color: var(--gb-lightest); /* Utilisation d'une couleur plus visible et en harmonie avec l'esthétique */
-  box-shadow: 0 0 2px rgba(0, 0, 0, 0.3); /* Légère ombre pour augmenter la visibilité */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--gb-lightest); /* Couleur de la coche */
+  font-size: 14px; /* Taille de la coche */
+  font-weight: bold;
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.5); /* Ombre pour augmenter la visibilité */
+  line-height: 1;
 }
 
 .subtask-label {
@@ -429,8 +434,8 @@ h1 {
 
 .subtask-checkbox:checked + .subtask-label {
   text-decoration: line-through;
-  opacity: 0.7;
-  color: var(--gb-dark); /* Texte plus foncé pour une meilleure lisibilité */
+  opacity: 0.8;
+  color: var(--gb-darkest); /* Texte beaucoup plus foncé pour une meilleure lisibilité */
   font-style: italic; /* Italique pour différencier davantage */
 }
 
@@ -459,7 +464,9 @@ h1 {
 }
 
 .golden-mode .subtask-checkbox:checked + .subtask-label {
-  color: #8b4513; /* Brun foncé pour le texte en mode doré */
+  color: #5c2e0a; /* Brun très foncé pour le texte en mode doré - amélioration de la lisibilité */
+  text-shadow: 0 0 1px rgba(255, 255, 255, 0.3); /* Légère ombre pour améliorer la lisibilité */
+  opacity: 0.9; /* Légèrement plus visible */
 }
 
 /* Renforcement de la visibilité des cases cochées en mode doré */
@@ -469,7 +476,13 @@ h1 {
 }
 
 .golden-mode .subtask-checkbox:checked::after {
-  background-color: #8b4513; /* Marque intérieure brune */
+  color: #8b4513; /* Couleur brune pour la coche */
+  text-shadow: 0 0 2px rgba(255, 255, 255, 0.7); /* Ombre claire pour contraste */
+}
+
+.golden-mode .task-main-checkbox:checked::after {
+  color: #8b4513; /* Couleur brune pour la coche */
+  text-shadow: 0 0 2px rgba(255, 255, 255, 0.7); /* Ombre claire pour contraste */
 }
 
 .task-footer {
