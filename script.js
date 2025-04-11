@@ -668,10 +668,29 @@ document.addEventListener('DOMContentLoaded', function() {
       copyBtns.forEach(btn => {
         if (btn.dataset.filename === text) {
           const originalText = btn.textContent;
+          
+          // Stocker la largeur actuelle du bouton pour la préserver
+          const currentWidth = btn.offsetWidth;
+          const currentHeight = btn.offsetHeight;
+          
+          // Appliquer une largeur fixe temporaire pour éviter le redimensionnement
+          if (!btn.dataset.originalWidth) {
+            btn.dataset.originalWidth = `${currentWidth}px`;
+            btn.dataset.originalHeight = `${currentHeight}px`;
+          }
+          
           btn.textContent = 'Copié !';
           
           setTimeout(() => {
             btn.textContent = originalText;
+            
+            // Retirer la largeur fixe après que le texte soit revenu à l'original
+            setTimeout(() => {
+              if (btn.dataset.originalWidth) {
+                delete btn.dataset.originalWidth;
+                delete btn.dataset.originalHeight;
+              }
+            }, 100);
           }, 1500);
         }
       });

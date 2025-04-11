@@ -415,7 +415,8 @@ h1 {
   left: 2px;
   width: 10px;
   height: 10px;
-  background-color: var(--gold-light); /* Utilisation d'une couleur plus visible */
+  background-color: var(--gb-lightest); /* Utilisation d'une couleur plus visible et en harmonie avec l'esthétique */
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.3); /* Légère ombre pour augmenter la visibilité */
 }
 
 .subtask-label {
@@ -427,22 +428,24 @@ h1 {
 .subtask-checkbox:checked + .subtask-label {
   text-decoration: line-through;
   opacity: 0.7;
+  color: var(--gb-dark); /* Texte plus foncé pour une meilleure lisibilité */
+  font-style: italic; /* Italique pour différencier davantage */
 }
 
 /* Style pour toute la ligne quand la tâche est cochée */
 .subtask-checkbox:checked ~ .subtask-label,
 .subtask-checkbox:checked ~ * {
-  background-color: rgba(255, 149, 24, 0.15); /* Légère teinte orange */
+  background-color: rgba(139, 172, 15, 0.2); /* Teinte verte légère qui correspond à l'esthétique Game Boy */
 }
 
 /* Style pour toute la ligne de la sous-tâche cochée - utilisant :has() */
 .subtask:has(.subtask-checkbox:checked) {
-  background-color: rgba(255, 149, 24, 0.15); /* Légère teinte orange */
+  background-color: rgba(139, 172, 15, 0.2); /* Teinte verte légère */
 }
 
 /* Style alternatif pour les navigateurs ne supportant pas :has() */
 .checked-subtask {
-  background-color: rgba(255, 149, 24, 0.15); /* Légère teinte orange */
+  background-color: rgba(139, 172, 15, 0.2); /* Teinte verte légère */
 }
 
 .task-footer {
@@ -486,6 +489,15 @@ h1 {
   font-size: 10px;
   transition: transform 0.2s, background-color 0.2s;
   margin-right: 5px; /* Marge supplémentaire à droite */
+  min-width: 85px; /* Largeur fixe minimale */
+  width: auto;
+  text-align: center;
+  white-space: nowrap; /* Empêche le texte de passer à la ligne */
+  height: auto;
+  min-height: 32px; /* Hauteur fixe minimale */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .copy-btn:hover {
