@@ -258,10 +258,10 @@ h1 {
 .task-main-checkbox {
   appearance: none;
   -webkit-appearance: none;
-  width: 20px;
-  height: 20px;
-  min-width: 20px; /* Empêche le rétrécissement */
-  min-height: 20px; /* Empêche le rétrécissement */
+  width: 24px;
+  height: 24px;
+  min-width: 24px; /* Empêche le rétrécissement - taille augmentée */
+  min-height: 24px; /* Empêche le rétrécissement - taille augmentée */
   border: 3px solid var(--gb-lightest);
   background-color: var(--gb-dark);
   cursor: pointer;
@@ -271,17 +271,19 @@ h1 {
 }
 
 .task-main-checkbox:checked {
-  background-color: var(--gb-lightest);
+  background-color: var(--gold-light); /* Couleur dorée plus visible */
+  border-color: var(--gb-darkest); /* Bordure plus contrastée */
+  box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); /* Ajout d'une légère lueur */
 }
 
 .task-main-checkbox:checked::after {
   content: "";
   position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 10px;
-  height: 10px;
-  background-color: var(--gb-dark);
+  top: 3px;
+  left: 3px;
+  width: 12px;
+  height: 12px;
+  background-color: var(--gb-darkest); /* Marque intérieure plus contrastée */
 }
 
 .task-header h2 {
@@ -435,17 +437,39 @@ h1 {
 /* Style pour toute la ligne quand la tâche est cochée */
 .subtask-checkbox:checked ~ .subtask-label,
 .subtask-checkbox:checked ~ * {
-  background-color: rgba(139, 172, 15, 0.2); /* Teinte verte légère qui correspond à l'esthétique Game Boy */
+  background-color: rgba(48, 98, 48, 0.5); /* Teinte verte plus foncée et plus opaque */
 }
 
 /* Style pour toute la ligne de la sous-tâche cochée - utilisant :has() */
 .subtask:has(.subtask-checkbox:checked) {
-  background-color: rgba(139, 172, 15, 0.2); /* Teinte verte légère */
+  background-color: rgba(48, 98, 48, 0.5); /* Teinte verte plus foncée et plus opaque */
 }
 
 /* Style alternatif pour les navigateurs ne supportant pas :has() */
 .checked-subtask {
-  background-color: rgba(139, 172, 15, 0.2); /* Teinte verte légère */
+  background-color: rgba(48, 98, 48, 0.5); /* Teinte verte plus foncée et plus opaque */
+}
+
+/* Modifications pour le mode doré */
+.golden-mode .subtask-checkbox:checked ~ .subtask-label,
+.golden-mode .subtask-checkbox:checked ~ *,
+.golden-mode .subtask:has(.subtask-checkbox:checked),
+.golden-mode .checked-subtask {
+  background-color: rgba(139, 69, 19, 0.25); /* Teinte brune/dorée pour le mode doré */
+}
+
+.golden-mode .subtask-checkbox:checked + .subtask-label {
+  color: #8b4513; /* Brun foncé pour le texte en mode doré */
+}
+
+/* Renforcement de la visibilité des cases cochées en mode doré */
+.golden-mode .subtask-checkbox:checked {
+  background-color: #daa520; /* Or plus foncé */
+  border-color: #8b4513; /* Bordure brune */
+}
+
+.golden-mode .subtask-checkbox:checked::after {
+  background-color: #8b4513; /* Marque intérieure brune */
 }
 
 .task-footer {
@@ -489,8 +513,8 @@ h1 {
   font-size: 10px;
   transition: transform 0.2s, background-color 0.2s;
   margin-right: 5px; /* Marge supplémentaire à droite */
-  min-width: 85px; /* Largeur fixe minimale */
-  width: auto;
+  min-width: 90px; /* Largeur fixe minimale augmentée */
+  width: 90px; /* Largeur fixe */
   text-align: center;
   white-space: nowrap; /* Empêche le texte de passer à la ligne */
   height: auto;
@@ -498,6 +522,33 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden; /* Empêche le débordement */
+}
+
+/* Style spécifique pour le mode doré */
+.golden-mode .copy-btn {
+  width: 90px; /* Largeur fixe également en mode doré */
+  background-color: #115740; /* Couleur de fond plus contrastée */
+  color: white; /* Texte blanc pour plus de lisibilité */
+  border-color: black;
+}
+
+/* Ajustements pour mobile */
+@media (max-width: 768px) {
+  .copy-btn {
+    padding: 5px 5px; /* Réduction du padding horizontal sur mobile */
+    font-size: 8px; /* Réduction de la taille de police sur mobile */
+  }
+  
+  .task-footer {
+    padding: 10px 8px; /* Réduction du padding du footer pour donner plus d'espace */
+  }
+  
+  .filename-display {
+    margin-right: 8px; /* Réduction de la marge droite sur mobile */
+    flex-grow: 1;
+    min-width: 0; /* Permettre au nom de fichier de se rétrécir si nécessaire */
+  }
 }
 
 .copy-btn:hover {
