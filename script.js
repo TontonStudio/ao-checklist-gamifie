@@ -206,27 +206,22 @@ document.addEventListener('DOMContentLoaded', function() {
       const taskFooter = document.createElement('div');
       taskFooter.className = 'task-footer';
       
-      // Deux cas de figure possibles:
-      // 1. Les sous-tâches ont des fichiers individuels -> afficher un message d'information
-      // 2. Le livrable a un nom de fichier global -> afficher le nom de fichier et un bouton pour le copier
+      // Logique de contenu du footer:
+      // 1. Si des sous-tâches ont des fichiers individuels -> afficher uniquement le message d'information
+      // 2. Sinon, si le livrable a un nom de fichier global -> afficher ce nom de fichier avec un bouton copier
+      // 3. Sinon -> message "Aucun fichier associé"
       
-      if (task.filename) {
-        // Si le livrable a un nom de fichier global, toujours l'afficher
-        let footerContent = `
+      if (hasSubtaskFiles) {
+        // Si le livrable contient des sous-tâches avec des fichiers, afficher uniquement le message
+        taskFooter.innerHTML = `
+          <div class="filename-display info-message">Les fichiers individuels sont accessibles depuis chaque sous-tâche</div>
+        `;
+      } else if (task.filename) {
+        // Si le livrable a un nom de fichier global et aucune sous-tâche avec des fichiers
+        taskFooter.innerHTML = `
           <div class="filename-display">${task.filename}</div>
           <button class="copy-btn" data-filename="${task.filename}">📋 Copier</button>
         `;
-        
-        // Si en plus il y a des sous-tâches avec des fichiers, ajouter un message d'information
-        if (hasSubtaskFiles) {
-          footerContent += `
-            <div class="info-message-container">
-              <div class="info-message">Les fichiers individuels sont aussi accessibles depuis chaque sous-tâche</div>
-            </div>
-          `;
-        }
-        
-        taskFooter.innerHTML = footerContent;
       } else {
         // Fallback au cas où
         taskFooter.innerHTML = `

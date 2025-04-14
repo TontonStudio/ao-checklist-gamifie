@@ -588,11 +588,6 @@ h1 {
   text-overflow: ellipsis;
 }
 
-.info-message-container {
-  flex-basis: 100%;
-  margin-top: 10px;
-}
-
 .info-message {
   background-color: var(--gb-dark);
   color: var(--gb-lightest);
@@ -601,7 +596,7 @@ h1 {
   text-align: center;
   padding: 5px;
   border-radius: 3px;
-  margin-top: 5px;
+  width: 100%;
 }
 
 .golden-mode .info-message {
