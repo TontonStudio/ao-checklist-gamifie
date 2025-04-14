@@ -220,7 +220,9 @@ document.addEventListener('DOMContentLoaded', function() {
         // Si le livrable a un nom de fichier global et aucune sous-tâche avec des fichiers
         taskFooter.innerHTML = `
           <div class="filename-display">${task.filename}</div>
-          <button class="copy-btn" data-filename="${task.filename}">📋 Copier</button>
+          <div class="copy-btn-container">
+            <button class="copy-btn" data-filename="${task.filename}">📋 Copier</button>
+          </div>
         `;
       } else {
         // Fallback au cas où
