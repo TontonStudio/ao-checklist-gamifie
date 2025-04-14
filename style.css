@@ -624,6 +624,16 @@ h1 {
   text-overflow: ellipsis;
 }
 
+@media (max-width: 768px) {
+  .filename-display {
+    min-width: 0; /* Éliminer la largeur minimale sur mobile */
+    font-size: 9px; /* Texte légèrement plus petit */
+    padding: 4px 8px; /* Moins de padding */
+    margin-right: 8px; /* Moins d'espace avant le bouton */
+    max-width: 65%; /* Limiter la largeur pour laisser de la place au bouton */
+  }
+}
+
 .info-message {
   background-color: var(--gb-dark);
   color: var(--gb-lightest);
@@ -653,6 +663,14 @@ h1 {
   opacity: 0;
   height: 0;
   overflow: hidden;
+}
+
+/* Style spécifique pour mobile */
+@media (max-width: 768px) {
+  .task-footer {
+    padding: 8px 10px; /* Moins de padding pour économiser de l'espace */
+    flex-wrap: nowrap; /* Forcer le bouton à rester sur la même ligne */
+  }
 }
 
 .copy-btn {
@@ -688,18 +706,18 @@ h1 {
 /* Ajustements pour mobile */
 @media (max-width: 768px) {
   .copy-btn {
-    padding: 5px 5px; /* Réduction du padding horizontal sur mobile */
-    font-size: 8px; /* Réduction de la taille de police sur mobile */
+    padding: 3px 6px; /* Padding plus compact */
+    font-size: 7px; /* Police plus petite */
+    min-height: 24px; /* Hauteur minimale réduite */
+    min-width: 65px; /* Largeur minimale plus petite */
+    width: auto; /* Permettre au bouton de s'adapter au contenu */
+    flex-shrink: 0; /* Empêcher le bouton de rétrécir */
   }
   
   .task-footer {
-    padding: 10px 8px; /* Réduction du padding du footer pour donner plus d'espace */
-  }
-  
-  .filename-display {
-    margin-right: 8px; /* Réduction de la marge droite sur mobile */
-    flex-grow: 1;
-    min-width: 0; /* Permettre au nom de fichier de se rétrécir si nécessaire */
+    padding: 8px; /* Padding réduit */
+    flex-direction: row; /* Forcer l'alignement horizontal */
+    justify-content: space-between; /* Espacer les éléments uniformément */
   }
 }
 
@@ -905,18 +923,86 @@ footer {
 /* Responsive */
 @media (max-width: 768px) {
   body {
-    padding: 10px;
+    padding: 8px; /* Réduire davantage le padding */
   }
   
   .gameboy-container {
-    padding: 15px;
+    padding: 12px; /* Moins de padding pour donner plus d'espace */
   }
   
   h1 {
-    font-size: 16px;
+    font-size: 14px; /* Titre principal plus petit */
+  }
+  
+  .task-header {
+    padding: 8px 10px; /* Moins de padding horizontal */
+  }
+  
+  .task-title-container {
+    flex-wrap: nowrap; /* Forcer le maintien sur une ligne */
+    overflow: hidden;
   }
   
   .task-header h2 {
-    font-size: 12px;
+    font-size: 10px; /* Titres de tâches plus petits */
+    line-height: 1.2; /* Meilleur espacement des lignes */
+    white-space: normal; /* Permettre au texte de passer à la ligne */
+    word-break: break-word; /* Permettre la rupture des mots longs */
+    max-height: 2.4em; /* Maximum deux lignes de texte */
+    text-overflow: ellipsis; /* Ajouter des points de suspension */
+  }
+  
+  /* Réduire l'espace pour la checkbox principale (moins d'espace gaspillé) */
+  .task-main-checkbox {
+    margin-right: 6px;
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    min-height: 20px;
+  }
+  
+  /* Réduire la taille de la police pour le message informatif */
+  .info-message {
+    font-size: 8px; 
+    padding: 4px 5px;
+    line-height: 1.2;
+    white-space: normal; /* Permettre le passage à la ligne */
+  }
+  
+  /* Sous-tâches plus compactes sur mobile */
+  .subtask {
+    padding: 8px 6px; /* Padding réduit */
+  }
+  
+  .subtask-content {
+    overflow: hidden;
+  }
+  
+  .subtask-label {
+    font-size: 9px; /* Taille réduite */
+    line-height: 1.3;
+    white-space: normal; /* Permettre le passage à la ligne */
+  }
+  
+  .subtask-filename {
+    font-size: 8px;
+    line-height: 1.2;
+    white-space: normal; /* Permettre le passage à la ligne */
+  }
+  
+  .subtask-checkbox {
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    min-height: 18px;
+    margin-right: 6px;
+  }
+  
+  .subtask-copy-btn {
+    font-size: 6px;
+    padding: 2px 4px;
+    min-height: 20px;
+    width: auto;
+    min-width: 50px;
   }
 }
