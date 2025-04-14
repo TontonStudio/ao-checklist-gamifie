@@ -124,13 +124,34 @@ document.addEventListener('DOMContentLoaded', function() {
         const isChecked = savedSubtasks.includes(subtaskIndex);
         if (isChecked) completedCount++;
         
-        subtaskItem.innerHTML = `
+        // Vérifier si la sous-tâche a un nom de fichier associé
+        const hasFilename = typeof subtask === 'object' && subtask.filename;
+        const subtaskLabel = typeof subtask === 'object' ? subtask.label : subtask;
+        
+        // Construire le HTML de la sous-tâche
+        let subtaskHTML = `
           <input type="checkbox" class="subtask-checkbox" data-task="${taskIndex}" data-subtask="${subtaskIndex}" ${isChecked ? 'checked' : ''}>
-          <span class="subtask-label">${subtask}</span>
+          <span class="subtask-label">${subtaskLabel}</span>
         `;
+        
+        // Ajouter un bouton de copie si la sous-tâche a un nom de fichier
+        if (hasFilename) {
+          subtaskHTML += `
+            <button class="subtask-copy-btn" data-filename="${subtask.filename}" title="Copier le nom du fichier">
+              📋
+            </button>
+          `;
+        }
+        
+        subtaskItem.innerHTML = subtaskHTML;
         
         // Gestionnaire d'événement pour cliquer sur toute la ligne
         subtaskItem.addEventListener('click', function(e) {
+          // Ne pas déclencher le changement si on clique sur le bouton de copie
+          if (e.target.classList.contains('subtask-copy-btn') || e.target.closest('.subtask-copy-btn')) {
+            return;
+          }
+          
           // Éviter de déclencher si on clique déjà sur la checkbox
           if (e.target.type !== 'checkbox') {
             const checkbox = this.querySelector('.subtask-checkbox');
@@ -141,6 +162,16 @@ document.addEventListener('DOMContentLoaded', function() {
             checkbox.dispatchEvent(changeEvent);
           }
         });
+        
+        // Ajouter le gestionnaire d'événement pour le bouton de copie
+        const copyBtn = subtaskItem.querySelector('.subtask-copy-btn');
+        if (copyBtn) {
+          copyBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const filename = this.dataset.filename;
+            copyToClipboard(filename);
+          });
+        }
         
         // Ajouter une classe pour les tâches cochées (pour les navigateurs qui ne supportent pas :has)
         const checkbox = subtaskItem.querySelector('.subtask-checkbox');
@@ -258,6 +289,24 @@ document.addEventListener('DOMContentLoaded', function() {
     uncheckSound.play().catch(e => {
       console.log('Erreur lors de la lecture du son de uncheck:', e);
     });
+  }
+  
+  /**
+   * Vérifie si une sous-tâche a un nom de fichier
+   */
+  function subtaskHasFilename(taskIndex, subtaskIndex) {
+    const task = tasks[taskIndex];
+    const subtask = task.subtasks[subtaskIndex];
+    return typeof subtask === 'object' && subtask.filename;
+  }
+  
+  /**
+   * Récupère le label d'une sous-tâche
+   */
+  function getSubtaskLabel(taskIndex, subtaskIndex) {
+    const task = tasks[taskIndex];
+    const subtask = task.subtasks[subtaskIndex];
+    return typeof subtask === 'object' ? subtask.label : subtask;
   }
   
   /**

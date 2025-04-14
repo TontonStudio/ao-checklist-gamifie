@@ -432,6 +432,44 @@ h1 {
   transition: text-decoration 0.3s, opacity 0.3s;
 }
 
+.subtask-copy-btn {
+  font-size: 12px;
+  background: var(--gb-lightest);
+  border: 2px solid var(--gb-darkest);
+  border-radius: 3px;
+  cursor: pointer;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 8px;
+  transition: transform 0.2s, background-color 0.2s;
+  flex-shrink: 0;
+  opacity: 0.8;
+}
+
+.subtask-copy-btn:hover {
+  background-color: var(--gb-light);
+  transform: scale(1.1);
+  opacity: 1;
+}
+
+.subtask-copy-btn:active {
+  transform: scale(0.95);
+}
+
+/* Style pour le mode doré */
+.golden-mode .subtask-copy-btn {
+  background-color: var(--gold-medium);
+  color: var(--gold-text);
+  border-color: var(--gold-dark);
+}
+
+.golden-mode .subtask-copy-btn:hover {
+  background-color: var(--gold-light);
+}
+
 .subtask-checkbox:checked + .subtask-label {
   text-decoration: line-through;
   opacity: 0.8;
