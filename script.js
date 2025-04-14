@@ -742,9 +742,9 @@ document.addEventListener('DOMContentLoaded', function() {
    */
   function copyToClipboard(text) {
     navigator.clipboard.writeText(text).then(() => {
-      // Feedback visuel
-      const copyBtns = document.querySelectorAll('.copy-btn');
-      copyBtns.forEach(btn => {
+      // Feedback visuel pour tous les boutons de copie (grands livrables et sous-tâches)
+      const allCopyBtns = document.querySelectorAll('.copy-btn, .subtask-copy-btn');
+      allCopyBtns.forEach(btn => {
         if (btn.dataset.filename === text) {
           const originalText = btn.textContent;
           
@@ -756,16 +756,26 @@ document.addEventListener('DOMContentLoaded', function() {
           if (!btn.dataset.originalWidth) {
             btn.dataset.originalWidth = `${currentWidth}px`;
             btn.dataset.originalHeight = `${currentHeight}px`;
+            btn.style.width = `${currentWidth}px`;
+            btn.style.minWidth = `${currentWidth}px`;
           }
           
+          // Changer le texte pour indiquer la copie
           btn.textContent = 'Copié !';
           
+          // Ajouter une classe pour l'animation de succès
+          btn.classList.add('copy-success');
+          
+          // Rétablir le texte original après un délai
           setTimeout(() => {
             btn.textContent = originalText;
+            btn.classList.remove('copy-success');
             
             // Retirer la largeur fixe après que le texte soit revenu à l'original
             setTimeout(() => {
               if (btn.dataset.originalWidth) {
+                btn.style.width = '';
+                btn.style.minWidth = '';
                 delete btn.dataset.originalWidth;
                 delete btn.dataset.originalHeight;
               }

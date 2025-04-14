@@ -502,6 +502,24 @@ h1 {
   box-shadow: 1px 1px 0 var(--gold-dark);
 }
 
+/* Style pour l'animation de succès après copie */
+.copy-success {
+  background-color: #8bac0f !important;
+  color: #0f380f !important;
+  animation: copyPulse 0.5s ease-in-out;
+}
+
+.golden-mode .copy-success {
+  background-color: var(--gold-light) !important;
+  color: var(--gold-text) !important;
+}
+
+@keyframes copyPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
 /* Style pour les tâches cochées */
 .subtask-checkbox:checked + .subtask-content .subtask-label {
   text-decoration: line-through;
