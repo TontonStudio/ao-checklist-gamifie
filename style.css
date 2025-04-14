@@ -588,17 +588,40 @@ h1 {
   text-overflow: ellipsis;
 }
 
+.info-message-container {
+  flex-basis: 100%;
+  margin-top: 10px;
+}
+
 .info-message {
   background-color: var(--gb-dark);
   color: var(--gb-lightest);
   font-style: italic;
   font-size: 10px;
   text-align: center;
+  padding: 5px;
+  border-radius: 3px;
+  margin-top: 5px;
 }
 
 .golden-mode .info-message {
   background-color: var(--gold-dark);
   color: white;
+}
+
+.task-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  background-color: var(--gb-dark);
+  color: var(--gb-lightest);
+  font-size: 12px;
+  transition: all 0.3s ease;
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
 }
 
 .copy-btn {
