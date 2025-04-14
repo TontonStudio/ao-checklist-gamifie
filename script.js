@@ -3,6 +3,8 @@ document.addEventListener('DOMContentLoaded', function() {
   const taskList = document.getElementById('task-list');
   const progressFill = document.getElementById('progress-fill');
   const progressText = document.getElementById('progress-text');
+  const progressWrapper = document.getElementById('progress-wrapper');
+  const progressSpacer = document.getElementById('progress-spacer');
   const resetBtn = document.getElementById('reset-btn');
   const successSound = document.getElementById('success-sound');
   const checkSound = document.getElementById('check-sound');
@@ -12,6 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const fireworksContainer = document.getElementById('fireworks-container');
   const flashOverlay = document.getElementById('flash-overlay');
   const gameContainer = document.querySelector('.gameboy-container');
+  const logoContainer = document.querySelector('.logo-container');
   
   // Variables pour les feux d'artifice
   let fireworksInterval;
@@ -26,6 +29,38 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Gestionnaire d'événements pour le bouton de réinitialisation
   resetBtn.addEventListener('click', resetProgress);
+  
+  // Gestion de la barre de progression fixe lors du défilement
+  window.addEventListener('scroll', handleProgressBarScroll);
+  window.addEventListener('resize', handleProgressBarScroll);
+  
+  /**
+   * Gère la position de la barre de progression lors du défilement
+   */
+  function handleProgressBarScroll() {
+    const logoRect = logoContainer.getBoundingClientRect();
+    const logoBottom = logoRect.bottom;
+    
+    // Mesurer la largeur de la barre de progression
+    const progressContainerWidth = progressWrapper.offsetWidth;
+    
+    // Si le bas du logo est au-dessus du viewport, fixer la barre de progression
+    if (logoBottom < 0) {
+      // Sauvegarder la largeur actuelle avant de fixer
+      if (!progressWrapper.style.width) {
+        progressWrapper.style.width = progressContainerWidth + 'px';
+      }
+      
+      progressWrapper.classList.add('fixed');
+      progressSpacer.classList.add('active');
+    } else {
+      progressWrapper.classList.remove('fixed');
+      progressSpacer.classList.remove('active');
+      
+      // Réinitialiser la largeur si elle a été définie
+      progressWrapper.style.width = '';
+    }
+  }
   
   /**
    * Initialise la liste des tâches à partir du fichier tasks.js
@@ -367,6 +402,12 @@ document.addEventListener('DOMContentLoaded', function() {
    * Active le mode doré (quand tout est complété)
    */
   function activateGoldenMode() {
+    // Si la barre de progression était fixée, la défixer d'abord
+    if (progressWrapper.classList.contains('fixed')) {
+      progressWrapper.classList.remove('fixed');
+      progressSpacer.classList.remove('active');
+    }
+    
     // Assurer que l'écran défile en douceur vers le haut en premier
     window.scrollTo({
       top: 0,

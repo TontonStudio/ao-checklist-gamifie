@@ -1,0 +1,7 @@
+# ÉTAPE 1: Créez d'abord un nouveau dépôt vide sur GitHub (sans README, LICENSE ou .gitignore)
+# via https://github.com/new
+
+# ÉTAPE 2: Exécutez ces commandes en remplaçant VOTRE_NOM_UTILISATEUR par votre nom d'utilisateur GitHub
+cd "/Users/Nordine/Desktop/TontonStudio/Commercial/Prospects/2025/AO Bordeaux Métropole/Propale/__CHECKLIST__"
+git remote add origin git@github.com:VOTRE_NOM_UTILISATEUR/ao-checklist-gamifie.git
+git push -u origin main
