@@ -455,13 +455,15 @@ h1 {
 }
 
 .subtask-copy-btn {
-  font-size: 10px;
+  font-size: 8px; /* Taille réduite pour la police pixelisée */
+  font-family: 'Press Start 2P', monospace; /* Même police que les autres boutons */
   background: var(--gb-lightest);
   border: 2px solid var(--gb-darkest);
   border-radius: 3px;
   cursor: pointer;
-  padding: 2px 8px;
-  height: 24px;
+  padding: 4px 8px; /* Plus de padding vertical pour compenser la hauteur de ligne */
+  height: auto; /* Hauteur auto pour s'adapter au contenu */
+  min-height: 26px; /* Hauteur minimale pour assurer une bonne taille de clic */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -469,26 +471,35 @@ h1 {
   transition: transform 0.2s, background-color 0.2s;
   flex-shrink: 0;
   white-space: nowrap;
+  letter-spacing: -0.5px; /* Léger ajustement de l'espacement des lettres */
 }
 
 .subtask-copy-btn:hover {
   background-color: var(--gb-light);
-  transform: scale(1.05);
+  transform: translateY(-2px);
+  box-shadow: 2px 2px 0 var(--gb-dark);
 }
 
 .subtask-copy-btn:active {
-  transform: scale(0.95);
+  transform: translateY(1px);
+  box-shadow: 1px 1px 0 var(--gb-dark);
 }
 
 /* Style pour le mode doré */
 .golden-mode .subtask-copy-btn {
   background-color: var(--gold-medium);
-  color: var(--gold-text);
+  color: white; /* Texte blanc pour une meilleure lisibilité */
   border-color: var(--gold-dark);
+  box-shadow: none;
 }
 
 .golden-mode .subtask-copy-btn:hover {
   background-color: var(--gold-light);
+  box-shadow: 2px 2px 0 var(--gold-dark);
+}
+
+.golden-mode .subtask-copy-btn:active {
+  box-shadow: 1px 1px 0 var(--gold-dark);
 }
 
 /* Style pour les tâches cochées */
@@ -505,13 +516,20 @@ h1 {
 /* Adaptation pour mobile */
 @media (max-width: 768px) {
   .subtask-copy-btn {
-    font-size: 9px;
-    padding: 2px 5px;
-    height: 22px;
+    font-size: 7px; /* Taille réduite pour s'adapter aux petits écrans */
+    padding: 3px 5px;
+    min-height: 24px;
+    margin-left: 5px; /* Moins d'espacement horizontal sur mobile */
   }
   
   .subtask-filename {
     font-size: 9px;
+  }
+  
+  /* Également synchroniser le style du grand bouton de copie pour la cohérence */
+  .copy-btn {
+    font-size: 8px;
+    min-height: 28px;
   }
 }
 
