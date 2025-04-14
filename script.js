@@ -214,7 +214,7 @@ document.addEventListener('DOMContentLoaded', function() {
       if (hasSubtaskFiles) {
         // Si le livrable contient des sous-tâches avec des fichiers, afficher uniquement le message
         taskFooter.innerHTML = `
-          <div class="filename-display info-message">Les fichiers individuels sont accessibles depuis chaque sous-tâche</div>
+          <div class="info-message">Les fichiers individuels sont accessibles depuis chaque sous-tâche</div>
         `;
       } else if (task.filename) {
         // Si le livrable a un nom de fichier global et aucune sous-tâche avec des fichiers

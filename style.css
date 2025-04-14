@@ -640,14 +640,17 @@ h1 {
   font-style: italic;
   font-size: 10px;
   text-align: center;
-  padding: 5px;
+  padding: 8px 10px;
   border-radius: 3px;
   width: 100%;
+  box-sizing: border-box;
+  display: block;
 }
 
 .golden-mode .info-message {
   background-color: var(--gold-dark);
   color: white;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
 }
 
 .task-footer {
@@ -718,6 +721,8 @@ h1 {
     padding: 8px; /* Padding réduit */
     flex-direction: row; /* Forcer l'alignement horizontal */
     justify-content: space-between; /* Espacer les éléments uniformément */
+    width: 100%;
+    box-sizing: border-box;
   }
 }
 
@@ -963,11 +968,17 @@ footer {
   
   /* Réduire la taille de la police pour le message informatif */
   .info-message {
-    font-size: 8px; 
-    padding: 4px 5px;
-    line-height: 1.2;
+    font-size: 9px;
+    padding: 6px 8px;
+    line-height: 1.3;
     white-space: normal; /* Permettre le passage à la ligne */
+    text-align: center;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    display: block;
   }
+=======
   
   /* Sous-tâches plus compactes sur mobile */
   .subtask {
