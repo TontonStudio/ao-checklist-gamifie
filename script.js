@@ -242,13 +242,15 @@ document.addEventListener('DOMContentLoaded', function() {
         checkbox.addEventListener('change', handleSubtaskChange);
       });
       
-      // Gestionnaire d'événement pour le bouton de copie
+      // Gestionnaire d'événement pour le bouton de copie s'il existe
       const copyBtn = taskFooter.querySelector('.copy-btn');
-      copyBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const filename = e.target.dataset.filename;
-        copyToClipboard(filename);
-      });
+      if (copyBtn) {
+        copyBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const filename = e.target.dataset.filename;
+          copyToClipboard(filename);
+        });
+      }
     });
   }
   
