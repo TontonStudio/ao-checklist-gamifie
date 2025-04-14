@@ -681,10 +681,10 @@ h1 {
   color: var(--gb-darkest);
   border: 2px solid var(--gb-darkest);
   font-family: 'Press Start 2P', monospace;
-  padding: 5px 10px;
+  padding: 6px 12px; /* Padding légèrement plus grand */
   cursor: pointer;
   font-size: 10px;
-  transition: transform 0.2s, background-color 0.2s;
+  transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
   margin-right: 5px; /* Marge supplémentaire à droite */
   min-width: 90px; /* Largeur fixe minimale augmentée */
   width: 90px; /* Largeur fixe */
@@ -696,6 +696,8 @@ h1 {
   align-items: center;
   justify-content: center;
   overflow: hidden; /* Empêche le débordement */
+  box-shadow: 0 2px 0 rgba(15, 56, 15, 0.5); /* Légère ombre pour plus de relief */
+  border-radius: 3px; /* Border radius pour adoucir les coins */
 }
 
 /* Style spécifique pour le mode doré */
@@ -728,11 +730,13 @@ h1 {
 
 .copy-btn:hover {
   background-color: var(--gb-light);
-  transform: scale(1.05);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 0 rgba(15, 56, 15, 0.5);
 }
 
 .copy-btn:active {
-  transform: scale(0.95);
+  transform: translateY(1px);
+  box-shadow: 0 1px 0 rgba(15, 56, 15, 0.5);
 }
 
 /* Footer */
@@ -1016,4 +1020,57 @@ footer {
     width: auto;
     min-width: 50px;
   }
+}
+
+/* Amélioration des boutons de copie des grands livrables */
+.copy-btn {
+  background-color: var(--gb-lightest);
+  color: var(--gb-darkest);
+  border: 2px solid var(--gb-darkest);
+  font-family: 'Press Start 2P', monospace;
+  padding: 6px 12px; /* Padding augmenté pour un meilleur aspect */
+  cursor: pointer;
+  font-size: 10px;
+  transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
+  margin-right: 5px;
+  min-width: 90px;
+  width: 90px;
+  text-align: center;
+  white-space: nowrap;
+  height: auto;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 2px 0 rgba(15, 56, 15, 0.5); /* Ombre pour plus de relief */
+  border-radius: 3px; /* Coins légèrement arrondis */
+}
+
+.copy-btn:hover {
+  background-color: var(--gb-light);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 0 rgba(15, 56, 15, 0.5);
+}
+
+.copy-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 0 rgba(15, 56, 15, 0.5);
+}
+
+/* Style en mode doré */
+.golden-mode .copy-btn {
+  background-color: #115740;
+  color: white;
+  border-color: black;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.4);
+}
+
+.golden-mode .copy-btn:hover {
+  background-color: #0a3b2b;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.4);
+}
+
+.golden-mode .copy-btn:active {
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
 }
