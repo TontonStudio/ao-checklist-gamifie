@@ -127,18 +127,22 @@ document.addEventListener('DOMContentLoaded', function() {
         // Vérifier si la sous-tâche a un nom de fichier associé
         const hasFilename = typeof subtask === 'object' && subtask.filename;
         const subtaskLabel = typeof subtask === 'object' ? subtask.label : subtask;
+        const filename = hasFilename ? subtask.filename : null;
         
         // Construire le HTML de la sous-tâche
         let subtaskHTML = `
           <input type="checkbox" class="subtask-checkbox" data-task="${taskIndex}" data-subtask="${subtaskIndex}" ${isChecked ? 'checked' : ''}>
-          <span class="subtask-label">${subtaskLabel}</span>
+          <div class="subtask-content">
+            <span class="subtask-label">${subtaskLabel}</span>
+            ${hasFilename ? `<span class="subtask-filename">${filename}</span>` : ''}
+          </div>
         `;
         
         // Ajouter un bouton de copie si la sous-tâche a un nom de fichier
         if (hasFilename) {
           subtaskHTML += `
-            <button class="subtask-copy-btn" data-filename="${subtask.filename}" title="Copier le nom du fichier">
-              📋
+            <button class="subtask-copy-btn" data-filename="${filename}" title="Copier le nom du fichier">
+              📋 Copier
             </button>
           `;
         }

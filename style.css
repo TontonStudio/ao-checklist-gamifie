@@ -426,33 +426,54 @@ h1 {
   line-height: 1;
 }
 
+.subtask-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
+}
+
 .subtask-label {
   font-size: 12px;
-  flex-grow: 1;
   transition: text-decoration 0.3s, opacity 0.3s;
 }
 
+.subtask-filename {
+  font-size: 10px;
+  color: var(--gb-dark);
+  font-style: italic;
+  margin-top: 2px;
+  opacity: 0.8;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.golden-mode .subtask-filename {
+  color: var(--gold-dark);
+}
+
 .subtask-copy-btn {
-  font-size: 12px;
+  font-size: 10px;
   background: var(--gb-lightest);
   border: 2px solid var(--gb-darkest);
   border-radius: 3px;
   cursor: pointer;
-  width: 28px;
-  height: 28px;
+  padding: 2px 8px;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-left: 8px;
   transition: transform 0.2s, background-color 0.2s;
   flex-shrink: 0;
-  opacity: 0.8;
+  white-space: nowrap;
 }
 
 .subtask-copy-btn:hover {
   background-color: var(--gb-light);
-  transform: scale(1.1);
-  opacity: 1;
+  transform: scale(1.05);
 }
 
 .subtask-copy-btn:active {
@@ -470,20 +491,33 @@ h1 {
   background-color: var(--gold-light);
 }
 
-.subtask-checkbox:checked + .subtask-label {
+/* Style pour les tâches cochées */
+.subtask-checkbox:checked + .subtask-content .subtask-label {
   text-decoration: line-through;
   opacity: 0.8;
-  color: var(--gb-darkest); /* Texte beaucoup plus foncé pour une meilleure lisibilité */
-  font-style: italic; /* Italique pour différencier davantage */
 }
 
-/* Style pour toute la ligne quand la tâche est cochée */
-.subtask-checkbox:checked ~ .subtask-label,
-.subtask-checkbox:checked ~ * {
-  background-color: rgba(48, 98, 48, 0.5); /* Teinte verte plus foncée et plus opaque */
+.subtask-checkbox:checked + .subtask-content .subtask-filename {
+  text-decoration: line-through;
+  opacity: 0.6;
 }
 
-/* Style pour toute la ligne de la sous-tâche cochée - utilisant :has() */
+/* Adaptation pour mobile */
+@media (max-width: 768px) {
+  .subtask-copy-btn {
+    font-size: 9px;
+    padding: 2px 5px;
+    height: 22px;
+  }
+  
+  .subtask-filename {
+    font-size: 9px;
+  }
+}
+
+/* Ce bloc est maintenant remplacé par le style dans .subtask-checkbox:checked + .subtask-content .subtask-label */
+
+/* Style pour toute la ligne de la sous-tâche cochée */
 .subtask:has(.subtask-checkbox:checked) {
   background-color: rgba(48, 98, 48, 0.5); /* Teinte verte plus foncée et plus opaque */
 }
