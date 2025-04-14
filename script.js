@@ -197,13 +197,32 @@ document.addEventListener('DOMContentLoaded', function() {
       // Mise à jour du compteur
       taskHeader.querySelector('.task-progress').textContent = `${completedCount}/${subtaskCount}`;
       
-      // Footer avec le nom de fichier
+      // Vérifier si le livrable a des sous-tâches qui sont des fichiers
+      const hasSubtaskFiles = task.subtasks.some(subtask => 
+        typeof subtask === 'object' && subtask.filename
+      );
+      
+      // Footer avec le nom de fichier (seulement si pas de sous-tâches qui sont des fichiers)
       const taskFooter = document.createElement('div');
       taskFooter.className = 'task-footer';
-      taskFooter.innerHTML = `
-        <div class="filename-display">${task.filename}</div>
-        <button class="copy-btn" data-filename="${task.filename}">📋 Copier</button>
-      `;
+      
+      if (!hasSubtaskFiles && task.filename) {
+        // N'afficher le nom de fichier global que s'il n'y a pas de sous-tâches avec des fichiers
+        taskFooter.innerHTML = `
+          <div class="filename-display">${task.filename}</div>
+          <button class="copy-btn" data-filename="${task.filename}">📋 Copier</button>
+        `;
+      } else if (hasSubtaskFiles) {
+        // Si des sous-tâches ont des fichiers, afficher un message informant que les fichiers sont directement accessibles
+        taskFooter.innerHTML = `
+          <div class="filename-display info-message">Les fichiers sont accessibles depuis chaque sous-tâche</div>
+        `;
+      } else {
+        // Fallback au cas où
+        taskFooter.innerHTML = `
+          <div class="filename-display">Aucun fichier associé</div>
+        `;
+      }
       
       // Ajout des éléments au DOM
       taskContent.appendChild(subtasksList);
