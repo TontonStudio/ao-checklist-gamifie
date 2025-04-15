@@ -1,53 +1,58 @@
 const tasks = [
   {
-    label: 'Candidature administrative',
-    filename: 'DossierAdmin_TontonStudio.zip', // Dossier global (optionnel)
+    label: 'Dossier de candidature',
+    filename: 'Candidature_TontonStudio.zip',
     subtasks: [
-      { label: 'Remplir DC1', filename: 'DC1_TontonStudio.pdf' },
-      { label: 'Remplir DC2', filename: 'DC2_TontonStudio.pdf' },
-      { label: 'Déclaration sur l\'honneur', filename: 'Declaration_TontonStudio.pdf' },
-      { label: 'Références professionnelles', filename: 'References_TontonStudio.pdf' }
+      { label: 'DUME complété', filename: 'DUME_TontonStudio.pdf' },
+      { label: 'Ou DC1 et DC2 complétés', filename: 'DC1_DC2_TontonStudio.pdf' },
+      { label: 'Déclaration sur l\'honneur', filename: 'Declaration_Honneur_TontonStudio.pdf' },
+      { label: 'Références professionnelles (3 dernières années)', filename: 'References_TontonStudio.pdf' },
+      { label: 'Questionnaire égalité/diversité complété', filename: 'Questionnaire_Egalite_TontonStudio.pdf' }
+    ]
+  },
+  {
+    label: 'Pièces de l\'offre',
+    filename: 'Offre_TontonStudio.zip',
+    subtasks: [
+      { label: 'Acte d\'engagement signé (AE)', filename: 'AE_TontonStudio.pdf' },
+      { label: 'Décomposition du prix global forfaitaire (DPGF)', filename: 'DPGF_TontonStudio.pdf' },
+      { label: 'Cadre de réponse RGPD complété', filename: 'RGPD_TontonStudio.pdf' }
     ]
   },
   {
     label: 'Mémoire technique',
-    filename: 'MemoireTechnique_TontonStudio.pdf',
+    filename: 'Memoire_Technique_TontonStudio.pdf',
     subtasks: [
-      { label: 'Présentation de l\'entreprise' }, // Pas de filename = tâche interne
-      { label: 'Compréhension du besoin' },
-      { label: 'Méthodologie proposée' },
-      { label: 'Moyens humains dédiés' },
-      { label: 'Planning prévisionnel' }
+      { label: 'CV des consultants experts en inclusion numérique' },
+      { label: 'Expérience en gestion de projets similaires' },
+      { label: 'Méthodologie pour la co-création des badges' },
+      { label: 'Support méthodologique et technique' },
+      { label: 'Plan de formation des équipes' },
+      { label: 'Stratégie de pérennisation du projet' },
+      { label: 'Méthodes de suivi et d\'évaluation proposées' },
+      { label: 'Exemples de livrables pour projets similaires (1-3)' }
     ]
   },
   {
-    label: 'Offre financière',
-    filename: 'OffreFinanciere_TontonStudio.pdf',
+    label: 'Vérifications finales',
+    filename: null,
     subtasks: [
-      { label: 'Détail des prix unitaires', filename: 'DetailPrix_TontonStudio.pdf' },
-      { label: 'Bordereau des prix', filename: 'BordereauPrix_TontonStudio.pdf' },
-      { label: 'Devis détaillé', filename: 'Devis_TontonStudio.pdf' },
-      { label: 'Conditions de paiement' }
+      { label: 'Vérification complète du dossier' },
+      { label: 'Format électronique adapté (pas de fichiers trop volumineux)' },
+      { label: 'Dépôt sur la plateforme au moins 48h avant la date limite' },
+      { label: 'Confirmation de dépôt enregistrée' },
+      { label: 'Date limite : 18 avril 2025 à 12:00' }
     ]
   },
   {
-    label: 'Portfolio de références',
-    filename: 'Portfolio_TontonStudio.pdf',
+    label: 'Préparation pour la phase de négociation',
+    filename: 'Arguments_Negociation_TontonStudio.pdf',
     subtasks: [
-      { label: 'Sélection de projets similaires' },
-      { label: 'Résultats et retours clients' },
-      { label: 'Équipe ayant travaillé sur les projets' },
-      { label: 'Technologies utilisées' }
-    ]
-  },
-  {
-    label: 'Documents complémentaires',
-    filename: 'Annexes_TontonStudio.zip',
-    subtasks: [
-      { label: 'Certifications et agréments', filename: 'Certifications_TontonStudio.pdf' },
-      { label: 'Attestations d\'assurance', filename: 'Assurances_TontonStudio.pdf' },
-      { label: 'CV des intervenants clés', filename: 'CV_TontonStudio.pdf' },
-      { label: 'Calendrier détaillé', filename: 'Calendrier_TontonStudio.pdf' }
+      { label: 'Points forts de notre offre' },
+      { label: 'Expertise spécifique sur les open badges' },
+      { label: 'Connaissance du territoire de Bordeaux Métropole' },
+      { label: 'Proposition de valeur ajoutée' },
+      { label: 'Calendrier de mise en œuvre détaillé' }
     ]
   }
 ];
