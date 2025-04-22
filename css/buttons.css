@@ -57,6 +57,42 @@
   box-shadow: 1px 1px 0 #1d5c38;
 }
 
+/* Style du bouton retour accueil en mode warning */
+.warning-mode .home-btn {
+  background-color: #ff5555; /* Rouge plus clair pour le bouton Retour Accueil */
+  color: #ffffff;
+  box-shadow: 3px 3px 0 #cc3333;
+  border: 1px solid #cc3333;
+}
+
+.warning-mode .home-btn:hover {
+  background-color: #ff7777;
+  box-shadow: 5px 5px 0 #cc3333;
+}
+
+.warning-mode .home-btn:active {
+  background-color: #cc3333;
+  box-shadow: 1px 1px 0 #cc3333;
+}
+
+/* Style du bouton réinitialiser en mode warning */
+.warning-mode .reset-btn {
+  background-color: #990000; /* Rouge foncé pour le bouton Réinitialiser */
+  color: #ffffff;
+  box-shadow: 3px 3px 0 #660000;
+  border: 1px solid #660000;
+}
+
+.warning-mode .reset-btn:hover {
+  background-color: #cc0000;
+  box-shadow: 5px 5px 0 #660000;
+}
+
+.warning-mode .reset-btn:active {
+  background-color: #660000;
+  box-shadow: 1px 1px 0 #660000;
+}
+
 .pixel-btn:hover {
   transform: translateY(-2px);
   box-shadow: 5px 5px 0 var(--gb-dark);

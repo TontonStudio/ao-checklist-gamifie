@@ -124,21 +124,25 @@
   margin-bottom: 10px;
 }
 
-.contact-link {
+.email-link {
   color: var(--gb-darkest);
   font-weight: bold;
   text-decoration: none;
-  display: inline-block;
-  padding: 5px 10px;
-  background-color: var(--gb-light);
-  border: 2px solid var(--gb-darkest);
+  display: inline-flex;
+  align-items: center;
   margin: 10px 0;
-  transition: transform 0.2s, background-color 0.2s;
+  transition: transform 0.2s;
 }
 
-.contact-link:hover {
+.email-link:hover {
   transform: translateY(-2px);
-  background-color: var(--gold-light);
+  color: var(--gb-dark);
+}
+
+.mail-icon {
+  height: 18px;
+  margin-right: 10px;
+  image-rendering: pixelated;
 }
 
 /* Suppression du style .create-tasks-container et .gpt-link qui ne sont plus utilisés */

@@ -266,6 +266,14 @@ body.warning-mode {
   border-color: #cc0000; /* Rouge moyen */
 }
 
+.warning-mode .task-item.completed {
+  border-color: #990000; /* Rouge foncé */
+}
+
+.warning-mode .subtask {
+  background-color: #ffeeee; /* Fond rouge très pâle */
+}
+
 .warning-mode .countdown-warning {
   font-weight: bold;
   color: #990000; /* Rouge foncé */
@@ -291,6 +299,48 @@ body.warning-mode {
 .warning-mode .subtask:has(.subtask-checkbox:checked),
 .warning-mode .checked-subtask {
   background-color: rgba(153, 0, 0, 0.15); /* Rouge foncé transparent */
+}
+
+/* Forcer le fond rouge clair pour tous les éléments complétés */
+.warning-mode .completed {
+  background-color: #ffe0e0 !important;
+}
+
+/* Assurer que les séparateurs sont rouges */
+.warning-mode .subtask {
+  border-color: #ffcccc;
+}
+
+/* S'assurer que tous les boutons Copier sont rouges */
+.warning-mode .copy-btn {
+  background-color: #990000 !important;
+  color: #ffffff !important;
+  border-color: #660000 !important;
+}
+
+.warning-mode .copy-btn:hover {
+  background-color: #cc0000 !important;
+}
+
+.warning-mode .copy-btn.copy-success {
+  background-color: #ff3333 !important;
+  color: #ffffff !important;
+}
+
+/* Assurer que toute la barre de progression est en rouge */
+.warning-mode .progress-container {
+  border-color: #990000;
+}
+
+/* Autres éléments qui pourraient contenir du vert */
+.warning-mode .donate-mini-btn {
+  background-color: #990000;
+  color: #ffffff;
+  border-color: #660000;
+}
+
+.warning-mode .donate-mini-btn:hover {
+  background-color: #cc0000;
 }
 
 .warning-mode .subtask-checkbox:checked + .subtask-label {
