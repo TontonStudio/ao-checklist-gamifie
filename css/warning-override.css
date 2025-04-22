@@ -174,3 +174,105 @@
 .warning-mode .task-item.completed {
   background-color: #ffe6e6 !important;
 }
+
+/* Correction de la barre de progression et du compteur */
+.warning-mode .progress-bar {
+  background-color: #330000 !important; /* Rouge très foncé pour le fond de la jauge */
+  border-color: #660000 !important;
+}
+
+.warning-mode .progress-fill {
+  background-color: #cc0000 !important; /* Rouge moyen pour la barre de progression */
+}
+
+/* Correction du séparateur horizontal et de tous les éléments horizontaux verts */
+.warning-mode hr,
+.warning-mode .separator,
+.warning-mode .progress-spacer {
+  background-color: #990000 !important;
+  border-color: #990000 !important;
+}
+
+/* Forcer les couleurs du countdown */
+.warning-mode .countdown-label,
+.warning-mode .countdown-timer {
+  color: #990000 !important; /* Rouge foncé pour le texte */
+}
+
+.warning-mode .countdown-container {
+  background-color: #ffeeee !important;
+  border: 3px solid #cc0000 !important;
+}
+
+/* Cibler le texte "Temps restant" spécifiquement */
+.warning-mode .countdown-label {
+  color: #990000 !important;
+  font-weight: bold !important;
+}
+
+/* Garantir que le compteur lui-même est en rouge */
+.warning-mode .countdown-timer {
+  color: #990000 !important;
+  font-weight: bold !important;
+}
+
+/* Cibler la ligne de séparation verte sous la barre de progression */
+.warning-mode .task-list > *:first-child {
+  border-top-color: #990000 !important;
+}
+
+.warning-mode .task-list {
+  border-top: 2px solid #990000 !important;
+}
+
+/* Style pour les séparateurs horizontaux dans le mode warning */
+.warning-mode .task-list::before,
+.warning-mode .task-list::after,
+.warning-mode .controls::before {
+  background-color: #990000 !important;
+  border-color: #990000 !important;
+}
+
+/* Style pour tous les séparateurs qui pourraient être en vert */
+.warning-mode *[class*="separator"],
+.warning-mode *[class*="divider"],
+.warning-mode *[class*="spacer"] {
+  background-color: #990000 !important;
+  border-color: #990000 !important;
+}
+
+/* Règle universelle pour éviter toute couleur verte */
+.warning-mode *[style*="green"],
+.warning-mode *[style*="rgb(0, 128, 0)"],
+.warning-mode *[style*="rgb(0, 255, 0)"],
+.warning-mode *[style*="#00ff00"],
+.warning-mode *[style*="#008000"],
+.warning-mode *[style*="306230"],
+.warning-mode *[style*="8bac0f"],
+.warning-mode *[style*="9bbc0f"] {
+  color: #990000 !important;
+  background-color: #ffeeee !important;
+  border-color: #cc0000 !important;
+}
+
+/* Règles pour cibler tous les éléments horizontaux en vert */
+.warning-mode hr, 
+.warning-mode .hline, 
+.warning-mode div[role="separator"] {
+  background-color: #990000 !important;
+  border-color: #990000 !important;
+}
+
+/* Cibler spécifiquement le compteur et sa formulation */
+.warning-mode header *:not(.logo):not(img) {
+  color: #990000 !important;
+}
+
+/* Rendre toutes les barres horizontales rouges */
+.warning-mode header::after,
+.warning-mode footer::before,
+.warning-mode main::before,
+.warning-mode main::after {
+  background-color: #990000 !important;
+  border-color: #990000 !important;
+}
