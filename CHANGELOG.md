@@ -1,5 +1,12 @@
 # Changelog
 
+## Version 2.1.0 (Avril 2025)
+
+### Améliorations majeures
+- **Intégration du GPT spécialisé** : Ajout des références au GPT Tonton Studio pour la génération assistée de fichiers tasks.js
+- **Documentation enrichie** : Mise à jour des instructions pour inclure l'utilisation du GPT spécialisé
+- **Simplification de la création de tasks.js** : Amélioration du processus de création avec l'aide du GPT
+
 ## Version 2.0.0 (Avril 2025)
 
 ### Améliorations majeures

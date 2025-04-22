@@ -2,6 +2,28 @@
 
 Ce document explique comment créer un fichier `tasks.js` personnalisé pour l'application AO Checklist.
 
+## Création assistée par notre GPT spécialisé (recommandé)
+
+Pour générer facilement et précisément votre fichier tasks.js, nous avons développé un GPT spécialisé :
+
+🤖 [**Tonton Studio - Gamified AO Checklist Generator**](https://chatgpt.com/g/g-680541e3745c8191b7bca4aa6861ad09-tonton-studio-gamified-ao-checklist-generator)
+
+### Avantages de notre GPT spécialisé :
+
+- **Analyse précise** : Il peut analyser directement vos documents d'appel d'offres (RC, CCTP, etc.)
+- **Structure optimale** : Il génère un fichier tasks.js parfaitement formaté pour l'application
+- **Exhaustivité** : Il s'assure de capturer tous les livrables et sous-tâches nécessaires
+- **Conventions de nommage** : Il respecte les exigences de nommage de fichiers spécifiées dans l'AO
+
+### Comment l'utiliser :
+
+1. Accédez au GPT via le lien ci-dessus
+2. Téléchargez vos documents d'appel d'offres (RC, CCTP, etc.)
+3. Le GPT analysera les documents et vous proposera un fichier tasks.js prêt à l'emploi
+4. Téléchargez le fichier généré et chargez-le dans l'application AO Checklist
+
+C'est la méthode la plus rapide et la plus simple pour créer un fichier tasks.js sans erreur.
+
 ## Structure de base
 
 Le fichier tasks.js contient deux éléments principaux :

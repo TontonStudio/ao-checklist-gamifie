@@ -85,12 +85,13 @@ const tasks = [
 ## Utilisation
 
 1. Ouvrez l'application dans un navigateur web
-2. Chargez votre fichier tasks.js spécifique à l'appel d'offres
-3. Suivez votre progression en cochant les tâches accomplies
-4. Un compte à rebours vous indique le temps restant avant la date limite
-5. Lorsqu'il reste moins de 48h, un mode d'alerte visuel et sonore s'active
-6. Utilisez les boutons "Copier" pour récupérer les noms de fichiers standardisés
-7. Quand toutes les tâches sont complétées, un mode "victoire" s'active avec des effets visuels
+2. Créez votre fichier tasks.js en utilisant notre [GPT spécialisé](https://chatgpt.com/g/g-680541e3745c8191b7bca4aa6861ad09-tonton-studio-gamified-ao-checklist-generator) ou en suivant le format décrit dans la documentation
+3. Chargez votre fichier tasks.js spécifique à l'appel d'offres
+4. Suivez votre progression en cochant les tâches accomplies
+5. Un compte à rebours vous indique le temps restant avant la date limite
+6. Lorsqu'il reste moins de 48h, un mode d'alerte visuel et sonore s'active
+7. Utilisez les boutons "Copier" pour récupérer les noms de fichiers standardisés
+8. Quand toutes les tâches sont complétées, un mode "victoire" s'active avec des effets visuels
 
 ## Modes d'interface
 
