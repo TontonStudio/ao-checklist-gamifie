@@ -1,5 +1,13 @@
 # Changelog
 
+## Version 2.2.1 (Avril 2025)
+
+### Améliorations finales
+- **Perfection du mode warning** : Élimination totale des éléments verts résiduels
+- **Correctif du séparateur** : Remplacement dynamique du séparateur sous le compte à rebours
+- **Boutons plus distincts** : Différenciation claire entre "Réinitialiser" et "Retour Accueil"
+- **Cohérence visuelle complète** : Palette de couleurs uniformément rouge en mode warning
+
 ## Version 2.2.0 (Avril 2025)
 
 ### Améliorations majeures

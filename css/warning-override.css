@@ -263,6 +263,36 @@
   border-color: #990000 !important;
 }
 
+/* Cibler spécifiquement le séparateur horizontal sous le compte à rebours */
+.warning-mode #task-list {
+  border-top: 2px solid #990000 !important;
+}
+
+.warning-mode main {
+  border-top: 2px solid #990000 !important;
+}
+
+/* Cibler toute bordure verte par sélecteurs plus génériques */
+.warning-mode *[style*="border"] {
+  border-color: #990000 !important;
+}
+
+.warning-mode *:not(.logo):not(img)[style*="background"] {
+  background-color: #ffeeee !important;
+}
+
+/* Séparateur direct */
+.warning-mode .task-list::before,
+.warning-mode main::before,
+.warning-mode #task-list::before {
+  background-color: #990000 !important;
+  border-color: #990000 !important;
+  content: '';
+  display: block;
+  height: 2px;
+  width: 100%;
+}
+
 /* Cibler spécifiquement le compteur et sa formulation */
 .warning-mode header *:not(.logo):not(img) {
   color: #990000 !important;
