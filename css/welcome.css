@@ -9,7 +9,7 @@
 .welcome-main {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 15px;
 }
 
 .upload-container {
@@ -17,8 +17,15 @@
   border: 4px solid var(--gb-darkest);
   padding: 20px;
   border-radius: 5px;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   text-align: center;
+}
+
+.separator {
+  height: 2px;
+  background: linear-gradient(to right, transparent, var(--gb-dark), transparent);
+  margin: 20px 0;
+  opacity: 0.5;
 }
 
 .upload-container h2 {
@@ -42,25 +49,31 @@
 }
 
 .file-input-label {
-  background-color: var(--gb-dark);
-  color: var(--gb-lightest);
-  padding: 10px 15px;
+  background-color: var(--gb-light);
+  color: var(--gb-darkest);
+  padding: 12px 20px;
   cursor: pointer;
-  font-size: 10px;
+  font-size: 11px;
   border: 2px solid var(--gb-darkest);
   box-shadow: 3px 3px 0 var(--gb-darkest);
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
   display: inline-block;
+  border-radius: 4px;
+  font-weight: bold;
+  text-align: center;
 }
 
 .file-input-label:hover {
   transform: translateY(-2px);
   box-shadow: 5px 5px 0 var(--gb-darkest);
+  background-color: var(--gb-lightest);
 }
 
 .file-input-label:active {
   transform: translateY(2px);
   box-shadow: 1px 1px 0 var(--gb-darkest);
+  background-color: var(--gb-dark);
+  color: white;
 }
 
 .file-input {
@@ -72,17 +85,17 @@
   z-index: -1;
 }
 
-.file-name {
+.file-name-display {
   font-size: 9px;
   color: var(--gb-darkest);
-  margin-top: 5px;
-  padding: 5px 10px;
-  background-color: var(--gb-background);
-  border: 2px solid var(--gb-dark);
+  margin-top: 10px;
+  padding: 5px 0;
   max-width: 80%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-style: italic;
+  text-align: center;
 }
 
 .error-message {
@@ -128,53 +141,42 @@
   background-color: var(--gold-light);
 }
 
-.create-tasks-container {
-  margin: 20px 0;
+/* Suppression du style .create-tasks-container et .gpt-link qui ne sont plus utilisés */
+
+.gpt-help-container {
   text-align: center;
-  background-color: var(--gb-light);
-  padding: 15px;
-  border: 2px solid var(--gb-darkest);
-  border-radius: 5px;
-}
-
-.gpt-link {
-  display: inline-block;
-  background-color: var(--gb-dark);
-  color: white;
-  padding: 10px 15px;
-  margin-top: 10px;
-  text-decoration: none;
-  font-size: 10px;
-  border: 2px solid var(--gb-darkest);
-  border-radius: 4px;
-  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.3);
-  transition: all 0.2s ease;
-}
-
-.gpt-link:hover {
-  transform: translateY(-2px);
-  box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.3);
-  background-color: var(--gb-darkest);
+  margin-top: 15px;
+  opacity: 0.85;
 }
 
 .gpt-btn {
   display: inline-block;
-  background-color: var(--gb-dark);
+  background-color: #10a37f; /* Couleur ChatGPT */
   color: white;
-  padding: 10px 15px;
-  margin-top: 15px;
+  padding: 8px 15px;
   text-decoration: none;
   font-size: 10px;
-  border: 2px solid var(--gb-darkest);
-  border-radius: 4px;
-  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.3);
+  border: 1px solid #0a8c6a;
+  border-radius: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   transition: all 0.2s ease;
 }
 
 .gpt-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.3);
-  background-color: var(--gb-darkest);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background-color: #0e8e6d;
+  opacity: 1;
+}
+
+.gpt-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.gpt-icon {
+  margin-right: 5px;
+  font-size: 12px;
 }
 
 .donate-container {

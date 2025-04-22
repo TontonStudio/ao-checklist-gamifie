@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Éléments DOM pour la page d'accueil
   const tasksFileInput = document.getElementById('tasks-file');
-  const fileNameDisplay = document.getElementById('file-name');
+  const fileNameDisplay = document.getElementById('file-name'); // Cet ID reste inchangé même si la classe a changé
   const fileErrorMessage = document.getElementById('file-error-message');
   
   // Éléments DOM pour la checklist
