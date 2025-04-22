@@ -1,5 +1,13 @@
 # Changelog
 
+## Version 2.2.2 (Avril 2025)
+
+### Nettoyage et optimisation
+- **Simplification du code** : Suppression des logs et commentaires de développement
+- **Documentation améliorée** : Mise à jour du README pour refléter toutes les fonctionnalités
+- **Optimisation des performances** : Réduction de la taille des scripts
+- **Stabilisation** : Élimination des fonctions redondantes et code mort
+
 ## Version 2.2.1 (Avril 2025)
 
 ### Améliorations finales

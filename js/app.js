@@ -3,18 +3,9 @@
  * Initialisation et gestion des événements principaux
  */
 document.addEventListener('DOMContentLoaded', function() {
-  // Vérifier la présence de SoundManager (pour rétrocompatibilité)
-  if (typeof SoundManager !== 'undefined' && SoundManager.init) {
-    console.log("SoundManager détecté (ancienne version), désactivation...");
-    // Remplacer les méthodes par des fonctions vides pour éviter les conflits
-    SoundManager.init = function() { console.log("SoundManager.init ignoré"); };
-    SoundManager.showMusicControl = function() { console.log("SoundManager.showMusicControl ignoré"); };
-    SoundManager.hideMusicControl = function() { console.log("SoundManager.hideMusicControl ignoré"); };
-  }
-  
   // Éléments DOM pour la page d'accueil
   const tasksFileInput = document.getElementById('tasks-file');
-  const fileNameDisplay = document.getElementById('file-name'); // Cet ID reste inchangé même si la classe a changé
+  const fileNameDisplay = document.getElementById('file-name');
   const fileErrorMessage = document.getElementById('file-error-message');
   
   // Éléments DOM pour la checklist
@@ -56,8 +47,6 @@ document.addEventListener('DOMContentLoaded', function() {
       
       // Démarrer le compte à rebours si une date est définie
       if (window.aoConfig.deadline) {
-        console.log("Démarrage du compte à rebours pour:", window.aoConfig.deadline);
-        
         // Réinitialiser complètement le compte à rebours pour éviter des états incohérents
         const countdownContainer = document.getElementById('countdown-container');
         const countdownTimer = document.getElementById('countdown-timer');
@@ -79,7 +68,6 @@ document.addEventListener('DOMContentLoaded', function() {
         CountdownManager.startCountdown(new Date(window.aoConfig.deadline));
       }
     } catch (error) {
-      console.error('Erreur lors de la restauration des données:', error);
       // En cas d'erreur, supprimer les données corrompues
       localStorage.removeItem('tontonAoConfigData');
       localStorage.removeItem('tontonAoTasksData');
@@ -94,8 +82,6 @@ document.addEventListener('DOMContentLoaded', function() {
       fileNameDisplay.textContent = file.name;
       fileErrorMessage.textContent = '';
       
-      // Nous chargeons automatiquement maintenant, pas besoin d'activer un bouton
-      
       // Lire le contenu du fichier
       const reader = new FileReader();
       reader.onload = function(event) {
@@ -103,8 +89,6 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Valider le format du fichier
         if (Utils.validateTasksFile(content)) {
-          // Charger directement le contenu
-          
           // Charger automatiquement le fichier dès qu'il est validé
           Utils.loadTasksAndConfig(content);
         } else {
@@ -122,8 +106,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
   
-  // Le bouton de chargement a été remplacé par un chargement automatique
-  
   // Gestionnaire d'événement pour le bouton de réinitialisation
   resetBtn.addEventListener('click', function() {
     TasksManager.resetProgress();
@@ -133,30 +115,4 @@ document.addEventListener('DOMContentLoaded', function() {
   returnHomeBtn.addEventListener('click', function() {
     TasksManager.returnToHome();
   });
-  
-  // Vérifier si un fichier tasks.js est déjà disponible par défaut
-  if (!savedAoConfig) {
-    // Tenter de charger le fichier tasks.js par défaut
-    // Note: Ceci ne sera utilisé que pour le développement, 
-    // dans la version finale l'utilisateur devra charger son propre fichier
-    try {
-      fetch('tasks.js')
-        .then(response => {
-          if (response.ok) {
-            return response.text();
-          }
-          throw new Error('Fichier tasks.js non trouvé');
-        })
-        .then(content => {
-          // Ne pas charger automatiquement le fichier en production
-          // On laisse l'utilisateur à la page d'accueil pour qu'il charge son fichier
-          //Utils.loadTasksAndConfig(content);
-        })
-        .catch(error => {
-          console.log('Aucun fichier tasks.js par défaut trouvé', error);
-        });
-    } catch (error) {
-      console.log('Erreur lors du chargement du fichier tasks.js par défaut', error);
-    }
-  }
 });

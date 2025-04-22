@@ -1,6 +1,5 @@
 /**
  * Script pour forcer le déblocage audio sur différents navigateurs
- * Utilise plusieurs techniques différentes pour maximiser les chances de réussite
  */
 (function() {
   // S'exécuter immédiatement pour essayer de débloquer l'audio le plus tôt possible
@@ -12,8 +11,6 @@
    */
   function unlockAudio() {
     if (audioUnlocked) return;
-    
-    console.log("Tentative de déblocage audio...");
     
     // 1. Créer un contexte audio temporaire
     try {
@@ -31,7 +28,7 @@
       oscillator.start(0);
       oscillator.stop(0.001);
     } catch(e) {
-      console.log("Contexte Audio non supporté");
+      // Contexte Audio non supporté - silencieux
     }
     
     // 2. Tentative de lecture/pause sur chaque élément audio
@@ -47,7 +44,6 @@
           audio.pause();
           audio.currentTime = 0;
           audio.volume = originalVolume;
-          console.log(`Audio '${audio.id}' débloqué`);
         }).catch(e => {
           audio.volume = originalVolume;
         });
@@ -102,17 +98,13 @@
       if (typeof SoundControl !== 'undefined') {
         // Vérifier si le son n'est pas en mode muet avant de le jouer
         if (!SoundControl.muted) {
-          console.log("Tentative de lecture du son d'avertissement après déblocage...");
           SoundControl.playWarningSound();
-        } else {
-          console.log("Son en mode muet, pas de lecture");
         }
       } else if (typeof CountdownManager !== 'undefined' && 
                  CountdownManager.warningActive) {
         // Fallback - essayer de jouer directement le son
         const warningSound = document.getElementById('warning-sound');
         if (warningSound) {
-          console.log("Tentative secours de lecture du son...");
           warningSound.play().catch(() => {});
         }
       }

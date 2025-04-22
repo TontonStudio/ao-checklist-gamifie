@@ -1,4 +1,4 @@
-# AO Checklist - Tonton Studio (v2)
+# AO Checklist - Tonton Studio (v2.2)
 
 Outil de suivi gamifié de réponse aux marchés publics, inspiré par l'esthétique des jeux vidéo rétro de type Game Boy.
 
@@ -9,10 +9,11 @@ Outil de suivi gamifié de réponse aux marchés publics, inspiré par l'esthét
 - **Gamification** : Effets visuels et sonores, animations lors de la complétion des tâches
 - **Compte à rebours** : Suivi du temps restant jusqu'à la date limite de l'AO
 - **Mode alerte** : Avertissement visuel et sonore quand il reste moins de 48h
-- **Contrôle du son** : Possibilité de couper/réactiver le son d'alerte
+- **Contrôle du son** : Possibilité de couper/réactiver le son d'alerte avec fade-out automatique
 - **Copie des noms de fichier** : Facilité de copier les noms de fichiers formatés selon les exigences du marché
-- **Personnalisation** : Chargement d'un fichier tasks.js spécifique à chaque appel d'offres
+- **Personnalisation** : Chargement automatique d'un fichier tasks.js spécifique à chaque appel d'offres
 - **Sauvegarde locale** : Conservation de la progression entre les sessions
+- **Création IA** : Génération du fichier tasks.js par notre GPT spécialisé
 
 ## Structure du projet
 
@@ -26,6 +27,7 @@ Outil de suivi gamifié de réponse aux marchés publics, inspiré par l'esthét
 │   ├── progress.css        # Styles de la barre de progression
 │   ├── effects.css         # Styles des effets visuels
 │   ├── modes.css           # Styles des modes (doré, warning)
+│   ├── warning-override.css # Surcharge pour le mode warning
 │   ├── responsive.css      # Styles adaptatifs
 │   ├── welcome.css         # Styles de la page d'accueil
 │   └── countdown.css       # Styles du compte à rebours
@@ -38,7 +40,9 @@ Outil de suivi gamifié de réponse aux marchés publics, inspiré par l'esthét
 │   ├── countdown.js        # Gestion du compte à rebours
 │   ├── effects.js          # Effets visuels et sonores
 │   ├── tasks-manager.js    # Gestion des tâches
-│   └── fix-warning-mode.js # Assure le bon fonctionnement du mode warning
+│   ├── fix-warning-mode.js # Détection du mode warning
+│   ├── fix-separator.js    # Correction du séparateur en mode warning
+│   └── fix-audio.js        # Déblocage audio sur les navigateurs
 ├── audio/
 │   ├── check.mp3           # Son de cochage
 │   ├── uncheck.mp3         # Son de décochage
@@ -47,7 +51,8 @@ Outil de suivi gamifié de réponse aux marchés publics, inspiré par l'esthét
 │   └── warning.mp3         # Son d'avertissement
 └── img/
     ├── TTS_Logo.png        # Logo standard
-    └── TTS_Logo_Checked.png # Logo activé (quand tout est complété)
+    ├── TTS_Logo_Checked.png # Logo activé (quand tout est complété)
+    └── mail.png            # Icône de mail en pixel art
 ```
 
 ## Format du fichier tasks.js
@@ -86,27 +91,29 @@ const tasks = [
 
 1. Ouvrez l'application dans un navigateur web
 2. Créez votre fichier tasks.js en utilisant notre [GPT spécialisé](https://chatgpt.com/g/g-680541e3745c8191b7bca4aa6861ad09-tonton-studio-gamified-ao-checklist-generator) ou en suivant le format décrit dans la documentation
-3. Chargez votre fichier tasks.js spécifique à l'appel d'offres
+3. Sélectionnez votre fichier tasks.js (chargement automatique)
 4. Suivez votre progression en cochant les tâches accomplies
 5. Un compte à rebours vous indique le temps restant avant la date limite
 6. Lorsqu'il reste moins de 48h, un mode d'alerte visuel et sonore s'active
-7. Utilisez les boutons "Copier" pour récupérer les noms de fichiers standardisés
-8. Quand toutes les tâches sont complétées, un mode "victoire" s'active avec des effets visuels
+7. Cliquez sur le bouton son 🔊 pour couper/activer l'alerte sonore
+8. Utilisez les boutons "Copier" pour récupérer les noms de fichiers standardisés
+9. Quand toutes les tâches sont complétées, un mode "victoire" s'active avec des effets visuels
 
 ## Modes d'interface
 
-- **Mode normal** : L'interface de base, inspirée de la Game Boy
-- **Mode warning** : Activé automatiquement lorsqu'il reste moins de 48h pour répondre à l'AO
-- **Mode doré** : Activé lorsque toutes les tâches sont complétées
+- **Mode normal** : L'interface de base, inspirée de la Game Boy avec palette verte
+- **Mode warning** : Activé automatiquement lorsqu'il reste moins de 48h, utilise une palette rouge
+- **Mode doré** : Activé lorsque toutes les tâches sont complétées, avec effets spéciaux
 
-## Nouveautés de la version 2
+## Nouveautés de la version 2.2
 
-- Architecture modulaire des styles CSS pour une meilleure maintenance
-- Système de gestion du son amélioré avec bouton de contrôle
-- Correction de divers bugs notamment dans la lecture automatique du son d'alerte
-- Amélioration du support mobile et de la réactivité
-- Détection automatique des changements d'écran
-- Conception optimisée du code pour une meilleure performance
+- Chargement automatique du fichier tasks.js dès sa sélection
+- Intégration du GPT spécialisé pour la création de fichiers tasks.js
+- Design amélioré du mode warning avec palette rouge homogène
+- Fade-out du son en mode warning lors de la complétion de toutes les tâches
+- Interface d'accueil repensée pour plus de clarté
+- Logo cliquable redirigeant vers le site Tonton Studio
+- Icône mail pixel art dans la page d'accueil
 
 ## Contact & Support
 
