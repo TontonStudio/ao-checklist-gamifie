@@ -1,0 +1,176 @@
+/* 
+ * OVERRIDES POUR LE MODE WARNING
+ * Priorité maximale pour les couleurs rouges en mode warning
+ * Fichier séparé pour garantir la priorité des règles
+ */
+
+/* Forcer tous les fonds verts à être rouges */
+.warning-mode .task-item {
+  border-color: #cc0000 !important;
+  background-color: #ffe0e0 !important;
+}
+
+.warning-mode .task-header {
+  background-color: #cc0000 !important;
+  color: #ffffff !important;
+}
+
+.warning-mode .task-header:hover {
+  background-color: #990000 !important;
+}
+
+.warning-mode .task-footer {
+  background-color: #cc0000 !important;
+  color: #ffffff !important;
+}
+
+/* Forcer les boutons à être rouges */
+.warning-mode .home-btn {
+  background-color: #ff5555 !important;
+  color: #ffffff !important;
+  box-shadow: 3px 3px 0 #cc3333 !important;
+  border: 1px solid #cc3333 !important;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5) !important;
+}
+
+.warning-mode .home-btn:hover {
+  background-color: #ff7777 !important;
+  box-shadow: 5px 5px 0 #cc3333 !important;
+}
+
+.warning-mode .home-btn:active {
+  background-color: #cc3333 !important;
+  box-shadow: 1px 1px 0 #cc3333 !important;
+}
+
+.warning-mode .reset-btn {
+  background-color: #990000 !important;
+  color: #ffffff !important;
+  box-shadow: 3px 3px 0 #660000 !important;
+  border: 1px solid #660000 !important;
+}
+
+.warning-mode .reset-btn:hover {
+  background-color: #cc0000 !important;
+  box-shadow: 5px 5px 0 #660000 !important;
+}
+
+.warning-mode .reset-btn:active {
+  background-color: #660000 !important;
+  box-shadow: 1px 1px 0 #660000 !important;
+}
+
+/* Changement des couleurs vertes et sections */
+.warning-mode .subtask {
+  background-color: #ffeeee !important;
+  border-color: #ffcccc !important;
+}
+
+.warning-mode .subtask:hover {
+  background-color: #ffdddd !important;
+}
+
+.warning-mode .subtask-checkbox:checked ~ .subtask-label,
+.warning-mode .subtask-checkbox:checked ~ *,
+.warning-mode .subtask:has(.subtask-checkbox:checked),
+.warning-mode .checked-subtask {
+  background-color: rgba(153, 0, 0, 0.15) !important;
+}
+
+.warning-mode .copy-btn,
+.warning-mode .subtask-copy-btn {
+  background-color: #990000 !important;
+  color: #ffffff !important;
+  border-color: #660000 !important;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.3) !important;
+}
+
+.warning-mode .copy-btn:hover,
+.warning-mode .subtask-copy-btn:hover {
+  background-color: #cc0000 !important;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.3) !important;
+}
+
+.warning-mode .copy-btn.copy-success,
+.warning-mode .subtask-copy-btn.copy-success {
+  background-color: #ff3333 !important;
+  color: #ffffff !important;
+}
+
+/* Forcer le style sur les sous-tâches cochées */
+.warning-mode .subtask:has(.subtask-checkbox:checked) {
+  background-color: rgba(153, 0, 0, 0.15) !important;
+}
+
+.warning-mode .checked-subtask {
+  background-color: rgba(153, 0, 0, 0.15) !important;
+}
+
+/* Forcer le style sur tous les éléments du compteur */
+.warning-mode .task-progress {
+  background-color: #ffdddd !important;
+  color: #990000 !important;
+  border: 1px solid #cc0000 !important;
+}
+
+/* Forcer les couleurs des séparateurs */
+.warning-mode .task-header {
+  border-bottom: 2px solid #cc0000 !important;
+}
+
+/* Forcer le style du tag "DONE!" */
+.warning-mode .task-done-tag {
+  background-color: #990000 !important;
+  color: #ffffff !important;
+  border-color: #ff3333 !important;
+}
+
+/* Surcharge pour le bouton "M'offrir un café" */
+.warning-mode .donate-mini-btn {
+  background-color: #990000 !important;
+  color: #ffffff !important;
+  border-color: #660000 !important;
+}
+
+.warning-mode .donate-mini-btn:hover {
+  background-color: #cc0000 !important;
+}
+
+/* Surcharge pour les info-messages */
+.warning-mode .info-message {
+  background-color: #990000 !important;
+  color: #ffffff !important;
+}
+
+/* Surcharge pour les checkboxes */
+.warning-mode .subtask-checkbox {
+  border-color: #990000 !important;
+  background-color: #ffeeee !important;
+}
+
+.warning-mode .subtask-checkbox:checked {
+  background-color: #cc0000 !important;
+}
+
+.warning-mode .subtask-checkbox:checked::after {
+  color: #ffffff !important;
+}
+
+.warning-mode .task-main-checkbox {
+  border-color: #ffffff !important;
+  background-color: #cc0000 !important;
+}
+
+.warning-mode .task-main-checkbox:checked {
+  background-color: #ff3333 !important;
+  border-color: #ffffff !important;
+}
+
+.warning-mode .task-main-checkbox:checked::after {
+  color: #ffffff !important;
+}
+
+/* Forcer les couleurs dans les accordéons fermés */
+.warning-mode .task-item.completed {
+  background-color: #ffe6e6 !important;
+}

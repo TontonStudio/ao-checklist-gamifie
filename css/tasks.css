@@ -226,6 +226,8 @@
   background-color: rgba(48, 98, 48, 0.5); /* Teinte verte plus foncée et plus opaque */
 }
 
+/* Ces styles seront écrasés par le mode warning via warning-override.css */
+
 .task-footer {
   display: flex;
   justify-content: space-between;
