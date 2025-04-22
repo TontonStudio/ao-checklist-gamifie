@@ -103,6 +103,15 @@
   box-shadow: 1px 1px 0 var(--gb-dark);
 }
 
+/* Override pour les boutons standard en mode warning */
+.warning-mode .pixel-btn:hover {
+  box-shadow: 5px 5px 0 #cc0000;
+}
+
+.warning-mode .pixel-btn:active {
+  box-shadow: 1px 1px 0 #cc0000;
+}
+
 /* Bouton de contrôle du son - Spécifique au mode warning */
 .sound-toggle {
   position: fixed !important;
@@ -174,25 +183,25 @@
   align-items: center;
   justify-content: center;
   overflow: hidden; /* Empêche le débordement */
-  box-shadow: 0 2px 0 rgba(15, 56, 15, 0.5); /* Légère ombre pour plus de relief */
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.3); /* Ombre neutre pour éviter les verts */
   border-radius: 3px; /* Border radius pour adoucir les coins */
 }
 
 .copy-btn:hover {
   background-color: var(--gb-light);
   transform: translateY(-2px);
-  box-shadow: 0 4px 0 rgba(15, 56, 15, 0.5);
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.3);
 }
 
 .copy-btn:active {
   transform: translateY(1px);
-  box-shadow: 0 1px 0 rgba(15, 56, 15, 0.5);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
 }
 
 /* Style pour l'animation de succès après copie */
 .copy-success {
-  background-color: #8bac0f !important;
-  color: #0f380f !important;
+  background-color: #4a90e2 !important; /* Bleu neutre pour remplacer le vert */
+  color: white !important;
   animation: copyPulse 0.5s ease-in-out;
 }
 
@@ -235,6 +244,16 @@
 .subtask-copy-btn:active {
   transform: translateY(1px);
   box-shadow: 1px 1px 0 var(--gb-dark);
+}
+
+/* Override pour les boutons de sous-tâches en mode warning */
+.warning-mode .subtask-copy-btn:hover {
+  background-color: #cc0000;
+  box-shadow: 2px 2px 0 #990000;
+}
+
+.warning-mode .subtask-copy-btn:active {
+  box-shadow: 1px 1px 0 #990000;
 }
 
 /* Amélioration des boutons de copie des grands livrables */

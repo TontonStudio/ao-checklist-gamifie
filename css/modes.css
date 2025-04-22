@@ -389,9 +389,9 @@ body.warning-mode {
 }
 
 @keyframes border-blink {
-  0% { border-color: var(--warning-medium); }
-  50% { border-color: var(--warning-dark); }
-  100% { border-color: var(--warning-medium); }
+  0% { border-color: #cc0000; }
+  50% { border-color: #990000; }
+  100% { border-color: #cc0000; }
 }
 
 @keyframes text-blink {
