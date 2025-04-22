@@ -1,0 +1,173 @@
+/* Styles responsifs */
+@media (max-width: 768px) {
+  body {
+    padding: 8px; /* Réduire davantage le padding */
+  }
+  
+  .gameboy-container {
+    padding: 12px; /* Moins de padding pour donner plus d'espace */
+  }
+  
+  h1 {
+    font-size: 14px; /* Titre principal plus petit */
+  }
+  
+  .welcome-main {
+    gap: 20px;
+  }
+  
+  .upload-container,
+  .info-section {
+    padding: 15px;
+  }
+  
+  .upload-container h2,
+  .info-section h3 {
+    font-size: 12px;
+  }
+  
+  .small-text {
+    font-size: 8px;
+  }
+  
+  .file-input-label {
+    font-size: 9px;
+    padding: 8px 12px;
+  }
+  
+  .file-name {
+    font-size: 8px;
+    max-width: 90%;
+  }
+  
+  .donate-btn {
+    font-size: 9px;
+    padding: 8px 12px;
+  }
+  
+  .contact-link {
+    font-size: 8px;
+  }
+  
+  /* Ajustements pour la barre de progression fixe sur mobile */
+  .progress-wrapper.fixed {
+    padding: 5px 15px;
+    width: calc(100% - 32px) !important; /* Ajusté pour correspondre à la taille de l'écran moins les marges */
+    max-width: none !important; /* Annule la max-width sur mobile */
+    left: 16px !important; /* Demi-padding du body */
+    transform: none !important; /* Pas de transformation pour éviter les problèmes d'alignement */
+  }
+  
+  .progress-spacer.active {
+    height: 40px; /* Hauteur adaptée pour mobile */
+  }
+  
+  .task-header {
+    padding: 8px 10px; /* Moins de padding horizontal */
+  }
+  
+  .task-title-container {
+    flex-wrap: nowrap; /* Forcer le maintien sur une ligne */
+    overflow: hidden;
+  }
+  
+  .task-header h2 {
+    font-size: 10px; /* Titres de tâches plus petits */
+    line-height: 1.2; /* Meilleur espacement des lignes */
+    white-space: normal; /* Permettre au texte de passer à la ligne */
+    word-break: break-word; /* Permettre la rupture des mots longs */
+    max-height: 2.4em; /* Maximum deux lignes de texte */
+    text-overflow: ellipsis; /* Ajouter des points de suspension */
+  }
+  
+  /* Réduire l'espace pour la checkbox principale (moins d'espace gaspillé) */
+  .task-main-checkbox {
+    margin-right: 6px;
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    min-height: 20px;
+  }
+  
+  /* Réduire la taille de la police pour le message informatif */
+  .info-message {
+    font-size: 9px;
+    padding: 6px 8px;
+    line-height: 1.3;
+    white-space: normal; /* Permettre le passage à la ligne */
+    text-align: center;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    display: block;
+  }
+  
+  /* Sous-tâches plus compactes sur mobile */
+  .subtask {
+    padding: 8px 6px; /* Padding réduit */
+  }
+  
+  .subtask-content {
+    overflow: hidden;
+  }
+  
+  .subtask-label {
+    font-size: 9px; /* Taille réduite */
+    line-height: 1.3;
+    white-space: normal; /* Permettre le passage à la ligne */
+  }
+  
+  .subtask-filename {
+    font-size: 8px;
+    line-height: 1.2;
+    white-space: normal; /* Permettre le passage à la ligne */
+  }
+  
+  .subtask-checkbox {
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    min-height: 18px;
+    margin-right: 6px;
+  }
+  
+  .subtask-copy-btn {
+    font-size: 6px;
+    padding: 2px 4px;
+    min-height: 20px;
+    width: auto;
+    min-width: 50px;
+  }
+  
+  .copy-btn {
+    padding: 3px 6px; /* Padding plus compact */
+    font-size: 7px; /* Police plus petite */
+    min-height: 24px; /* Hauteur minimale réduite */
+    min-width: 65px; /* Largeur minimale plus petite */
+    width: auto; /* Permettre au bouton de s'adapter au contenu */
+    flex-shrink: 0; /* Empêcher le bouton de rétrécir */
+  }
+  
+  .task-footer {
+    padding: 8px; /* Padding réduit */
+    flex-direction: row; /* Forcer l'alignement horizontal */
+    justify-content: space-between; /* Espacer les éléments uniformément */
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .filename-display {
+    min-width: 0; /* Éliminer la largeur minimale sur mobile */
+    font-size: 9px; /* Texte légèrement plus petit */
+    padding: 4px 8px; /* Moins de padding */
+    margin-right: 8px; /* Moins d'espace avant le bouton */
+    max-width: 65%; /* Limiter la largeur pour laisser de la place au bouton */
+  }
+  
+  /* Repositionnement du tag DONE! pour les mobiles */
+  .task-done-tag {
+    left: -5px;
+    top: -15px;
+    transform: translateY(0);
+  }
+}

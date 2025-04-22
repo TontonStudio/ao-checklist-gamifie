@@ -1,0 +1,277 @@
+/* Styles pour les différents modes */
+
+/* Mode doré quand tout est complété */
+.gameboy-container.golden-mode {
+  background-color: var(--gold-bg);
+  border-color: var(--gold-dark-border);
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.7), 10px 10px 0 rgba(186, 134, 11, 0.3);
+  transition: all 1s ease;
+}
+
+.completion-message {
+  display: none;
+  text-align: center;
+  color: #8b4513;
+  font-size: 12px;
+  margin: 10px 0;
+  padding: 8px;
+}
+
+.golden-mode .completion-message {
+  display: block;
+}
+
+.golden-mode header,
+.golden-mode footer {
+  border-color: var(--gold-dark-border);
+}
+
+.golden-mode h1 {
+  color: var(--gold-dark-border);
+  text-shadow: 2px 2px 0 var(--gold-light);
+}
+
+.golden-mode .task-item {
+  border-color: var(--gold-dark-border);
+  background-color: var(--gold-item-bg);
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+.golden-mode .task-header {
+  background-color: var(--gold-header);
+  color: #000000;
+}
+
+.golden-mode .task-header h2 {
+  color: #000000;
+  transition: color 0.2s ease;
+}
+
+.golden-mode .task-header:hover h2 {
+  color: #FFFFFF;
+}
+
+.golden-mode .task-footer {
+  background-color: var(--gold-header);
+  color: #000000;
+}
+
+.golden-mode .filename-display {
+  background-color: #115740;
+  color: #ffffff;
+}
+
+.golden-mode .copy-btn {
+  background-color: #115740;
+  color: #ffffff;
+  border-color: #000000;
+}
+
+.golden-mode .copy-btn:hover {
+  background-color: #0a3b2b;
+}
+
+.golden-mode .subtasks {
+  background-color: var(--gold-content-bg);
+}
+
+.golden-mode .subtask:hover {
+  background-color: rgba(219, 165, 32, 0.2);
+}
+
+.golden-mode .task-progress {
+  background-color: #ff9518; /* Orange */
+  color: #000000;
+  font-weight: bold;
+  border: 1px solid #8b4513;
+}
+
+.golden-mode .progress-text {
+  color: var(--gold-dark-border);
+  font-weight: bold;
+  font-size: 16px;
+  animation: pulsate 1.5s ease-in-out infinite;
+  text-shadow: 0 0 5px rgba(255, 215, 0, 0.7);
+}
+
+.golden-mode .pixel-btn {
+  background-color: var(--gold-header);
+  box-shadow: 3px 3px 0 var(--gold-dark-border);
+  color: white;
+}
+
+.golden-mode .task-done-tag {
+  background-color: #8b4513;
+  color: var(--gold-light);
+  border-color: var(--gold-light);
+}
+
+.golden-mode .subtask-filename {
+  color: var(--gold-dark);
+}
+
+.golden-mode .subtask-copy-btn {
+  background-color: var(--gold-medium);
+  color: white; /* Texte blanc pour une meilleure lisibilité */
+  border-color: var(--gold-dark);
+  box-shadow: none;
+}
+
+.golden-mode .subtask-copy-btn:hover {
+  background-color: var(--gold-light);
+  box-shadow: 2px 2px 0 var(--gold-dark);
+}
+
+.golden-mode .subtask-copy-btn:active {
+  box-shadow: 1px 1px 0 var(--gold-dark);
+}
+
+.golden-mode .copy-success {
+  background-color: var(--gold-light) !important;
+  color: var(--gold-text) !important;
+}
+
+.golden-mode .subtask-checkbox:checked ~ .subtask-label,
+.golden-mode .subtask-checkbox:checked ~ *,
+.golden-mode .subtask:has(.subtask-checkbox:checked),
+.golden-mode .checked-subtask {
+  background-color: rgba(139, 69, 19, 0.25); /* Teinte brune/dorée pour le mode doré */
+}
+
+.golden-mode .subtask-checkbox:checked + .subtask-label {
+  color: #5c2e0a; /* Brun très foncé pour le texte en mode doré - amélioration de la lisibilité */
+  text-shadow: 0 0 1px rgba(255, 255, 255, 0.3); /* Légère ombre pour améliorer la lisibilité */
+  opacity: 0.9; /* Légèrement plus visible */
+}
+
+.golden-mode .subtask-checkbox:checked {
+  background-color: #daa520; /* Or plus foncé */
+  border-color: #8b4513; /* Bordure brune */
+}
+
+.golden-mode .subtask-checkbox:checked::after {
+  color: #8b4513; /* Couleur brune pour la coche */
+  text-shadow: 0 0 2px rgba(255, 255, 255, 0.7); /* Ombre claire pour contraste */
+}
+
+.golden-mode .task-main-checkbox:checked::after {
+  color: #8b4513; /* Couleur brune pour la coche */
+  text-shadow: 0 0 2px rgba(255, 255, 255, 0.7); /* Ombre claire pour contraste */
+}
+
+.golden-mode .info-message {
+  background-color: var(--gold-dark);
+  color: white;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
+}
+
+.golden-mode .copy-btn {
+  background-color: #115740;
+  color: white;
+  border-color: black;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.4);
+}
+
+.golden-mode .copy-btn:hover {
+  background-color: #0a3b2b;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.4);
+}
+
+.golden-mode .copy-btn:active {
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+}
+
+/* Style pour le mode d'avertissement */
+body.warning-mode {
+  background-color: #ffebeb;
+}
+
+.warning-mode .gameboy-container {
+  background-color: #ffe0e0;
+  box-shadow: 0 0 20px rgba(255, 0, 0, 0.7), 10px 10px 0 rgba(139, 0, 0, 0.3);
+  border-color: var(--warning-medium);
+  transition: all 0.5s ease;
+}
+
+.warning-mode h1 {
+  color: var(--warning-dark);
+  text-shadow: 2px 2px 0 var(--warning-light);
+}
+
+.warning-mode .task-header {
+  background-color: var(--warning-medium);
+}
+
+.warning-mode .task-header:hover {
+  background-color: var(--warning-dark);
+}
+
+.warning-mode .task-footer {
+  background-color: var(--warning-medium);
+}
+
+.warning-mode .progress-bar {
+  border-color: var(--warning-dark);
+}
+
+.warning-mode .progress-fill {
+  background-color: var(--warning-light);
+}
+
+.warning-mode .pixel-btn {
+  background-color: var(--warning-dark);
+  box-shadow: 3px 3px 0 var(--warning-medium);
+}
+
+.warning-mode .pixel-btn:hover {
+  box-shadow: 5px 5px 0 var(--warning-medium);
+}
+
+.warning-mode .task-done-tag {
+  background-color: var(--warning-dark);
+  border-color: var(--warning-light);
+}
+
+.warning-mode .countdown-container {
+  background-color: #fff0f0;
+  border: 3px solid var(--warning-medium);
+  padding: 10px;
+  border-radius: 5px;
+  animation: warning-pulse 2s infinite;
+}
+
+@keyframes warning-pulse {
+  0% { box-shadow: 0 0 5px rgba(255, 0, 0, 0.5); }
+  50% { box-shadow: 0 0 15px rgba(255, 0, 0, 0.8); }
+  100% { box-shadow: 0 0 5px rgba(255, 0, 0, 0.5); }
+}
+
+/* Bordure clignotante pour le mode d'avertissement */
+.warning-mode .market-title {
+  border: 2px solid var(--warning-medium);
+  animation: border-blink 1.5s infinite;
+  background-color: #ffeeee;
+}
+
+.warning-mode .task-item:not(.completed) {
+  border-color: var(--warning-medium);
+}
+
+.warning-mode .countdown-warning {
+  font-weight: bold;
+  color: var(--warning-dark);
+  font-size: 10px;
+  animation: text-blink 1.5s infinite;
+}
+
+@keyframes border-blink {
+  0% { border-color: var(--warning-medium); }
+  50% { border-color: var(--warning-dark); }
+  100% { border-color: var(--warning-medium); }
+}
+
+@keyframes text-blink {
+  0% { opacity: 1; }
+  50% { opacity: 0.7; }
+  100% { opacity: 1; }
+}

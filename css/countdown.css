@@ -1,0 +1,51 @@
+/* Marché et Countdown */
+.market-title {
+  font-size: 10px;
+  margin: 10px 0;
+  padding: 5px 10px;
+  background-color: var(--gb-dark);
+  color: var(--gb-lightest);
+  text-align: center;
+  border: 2px solid var(--gb-darkest);
+  border-radius: 3px;
+}
+
+.countdown-container {
+  margin: 10px 0;
+  text-align: center;
+}
+
+.countdown-label {
+  font-size: 10px;
+  margin-bottom: 5px;
+}
+
+.countdown-timer {
+  font-size: 16px;
+  font-weight: bold;
+  margin: 5px 0;
+}
+
+.countdown-message {
+  font-size: 9px;
+  margin-top: 5px;
+  min-height: 20px;
+}
+
+.countdown-warning {
+  color: var(--warning-color);
+  font-weight: bold;
+  animation: blink 1s infinite;
+}
+
+.countdown-container.warning-mode {
+  background-color: var(--warning-bg);
+  border: 2px solid var(--warning-color);
+  padding: 5px;
+  border-radius: 3px;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}

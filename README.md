@@ -1,87 +1,118 @@
-# Outil de suivi gamifié de réponse aux marchés publics
+# AO Checklist - Tonton Studio (v2)
 
-Un outil web gamifié au style Game Boy pour suivre l'avancement des réponses aux appels d'offres de Tonton Studio.
-
-<p align="center">
-  <img src="img/TTS_Logo.png" alt="Tonton Studio Logo" width="250" height="250"/>
-</p>
-
-## Description
-
-Cet outil offre une expérience ludique pour gérer les tâches liées à la préparation d'une réponse à un appel d'offres public. Inspiré par l'esthétique Game Boy rétro (8-bit), il transforme une activité potentiellement fastidieuse en une expérience engageante avec des animations, des effets sonores et un système de récompense visuelle.
+Outil de suivi gamifié de réponse aux marchés publics, inspiré par l'esthétique des jeux vidéo rétro de type Game Boy.
 
 ## Fonctionnalités
 
-- Suivi des livrables et sous-tâches pour les appels d'offres
-- Interface interactive au style Game Boy rétro
-- Checkbox principale permettant de cocher/décocher toutes les sous-tâches d'un livrable en un seul clic
-- Visualisation intuitive avec symboles de coche (✓) pour les tâches complétées
-- Mise en évidence visuelle des tâches cochées (couleur de fond différente)
-- Effets visuels et sonores de récompense
-- Sauvegarde automatique de la progression (localStorage)
-- Mode "Victoire" avec thème doré lorsque 100% des tâches sont complétées
-- Défilement automatique vers le haut lors de la complétion totale
-- Conception responsive optimisée pour mobile et desktop
-- Fonction de copie du nom de fichier pour chaque livrable
-- Fonctionne entièrement côté client, sans dépendance serveur
-
-## Installation
-
-Aucune installation n'est nécessaire. Il suffit d'ouvrir le fichier `index.html` dans un navigateur web moderne.
-
-```bash
-# Cloner le dépôt
-git clone https://github.com/tontonantonin/ao-checklist.git
-
-# Naviguer dans le dossier
-cd ao-checklist
-
-# Ouvrir dans le navigateur
-open index.html  # sur macOS
-```
-
-## Technologies utilisées
-
-- HTML5
-- CSS3 (avec animations et transitions)
-- JavaScript vanilla (sans frameworks)
-- LocalStorage pour la persistance des données
+- **Interface rétro Game Boy** : Design 8-bit nostalgique
+- **Suivi des tâches** : Gestion de livrables et sous-tâches pour les appels d'offres
+- **Gamification** : Effets visuels et sonores, animations lors de la complétion des tâches
+- **Compte à rebours** : Suivi du temps restant jusqu'à la date limite de l'AO
+- **Mode alerte** : Avertissement visuel et sonore quand il reste moins de 48h
+- **Contrôle du son** : Possibilité de couper/réactiver le son d'alerte
+- **Copie des noms de fichier** : Facilité de copier les noms de fichiers formatés selon les exigences du marché
+- **Personnalisation** : Chargement d'un fichier tasks.js spécifique à chaque appel d'offres
+- **Sauvegarde locale** : Conservation de la progression entre les sessions
 
 ## Structure du projet
 
 ```
 /__CHECKLIST__/
-├── index.html        # Structure HTML principale
-├── style.css         # Feuille de style Game Boy
-├── script.js         # Logique interactive
-├── tasks.js          # Liste des livrables et sous-tâches
-├── img/              # Images et logo
-└── audio/            # Effets sonores
+├── index.html              # Page principale
+├── css/                    # Styles modulaires
+│   ├── base.css            # Styles de base
+│   ├── tasks.css           # Styles des tâches
+│   ├── buttons.css         # Styles des boutons
+│   ├── progress.css        # Styles de la barre de progression
+│   ├── effects.css         # Styles des effets visuels
+│   ├── modes.css           # Styles des modes (doré, warning)
+│   ├── responsive.css      # Styles adaptatifs
+│   ├── welcome.css         # Styles de la page d'accueil
+│   └── countdown.css       # Styles du compte à rebours
+├── js/
+│   ├── app.js              # Initialisation de l'application
+│   ├── config.js           # Configuration globale
+│   ├── logger.js           # Utilitaire de journalisation
+│   ├── utils.js            # Fonctions utilitaires
+│   ├── sound-control.js    # Gestion du son
+│   ├── countdown.js        # Gestion du compte à rebours
+│   ├── effects.js          # Effets visuels et sonores
+│   ├── tasks-manager.js    # Gestion des tâches
+│   └── fix-warning-mode.js # Assure le bon fonctionnement du mode warning
+├── audio/
+│   ├── check.mp3           # Son de cochage
+│   ├── uncheck.mp3         # Son de décochage
+│   ├── success.mp3         # Son de complétion
+│   ├── finish.mp3          # Son de finalisation
+│   └── warning.mp3         # Son d'avertissement
+└── img/
+    ├── TTS_Logo.png        # Logo standard
+    └── TTS_Logo_Checked.png # Logo activé (quand tout est complété)
 ```
 
-## Personnalisation
+## Format du fichier tasks.js
 
-Pour adapter l'outil à vos besoins :
+```javascript
+// Configuration globale de l'appel d'offres
+const aoConfig = {
+  title: "Titre de l'appel d'offres",
+  deadline: "YYYY-MM-DDThh:mm:ss", // Format ISO pour la date limite
+  reference: "REF-YYYY-X" // Référence de l'AO
+};
 
-1. Modifiez la liste des livrables et sous-tâches dans le fichier `tasks.js`
-2. Ajustez les styles dans `style.css` pour changer l'apparence
-3. Remplacez les sons dans le dossier `audio/` par vos propres effets sonores
+// Structure des tâches
+const tasks = [
+  {
+    label: 'Nom du livrable',
+    filename: 'Nom_de_fichier_global.pdf', // Fichier global optionnel
+    isMultiFile: false, // Indique si le livrable est un fichier unique ou multiple
+    subtasks: [
+      { label: "Sous-tâche 1", filename: "Fichier_Soustache1.pdf" }, // Avec fichier
+      { label: "Sous-tâche 2" } // Sans fichier
+    ]
+  },
+  {
+    label: 'Livrable multi-fichiers',
+    isMultiFile: true, // Pour les livrables comportant plusieurs fichiers distincts
+    subtasks: [
+      { label: "Document 1", filename: "Document1.pdf" },
+      { label: "Document 2", filename: "Document2.pdf" }
+    ]
+  }
+];
+```
 
-## Compatibilité et accessibilité
+## Utilisation
 
-Compatible avec les navigateurs modernes :
-- Chrome (recommandé)
-- Firefox
-- Safari
-- Edge
+1. Ouvrez l'application dans un navigateur web
+2. Chargez votre fichier tasks.js spécifique à l'appel d'offres
+3. Suivez votre progression en cochant les tâches accomplies
+4. Un compte à rebours vous indique le temps restant avant la date limite
+5. Lorsqu'il reste moins de 48h, un mode d'alerte visuel et sonore s'active
+6. Utilisez les boutons "Copier" pour récupérer les noms de fichiers standardisés
+7. Quand toutes les tâches sont complétées, un mode "victoire" s'active avec des effets visuels
 
-Fonctionnalités d'accessibilité et UX :
-- Contraste optimisé pour une meilleure lisibilité
-- Interactions tactiles améliorées sur appareils mobiles
-- Retours visuels clairs des actions utilisateur
-- Taille d'interface adaptative selon les appareils
-- Sélection intuitive par catégorie (checkbox principale)
+## Modes d'interface
 
-## Crédits
+- **Mode normal** : L'interface de base, inspirée de la Game Boy
+- **Mode warning** : Activé automatiquement lorsqu'il reste moins de 48h pour répondre à l'AO
+- **Mode doré** : Activé lorsque toutes les tâches sont complétées
 
-Développé par [Tonton Studio](https://tontonstud.io) © 2025
+## Nouveautés de la version 2
+
+- Architecture modulaire des styles CSS pour une meilleure maintenance
+- Système de gestion du son amélioré avec bouton de contrôle
+- Correction de divers bugs notamment dans la lecture automatique du son d'alerte
+- Amélioration du support mobile et de la réactivité
+- Détection automatique des changements d'écran
+- Conception optimisée du code pour une meilleure performance
+
+## Contact & Support
+
+Pour toute question ou suggestion : [contact@tontonstudio.com](mailto:contact@tontonstudio.com)
+
+Si vous trouvez cet outil utile, vous pouvez [m'offrir un café](https://www.paypal.com/donate/?business=RH4796JY56ZRE&no_recurring=0&item_name=Un+petit+caf%C3%A9+pour+mon+travail+?+%3A%29&currency_code=EUR) ☕
+
+## Licence
+
+© 2025 Tonton Studio - Tous droits réservés

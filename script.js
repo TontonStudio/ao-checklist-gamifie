@@ -41,23 +41,25 @@ document.addEventListener('DOMContentLoaded', function() {
     const logoRect = logoContainer.getBoundingClientRect();
     const logoBottom = logoRect.bottom;
     
-    // Mesurer la largeur de la barre de progression
-    const progressContainerWidth = progressWrapper.offsetWidth;
-    
     // Si le bas du logo est au-dessus du viewport, fixer la barre de progression
     if (logoBottom < 0) {
-      // Sauvegarder la largeur actuelle avant de fixer
-      if (!progressWrapper.style.width) {
-        progressWrapper.style.width = progressContainerWidth + 'px';
+      // Éviter de changer la largeur si déjà fixée
+      if (!progressWrapper.classList.contains('fixed')) {
+        // Assurer que les dimensions sont définies avant d'ajouter fixed
+        const gameContainerWidth = document.querySelector('.gameboy-container').offsetWidth;
+        const maxWidth = Math.min(gameContainerWidth - 40, window.innerWidth * 0.9);
+        progressWrapper.style.width = maxWidth + 'px';
       }
       
+      // Ajouter les classes après avoir défini la largeur
       progressWrapper.classList.add('fixed');
       progressSpacer.classList.add('active');
     } else {
+      // Enlever les classes fixed
       progressWrapper.classList.remove('fixed');
       progressSpacer.classList.remove('active');
       
-      // Réinitialiser la largeur si elle a été définie
+      // Réinitialiser la largeur UNIQUEMENT si on n'est plus en mode fixed
       progressWrapper.style.width = '';
     }
   }

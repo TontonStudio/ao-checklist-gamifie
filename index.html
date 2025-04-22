@@ -5,15 +5,75 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AO Checklist - Tonton Studio</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap">
-  <link rel="stylesheet" href="style.css">
+  <!-- Styles modulaires -->
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/tasks.css">
+  <link rel="stylesheet" href="css/buttons.css">
+  <link rel="stylesheet" href="css/progress.css">
+  <link rel="stylesheet" href="css/effects.css">
+  <link rel="stylesheet" href="css/modes.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/welcome.css">
+  <link rel="stylesheet" href="css/countdown.css">
 </head>
 <body>
-  <div class="gameboy-container">
+  <div id="welcome-screen" class="gameboy-container">
     <header>
       <div class="logo-container">
         <img src="img/TTS_Logo.png" alt="Tonton Studio Logo" class="logo">
       </div>
       <h1>AO Checklist</h1>
+      <div class="welcome-message">
+        <p>Bienvenue sur l'outil de suivi gamifié de réponse aux marchés publics !</p>
+        <p>Cet outil vous permet de suivre l'avancement de votre réponse à un appel d'offres.</p>
+      </div>
+    </header>
+    
+    <main class="welcome-main">
+      <div class="upload-container">
+        <h2>Charger votre fichier de tâches</h2>
+        <p class="small-text">Pour commencer, veuillez charger votre fichier tasks.js qui contient la liste des tâches à accomplir.</p>
+        <div class="file-input-container">
+          <label for="tasks-file" class="file-input-label">Sélectionner un fichier</label>
+          <input type="file" id="tasks-file" accept=".js" class="file-input">
+          <span id="file-name" class="file-name">Aucun fichier sélectionné</span>
+        </div>
+        <div class="error-message" id="file-error-message"></div>
+        <button id="load-tasks-btn" class="pixel-btn" disabled>Charger la checklist</button>
+      </div>
+      
+      <div class="info-section">
+        <h3>À propos</h3>
+        <p>Cette application vous aide à suivre et organiser votre réponse aux appels d'offres de manière ludique et engageante, inspirée par l'esthétique des jeux vidéo rétro.</p>
+        <p>Pour toute question, suggestion ou assistance, n'hésitez pas à me contacter :</p>
+        <a href="mailto:contact@tontonstudio.com" class="contact-link">contact@tontonstudio.com</a>
+        <div class="donate-container">
+          <p>Vous trouvez cet outil utile ? 🙂</p>
+          <a href="https://www.paypal.com/donate/?business=RH4796JY56ZRE&no_recurring=0&item_name=Un+petit+caf%C3%A9+pour+mon+travail+?+%3A%29&currency_code=EUR" class="donate-btn" target="_blank">M'offrir un café</a>
+        </div>
+      </div>
+    </main>
+    
+    <footer>
+      <div class="credits">
+        <p>TONTON STUDIO © 2025</p>
+        <p><a href="mailto:contact@tontonstudio.com" class="footer-link">contact@tontonstudio.com</a></p>
+      </div>
+    </footer>
+  </div>
+  
+  <div id="checklist-screen" class="gameboy-container" style="display: none;">
+    <header>
+      <div class="logo-container">
+        <img src="img/TTS_Logo.png" alt="Tonton Studio Logo" class="logo">
+      </div>
+      <h1>AO Checklist</h1>
+      <div id="market-title" class="market-title"></div>
+      <div id="countdown-container" class="countdown-container">
+        <div class="countdown-label">Temps restant :</div>
+        <div class="countdown-timer" id="countdown-timer"></div>
+        <div class="countdown-message" id="countdown-message"></div>
+      </div>
       <div id="completion-message" class="completion-message">
         T'as plus qu'à envoyer ton dossier ! Bonne chance !!!
       </div>
@@ -34,10 +94,15 @@
     
     <footer>
       <div class="controls">
-        <button id="reset-btn" class="pixel-btn">Reset Progress</button>
+        <button id="reset-btn" class="pixel-btn reset-btn">Réinitialiser</button>
+        <button id="return-home-btn" class="pixel-btn home-btn">Retour Accueil</button>
+      </div>
+      <div class="donate-mini-container">
+        <a href="https://www.paypal.com/donate/?business=RH4796JY56ZRE&no_recurring=0&item_name=Un+petit+caf%C3%A9+pour+mon+travail+?+%3A%29&currency_code=EUR" class="donate-mini-btn" target="_blank">M'offrir un café</a>
       </div>
       <div class="credits">
         <p>TONTON STUDIO © 2025</p>
+        <p><a href="mailto:contact@tontonstudio.com" class="footer-link">contact@tontonstudio.com</a></p>
       </div>
     </footer>
   </div>
@@ -48,11 +113,28 @@
   <audio id="check-sound" src="audio/check.mp3" preload="auto"></audio>
   <audio id="uncheck-sound" src="audio/uncheck.mp3" preload="auto"></audio>
   <audio id="finish-sound" src="audio/finish.mp3" preload="auto"></audio>
+  <audio id="warning-sound" src="audio/warning.mp3" preload="auto"></audio>
   
   <div id="flash-overlay" class="flash-overlay"></div>
   <div id="fireworks-container" class="fireworks-container"></div>
   
-  <script src="tasks.js"></script>
-  <script src="script.js"></script>
+  <!-- Bouton de contrôle du son (caché par défaut) -->
+  <div id="sound-toggle" class="sound-toggle" title="Couper le son">🔊</div>
+  
+  <!-- Chargement des scripts dans un ordre spécifique -->
+  <script src="js/config.js"></script>
+  <script src="js/logger.js"></script>
+  <script src="js/sound-control.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/countdown.js"></script>
+  <script src="js/effects.js"></script>
+  <script src="js/tasks-manager.js"></script>
+  <script src="js/app.js"></script>
+  
+  <!-- Les correctifs doivent être chargés après les scripts principaux -->
+  <script src="js/fix-progress-bar.js"></script>
+  <!-- <script src="js/fix-sound-button.js"></script> --> <!-- Désactivé car intégré à countdown.js -->
+  <script src="js/fix-warning-mode.js"></script>
+  <script src="js/fix-audio.js"></script>
 </body>
 </html>
