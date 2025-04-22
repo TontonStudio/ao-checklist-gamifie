@@ -1,5 +1,20 @@
 # Changelog
 
+## Version 2.2.0 (Avril 2025)
+
+### Améliorations majeures
+- **Refonte du mode warning** : Couleurs améliorées pour meilleure lisibilité (rouge, blanc, noir)
+- **Fond noir en mode warning** : Meilleur contraste visuel hors du cadre de l'application
+- **Chargement automatique des fichiers** : Le fichier tasks.js se charge désormais automatiquement dès sa sélection
+- **Fade-out du son en mode warning** : Le son d'alerte s'arrête en fondu lorsque toutes les tâches sont complétées
+- **Logo cliquable** : Accès direct au site Tonton Studio en cliquant sur le logo
+- **Réorganisation de l'interface d'accueil** : Mise en avant du GPT spécialisé
+
+### Corrections de bugs
+- **Arrêt du son en retour accueil** : Le son d'alerte ne se relance plus en revenant à l'accueil
+- **Amélioration des contrastes** : Meilleure lisibilité des textes en mode warning
+- **Contrôle du son cohérent** : Affichage amélioré du bouton de contrôle du son
+
 ## Version 2.1.0 (Avril 2025)
 
 ### Améliorations majeures

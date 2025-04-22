@@ -20,7 +20,9 @@
   <div id="welcome-screen" class="gameboy-container">
     <header>
       <div class="logo-container">
-        <img src="img/TTS_Logo.png" alt="Tonton Studio Logo" class="logo">
+        <a href="https://www.tontonstudio.com" target="_blank" title="Visiter le site Tonton Studio">
+          <img src="img/TTS_Logo.png" alt="Tonton Studio Logo" class="logo">
+        </a>
       </div>
       <h1>AO Checklist</h1>
       <div class="welcome-message">
@@ -33,24 +35,24 @@
       <div class="upload-container">
         <h2>Charger votre fichier de tâches</h2>
         <p class="small-text">Pour commencer, veuillez charger votre fichier tasks.js qui contient la liste des tâches à accomplir.</p>
+        
+        <div class="create-tasks-container">
+          <p>Pas encore de fichier tasks.js ? Utilisez notre GPT spécialisé pour en générer un :</p>
+          <a href="https://chatgpt.com/g/g-680541e3745c8191b7bca4aa6861ad09-tonton-studio-gamified-ao-checklist-generator" class="gpt-link" target="_blank">Assistant Création tasks.js</a>
+        </div>
+        
         <div class="file-input-container">
-          <label for="tasks-file" class="file-input-label">Sélectionner un fichier</label>
+          <label for="tasks-file" class="file-input-label">Sélectionner un fichier tasks.js</label>
           <input type="file" id="tasks-file" accept=".js" class="file-input">
           <span id="file-name" class="file-name">Aucun fichier sélectionné</span>
         </div>
         <div class="error-message" id="file-error-message"></div>
-        <button id="load-tasks-btn" class="pixel-btn" disabled>Charger la checklist</button>
+        <a href="https://chatgpt.com/g/g-680541e3745c8191b7bca4aa6861ad09-tonton-studio-gamified-ao-checklist-generator" class="gpt-btn" target="_blank">Créer avec GPT</a>
       </div>
       
       <div class="info-section">
         <h3>À propos</h3>
         <p>Cette application vous aide à suivre et organiser votre réponse aux appels d'offres de manière ludique et engageante, inspirée par l'esthétique des jeux vidéo rétro.</p>
-        
-        <div class="create-tasks-container">
-          <h3>Créer votre fichier tasks.js</h3>
-          <p>Utilisez notre GPT spécialisé pour générer rapidement un fichier tasks.js adapté à votre appel d'offres :</p>
-          <a href="https://chatgpt.com/g/g-680541e3745c8191b7bca4aa6861ad09-tonton-studio-gamified-ao-checklist-generator" class="gpt-link" target="_blank">Assistant Création tasks.js</a>
-        </div>
         
         <p>Pour toute question, suggestion ou assistance, n'hésitez pas à me contacter :</p>
         <a href="mailto:contact@tontonstudio.com" class="contact-link">contact@tontonstudio.com</a>
@@ -72,7 +74,9 @@
   <div id="checklist-screen" class="gameboy-container" style="display: none;">
     <header>
       <div class="logo-container">
-        <img src="img/TTS_Logo.png" alt="Tonton Studio Logo" class="logo">
+        <a href="https://www.tontonstudio.com" target="_blank" title="Visiter le site Tonton Studio">
+          <img src="img/TTS_Logo.png" alt="Tonton Studio Logo" class="logo">
+        </a>
       </div>
       <h1>AO Checklist</h1>
       <div id="market-title" class="market-title"></div>

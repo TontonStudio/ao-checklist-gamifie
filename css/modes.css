@@ -183,58 +183,66 @@
 
 /* Style pour le mode d'avertissement */
 body.warning-mode {
-  background-color: #ffebeb;
+  background-color: #000000; /* Fond noir pour le corps en mode warning */
 }
 
 .warning-mode .gameboy-container {
-  background-color: #ffe0e0;
+  background-color: #ffeeee; /* Fond rouge très pâle */
   box-shadow: 0 0 20px rgba(255, 0, 0, 0.7), 10px 10px 0 rgba(139, 0, 0, 0.3);
-  border-color: var(--warning-medium);
+  border-color: #cc0000; /* Rouge moyen */
   transition: all 0.5s ease;
 }
 
 .warning-mode h1 {
-  color: var(--warning-dark);
-  text-shadow: 2px 2px 0 var(--warning-light);
+  color: #990000; /* Rouge foncé */
+  text-shadow: 2px 2px 0 #ff3333; /* Rouge clair */
 }
 
 .warning-mode .task-header {
-  background-color: var(--warning-medium);
+  background-color: #cc0000; /* Rouge moyen */
+  color: #ffffff; /* Texte blanc pour la lisibilité */
 }
 
 .warning-mode .task-header:hover {
-  background-color: var(--warning-dark);
+  background-color: #990000; /* Rouge foncé */
+}
+
+.warning-mode .task-header h2 {
+  color: #ffffff; /* Texte blanc pour la lisibilité */
 }
 
 .warning-mode .task-footer {
-  background-color: var(--warning-medium);
+  background-color: #cc0000; /* Rouge moyen */
+  color: #ffffff; /* Texte blanc pour la lisibilité */
 }
 
 .warning-mode .progress-bar {
-  border-color: var(--warning-dark);
+  border-color: #990000; /* Rouge foncé */
 }
 
 .warning-mode .progress-fill {
-  background-color: var(--warning-light);
+  background-color: #ff3333; /* Rouge clair */
 }
 
 .warning-mode .pixel-btn {
-  background-color: var(--warning-dark);
-  box-shadow: 3px 3px 0 var(--warning-medium);
+  background-color: #990000; /* Rouge foncé */
+  box-shadow: 3px 3px 0 #cc0000; /* Rouge moyen */
+  color: #ffffff; /* Texte blanc pour la lisibilité */
 }
 
 .warning-mode .pixel-btn:hover {
-  box-shadow: 5px 5px 0 var(--warning-medium);
+  box-shadow: 5px 5px 0 #cc0000; /* Rouge moyen */
 }
 
 .warning-mode .task-done-tag {
-  background-color: var(--warning-dark);
-  border-color: var(--warning-light);
+  background-color: #990000; /* Rouge foncé */
+  border-color: #ff3333; /* Rouge clair */
+  color: #ffffff; /* Texte blanc pour la lisibilité */
 }
 
 .warning-mode .countdown-container {
-  background-color: #fff0f0;
-  border: 3px solid var(--warning-medium);
+  background-color: #ffeeee; /* Fond rouge très pâle */
+  border: 3px solid #cc0000; /* Rouge moyen */
   padding: 10px;
   border-radius: 5px;
   animation: warning-pulse 2s infinite;
@@ -248,20 +256,86 @@ body.warning-mode {
 
 /* Bordure clignotante pour le mode d'avertissement */
 .warning-mode .market-title {
-  border: 2px solid var(--warning-medium);
+  border: 2px solid #cc0000; /* Rouge moyen */
   animation: border-blink 1.5s infinite;
-  background-color: #ffeeee;
+  background-color: #ffeeee; /* Fond rouge très pâle */
+  color: #990000; /* Rouge foncé pour le texte */
 }
 
 .warning-mode .task-item:not(.completed) {
-  border-color: var(--warning-medium);
+  border-color: #cc0000; /* Rouge moyen */
 }
 
 .warning-mode .countdown-warning {
   font-weight: bold;
-  color: var(--warning-dark);
+  color: #990000; /* Rouge foncé */
   font-size: 10px;
   animation: text-blink 1.5s infinite;
+}
+
+/* Styles pour les sous-tâches en mode warning */
+.warning-mode .subtask {
+  background-color: #ffeeee; /* Fond rouge très pâle */
+}
+
+.warning-mode .subtask:hover {
+  background-color: #ffdddd; /* Fond rouge plus foncé au survol */
+}
+
+.warning-mode .subtask-label {
+  color: #000000; /* Texte noir pour la lisibilité */
+}
+
+.warning-mode .subtask-checkbox:checked ~ .subtask-label,
+.warning-mode .subtask-checkbox:checked ~ *,
+.warning-mode .subtask:has(.subtask-checkbox:checked),
+.warning-mode .checked-subtask {
+  background-color: rgba(153, 0, 0, 0.15); /* Rouge foncé transparent */
+}
+
+.warning-mode .subtask-checkbox:checked + .subtask-label {
+  color: #990000; /* Rouge foncé pour le texte */
+  opacity: 0.9;
+  text-shadow: none;
+}
+
+.warning-mode .filename-display,
+.warning-mode .subtask-filename {
+  color: #990000; /* Rouge foncé */
+}
+
+.warning-mode .copy-btn,
+.warning-mode .subtask-copy-btn {
+  background-color: #990000; /* Rouge foncé */
+  color: #ffffff; /* Texte blanc */
+  border-color: #000000; /* Bordure noire */
+}
+
+.warning-mode .copy-btn:hover,
+.warning-mode .subtask-copy-btn:hover {
+  background-color: #cc0000; /* Rouge moyen au survol */
+}
+
+.warning-mode .task-main-checkbox:checked::after,
+.warning-mode .subtask-checkbox:checked::after {
+  color: #990000; /* Rouge foncé pour la coche */
+}
+
+.warning-mode .info-message {
+  background-color: #990000; /* Rouge foncé */
+  color: #ffffff; /* Texte blanc */
+}
+
+/* Bouton de son en mode warning */
+.warning-mode .sound-toggle {
+  background-color: #ff3333 !important; /* Rouge clair */
+  color: #ffffff !important; /* Texte blanc */
+  border-color: #990000 !important; /* Bordure rouge foncé */
+}
+
+.warning-mode .sound-toggle[data-muted="true"] {
+  background-color: #ffdddd !important; /* Rouge pâle */
+  color: #990000 !important; /* Texte rouge foncé */
 }
 
 @keyframes border-blink {

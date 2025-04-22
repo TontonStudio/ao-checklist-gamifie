@@ -107,6 +107,9 @@ document.addEventListener('DOMContentLoaded', function() {
         if (Utils.validateTasksFile(content)) {
           // Stocker temporairement le contenu pour le bouton de chargement
           loadTasksBtn.dataset.fileContent = content;
+          
+          // Charger automatiquement le fichier dès qu'il est validé
+          Utils.loadTasksAndConfig(content);
         } else {
           fileErrorMessage.textContent = APP_CONFIG.messages.fileError;
           loadTasksBtn.disabled = true;

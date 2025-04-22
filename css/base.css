@@ -10,12 +10,12 @@
   --gold-dark: #b8860b;
   --gold-medium: #daa520;
   --done-color: #ff9518;
-  --warning-color: #ff4500;
-  --warning-bg: #ffeecc;
+  --warning-color: #ff0000;
+  --warning-bg: #ffeeee;
   --warning-dark: #990000;
   --warning-medium: #cc0000;
   --warning-light: #ff3333;
-  --warning-subtle: #ffe6e6;
+  --warning-subtle: #ffdddd;
   
   /* Variables pour le mode doré */
   --gold-bg: #f5e7a3;

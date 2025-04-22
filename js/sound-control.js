@@ -167,14 +167,47 @@ const SoundControl = {
   
   /**
    * Arrête la musique d'avertissement
+   * @param {boolean} fadeOut - Si vrai, effectue un fade out de la musique
    */
-  stopWarningSound: function() {
+  stopWarningSound: function(fadeOut = false) {
     // Vérifier que l'élément audio existe
-    if (!this.warningSound) return;
+    if (!this.warningSound || this.warningSound.paused) return;
     
-    // Arrêter la lecture
-    this.warningSound.pause();
-    this.warningSound.currentTime = 0;
+    if (fadeOut) {
+      // Effectuer un fade out progressif
+      if (APP_CONFIG.debug) console.log("Arrêt progressif du son d'avertissement (fade out)");
+      
+      const fadeDuration = 1000; // 1 seconde
+      const initialVolume = this.warningSound.volume;
+      const fadeSteps = 20; // Nombre d'étapes du fade
+      const volumeStep = initialVolume / fadeSteps;
+      const stepDuration = fadeDuration / fadeSteps;
+      
+      let currentStep = 0;
+      
+      const fadeInterval = setInterval(() => {
+        currentStep++;
+        
+        // Calculer le nouveau volume
+        const newVolume = initialVolume - (volumeStep * currentStep);
+        
+        // Appliquer le nouveau volume (avec sécurité pour ne pas descendre sous 0)
+        this.warningSound.volume = Math.max(0, newVolume);
+        
+        // Quand le fade est complet
+        if (currentStep >= fadeSteps) {
+          clearInterval(fadeInterval);
+          this.warningSound.pause();
+          this.warningSound.currentTime = 0;
+          // Réinitialiser le volume pour la prochaine lecture
+          this.warningSound.volume = initialVolume;
+        }
+      }, stepDuration);
+    } else {
+      // Arrêt immédiat
+      this.warningSound.pause();
+      this.warningSound.currentTime = 0;
+    }
   },
   
   /**

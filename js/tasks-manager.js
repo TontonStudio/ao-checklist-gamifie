@@ -435,8 +435,8 @@ const TasksManager = {
         this.isComplete = true;
         
         // Si le mode warning est actif, effectuer un fade out de la musique
-        if (CountdownManager.warningActive && CountdownManager.warningSound) {
-          SoundManager.fadeOutMusic();
+        if (CountdownManager.warningActive && typeof SoundControl !== 'undefined') {
+          SoundControl.stopWarningSound(true); // Fade out pendant 1 seconde
         }
         
         // Activer le mode doré (qui fera défiler vers le haut)
@@ -581,15 +581,16 @@ const TasksManager = {
       });
       
       // Arrêter le son d'avertissement s'il est en cours
-      const warningSound = document.getElementById('warning-sound');
-      if (warningSound) {
-        warningSound.pause();
-        warningSound.currentTime = 0;
-      }
-      
-      // Masquer le bouton de contrôle de la musique
-      if (SoundManager) {
-        SoundManager.hideMusicControl();
+      if (typeof SoundControl !== 'undefined') {
+        SoundControl.stopWarningSound(false); // Arrêt immédiat (pas de fade out)
+        SoundControl.hideSoundButton();
+      } else {
+        // Fallback si SoundControl n'est pas disponible
+        const warningSound = document.getElementById('warning-sound');
+        if (warningSound) {
+          warningSound.pause();
+          warningSound.currentTime = 0;
+        }
       }
       
       // Réinitialiser le champ de fichier
