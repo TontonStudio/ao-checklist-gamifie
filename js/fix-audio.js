@@ -99,18 +99,22 @@
    */
   function checkAndPlayWarningSound() {
     if (window.CountdownManager && CountdownManager.warningActive) {
-      if (window.AudioEngine) {
+      if (typeof SoundControl !== 'undefined') {
         // Vérifier si le son n'est pas en mode muet avant de le jouer
-        if (!AudioEngine.muted) {
+        if (!SoundControl.muted) {
           console.log("Tentative de lecture du son d'avertissement après déblocage...");
-          AudioEngine.playWarningSound();
+          SoundControl.playWarningSound();
         } else {
           console.log("Son en mode muet, pas de lecture");
         }
-      } else if (CountdownManager.warningSound && 
-                !CountdownManager.musicMuted) {
-        console.log("Tentative secours de lecture du son...");
-        CountdownManager.warningSound.play().catch(() => {});
+      } else if (typeof CountdownManager !== 'undefined' && 
+                 CountdownManager.warningActive) {
+        // Fallback - essayer de jouer directement le son
+        const warningSound = document.getElementById('warning-sound');
+        if (warningSound) {
+          console.log("Tentative secours de lecture du son...");
+          warningSound.play().catch(() => {});
+        }
       }
     }
   }

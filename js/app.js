@@ -16,7 +16,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const tasksFileInput = document.getElementById('tasks-file');
   const fileNameDisplay = document.getElementById('file-name');
   const fileErrorMessage = document.getElementById('file-error-message');
-  const loadTasksBtn = document.getElementById('load-tasks-btn');
   
   // Éléments DOM pour la checklist
   const resetBtn = document.getElementById('reset-btn');
@@ -95,8 +94,7 @@ document.addEventListener('DOMContentLoaded', function() {
       fileNameDisplay.textContent = file.name;
       fileErrorMessage.textContent = '';
       
-      // Activer le bouton de chargement
-      loadTasksBtn.disabled = false;
+      // Nous chargeons automatiquement maintenant, pas besoin d'activer un bouton
       
       // Lire le contenu du fichier
       const reader = new FileReader();
@@ -105,36 +103,26 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Valider le format du fichier
         if (Utils.validateTasksFile(content)) {
-          // Stocker temporairement le contenu pour le bouton de chargement
-          loadTasksBtn.dataset.fileContent = content;
+          // Charger directement le contenu
           
           // Charger automatiquement le fichier dès qu'il est validé
           Utils.loadTasksAndConfig(content);
         } else {
           fileErrorMessage.textContent = APP_CONFIG.messages.fileError;
-          loadTasksBtn.disabled = true;
         }
       };
       
       reader.onerror = function() {
         fileErrorMessage.textContent = "Erreur lors de la lecture du fichier.";
-        loadTasksBtn.disabled = true;
       };
       
       reader.readAsText(file);
     } else {
       fileNameDisplay.textContent = "Aucun fichier sélectionné";
-      loadTasksBtn.disabled = true;
     }
   });
   
-  // Gestionnaire d'événement pour le bouton de chargement
-  loadTasksBtn.addEventListener('click', function() {
-    const content = this.dataset.fileContent;
-    if (content) {
-      Utils.loadTasksAndConfig(content);
-    }
-  });
+  // Le bouton de chargement a été remplacé par un chargement automatique
   
   // Gestionnaire d'événement pour le bouton de réinitialisation
   resetBtn.addEventListener('click', function() {
