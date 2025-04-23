@@ -1,0 +1,27 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Documents
+*.md       text diff=markdown
+*.txt      text
+*.html     text diff=html
+*.css      text diff=css
+*.js       text
+*.json     text
+
+# Graphics
+*.png      binary
+*.jpg      binary
+*.jpeg     binary
+*.gif      binary
+*.ico      binary
+*.svg      text
+
+# Audio
+*.mp3      binary
+*.wav      binary
+*.ogg      binary
+
+# Exclude files from exporting
+.gitattributes export-ignore
+.gitignore     export-ignore

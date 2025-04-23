@@ -115,4 +115,6 @@ document.addEventListener('DOMContentLoaded', function() {
   returnHomeBtn.addEventListener('click', function() {
     TasksManager.returnToHome();
   });
+  
+  // La gestion de la barre de progression fixe est maintenant dans fixed-progress-bar.js
 });

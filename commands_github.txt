@@ -1,7 +1,106 @@
-# ÉTAPE 1: Créez d'abord un nouveau dépôt vide sur GitHub (sans README, LICENSE ou .gitignore)
-# via https://github.com/new
+# Guide des commandes Git/GitHub pour déployer l'AO Checklist
 
-# ÉTAPE 2: Exécutez ces commandes en remplaçant VOTRE_NOM_UTILISATEUR par votre nom d'utilisateur GitHub
+## Configuration initiale (première fois uniquement)
+
+### 1. Créer un dépôt sur GitHub
+1. Allez sur https://github.com/new
+2. Entrez "ao-checklist-gamifie" comme nom de dépôt
+3. Choisissez "Public" pour la visibilité
+4. Ne cochez PAS "Initialize this repository with a README"
+5. Cliquez sur "Create repository"
+
+### 2. Initialiser le dépôt local et le connecter à GitHub
+Option 1 (recommandée) : Utiliser le script automatisé
+```bash
+# Rendre le script exécutable
+chmod +x github_setup.sh
+
+# Exécuter le script (après avoir modifié le nom d'utilisateur à l'intérieur si nécessaire)
+./github_setup.sh
+```
+
+Option 2 (manuelle) : Exécuter les commandes une par une
+```bash
+# Naviguer vers le dossier du projet
 cd "/Users/Nordine/Desktop/TontonStudio/Commercial/Prospects/2025/AO Bordeaux Métropole/Propale/__CHECKLIST__"
+
+# Initialiser le dépôt Git
+git init
+
+# Ajouter tous les fichiers au dépôt
+git add .
+
+# Créer le premier commit
+git commit -m "Initial commit"
+
+# Connecter au dépôt distant (remplacez VOTRE_NOM_UTILISATEUR par votre nom d'utilisateur GitHub)
 git remote add origin git@github.com:VOTRE_NOM_UTILISATEUR/ao-checklist-gamifie.git
+
+# Pousser le code vers GitHub
 git push -u origin main
+```
+
+## Commandes courantes pour les mises à jour futures
+
+### Vérifier l'état des fichiers modifiés
+```bash
+git status
+```
+
+### Ajouter les fichiers modifiés à la zone de staging
+```bash
+# Ajouter tous les fichiers modifiés
+git add .
+
+# OU ajouter des fichiers spécifiques
+git add nom_du_fichier
+```
+
+### Créer un commit avec les changements
+```bash
+git commit -m "Description des changements effectués"
+```
+
+### Envoyer les commits vers GitHub
+```bash
+git push
+```
+
+### Récupérer les dernières modifications depuis GitHub
+```bash
+git pull
+```
+
+## Déploiement sur GitHub Pages
+
+Pour publier l'application sur GitHub Pages et la rendre accessible en ligne :
+
+1. Allez sur votre dépôt GitHub dans un navigateur
+2. Cliquez sur "Settings" (en haut à droite)
+3. Dans le menu de gauche, cliquez sur "Pages"
+4. Dans la section "Source", sélectionnez la branche "main"
+5. Cliquez sur "Save"
+6. Attendez quelques minutes, puis votre site sera disponible à l'adresse :
+   https://VOTRE_NOM_UTILISATEUR.github.io/ao-checklist-gamifie/
+
+## Astuces utiles
+
+### Annuler les modifications non commitées
+```bash
+git checkout -- .
+```
+
+### Voir l'historique des commits
+```bash
+git log --oneline
+```
+
+### Créer une nouvelle branche pour tester des fonctionnalités
+```bash
+git checkout -b nom_de_la_branche
+```
+
+### Revenir à la branche principale
+```bash
+git checkout main
+```

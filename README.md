@@ -1,19 +1,25 @@
-# AO Checklist - Tonton Studio (v2.2)
+# AO Checklist - Tonton Studio (v2.3)
 
 Outil de suivi gamifié de réponse aux marchés publics, inspiré par l'esthétique des jeux vidéo rétro de type Game Boy.
 
+![Version](https://img.shields.io/badge/version-2.3.0-green)
+![License](https://img.shields.io/badge/license-MIT-blue)
+
 ## Fonctionnalités
 
-- **Interface rétro Game Boy** : Design 8-bit nostalgique
-- **Suivi des tâches** : Gestion de livrables et sous-tâches pour les appels d'offres
+- **Interface rétro Game Boy** : Design 8-bit nostalgique inspiré des consoles portables classiques
+- **Suivi des tâches** : Gestion intuitive de livrables et sous-tâches pour les appels d'offres
 - **Gamification** : Effets visuels et sonores, animations lors de la complétion des tâches
 - **Compte à rebours** : Suivi du temps restant jusqu'à la date limite de l'AO
 - **Mode alerte** : Avertissement visuel et sonore quand il reste moins de 48h
 - **Contrôle du son** : Possibilité de couper/réactiver le son d'alerte avec fade-out automatique
 - **Copie des noms de fichier** : Facilité de copier les noms de fichiers formatés selon les exigences du marché
 - **Personnalisation** : Chargement automatique d'un fichier tasks.js spécifique à chaque appel d'offres
+- **Barre de progression fixe** : La barre de progression reste visible lors du défilement
+- **Badges "DONE!"** : Indicateurs visuels animés pour les tâches complétées
 - **Sauvegarde locale** : Conservation de la progression entre les sessions
 - **Création IA** : Génération du fichier tasks.js par notre GPT spécialisé
+- **Interface responsive** : S'adapte aux différentes tailles d'écran
 
 ## Structure du projet
 
@@ -25,8 +31,10 @@ Outil de suivi gamifié de réponse aux marchés publics, inspiré par l'esthét
 │   ├── tasks.css           # Styles des tâches
 │   ├── buttons.css         # Styles des boutons
 │   ├── progress.css        # Styles de la barre de progression
+│   ├── donate-block.css    # Styles du bloc de donation
 │   ├── effects.css         # Styles des effets visuels
 │   ├── modes.css           # Styles des modes (doré, warning)
+│   ├── tasks-fix.css       # Correctifs pour les titres longs
 │   ├── warning-override.css # Surcharge pour le mode warning
 │   ├── responsive.css      # Styles adaptatifs
 │   ├── welcome.css         # Styles de la page d'accueil
@@ -34,15 +42,14 @@ Outil de suivi gamifié de réponse aux marchés publics, inspiré par l'esthét
 ├── js/
 │   ├── app.js              # Initialisation de l'application
 │   ├── config.js           # Configuration globale
-│   ├── logger.js           # Utilitaire de journalisation
 │   ├── utils.js            # Fonctions utilitaires
 │   ├── sound-control.js    # Gestion du son
 │   ├── countdown.js        # Gestion du compte à rebours
 │   ├── effects.js          # Effets visuels et sonores
 │   ├── tasks-manager.js    # Gestion des tâches
-│   ├── fix-warning-mode.js # Détection du mode warning
-│   ├── fix-separator.js    # Correction du séparateur en mode warning
-│   └── fix-audio.js        # Déblocage audio sur les navigateurs
+│   ├── fixed-progress-bar.js # Gestion de la barre de progression fixe
+│   ├── sound-manager.js    # Gestion avancée du son
+│   └── audio-engine.js     # Moteur audio
 ├── audio/
 │   ├── check.mp3           # Son de cochage
 │   ├── uncheck.mp3         # Son de décochage
@@ -52,6 +59,7 @@ Outil de suivi gamifié de réponse aux marchés publics, inspiré par l'esthét
 └── img/
     ├── TTS_Logo.png        # Logo standard
     ├── TTS_Logo_Checked.png # Logo activé (quand tout est complété)
+    ├── tonton.png          # Avatar Tonton Studio
     └── mail.png            # Icône de mail en pixel art
 ```
 
@@ -105,15 +113,38 @@ const tasks = [
 - **Mode warning** : Activé automatiquement lorsqu'il reste moins de 48h, utilise une palette rouge
 - **Mode doré** : Activé lorsque toutes les tâches sont complétées, avec effets spéciaux
 
-## Nouveautés de la version 2.2
+## Nouveautés de la version 2.3
 
-- Chargement automatique du fichier tasks.js dès sa sélection
-- Intégration du GPT spécialisé pour la création de fichiers tasks.js
-- Design amélioré du mode warning avec palette rouge homogène
-- Fade-out du son en mode warning lors de la complétion de toutes les tâches
-- Interface d'accueil repensée pour plus de clarté
-- Logo cliquable redirigeant vers le site Tonton Studio
-- Icône mail pixel art dans la page d'accueil
+- **Barre de progression améliorée** : Reste visible lors du défilement pour un meilleur suivi
+- **Gestion optimisée des titres longs** : Troncature élégante avec points de suspension
+- **Visibilité des badges "DONE!"** : Assurée même lorsque la barre de progression est fixée
+- **Bloc de donation redesigné** : Style plus cohérent et mise en valeur
+- **Optimisation des performances** : Meilleure réactivité lors du défilement
+- **Compatibilité mobile améliorée** : Adaptation optimale sur petits écrans
+- **Stabilité renforcée** : Correction des problèmes de z-index et d'affichage
+
+## Génération automatique avec notre GPT spécialisé
+
+Pour créer rapidement un fichier tasks.js parfaitement formaté, utilisez notre GPT dédié :
+
+[🤖 **Tonton Studio - Gamified AO Checklist Generator**](https://chatgpt.com/g/g-680541e3745c8191b7bca4aa6861ad09-tonton-studio-gamified-ao-checklist-generator)
+
+Il suffit de télécharger vos documents d'appel d'offres (RC, CCTP, etc.) et le GPT générera automatiquement un fichier tasks.js prêt à l'emploi, en suivant parfaitement le format requis.
+
+## Installation
+
+1. Clonez ce dépôt sur votre machine locale ou sur votre serveur :
+   ```
+   git clone https://github.com/tontonantonin/ao-checklist-gamifie.git
+   ```
+
+2. Ouvrez le fichier `index.html` dans votre navigateur web préféré.
+
+3. Aucune installation supplémentaire ou dépendance n'est requise, l'application fonctionne directement dans votre navigateur.
+
+## Déploiement
+
+L'application peut être déployée sur n'importe quel hébergement statique (GitHub Pages, Netlify, Vercel, etc.) ou serveur web traditionnel. Il s'agit d'une application front-end pure sans dépendances côté serveur.
 
 ## Contact & Support
 
@@ -121,6 +152,12 @@ Pour toute question ou suggestion : [contact@tontonstudio.com](mailto:contact@to
 
 Si vous trouvez cet outil utile, vous pouvez [m'offrir un café](https://www.paypal.com/donate/?business=RH4796JY56ZRE&no_recurring=0&item_name=Un+petit+caf%C3%A9+pour+mon+travail+?+%3A%29&currency_code=EUR) ☕
 
+## Contribution
+
+Les contributions sont les bienvenues ! Consultez [CONTRIBUTING.md](CONTRIBUTING.md) pour plus d'informations sur la façon de contribuer à ce projet.
+
 ## Licence
 
-© 2025 Tonton Studio - Tous droits réservés
+Ce projet est distribué sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus d'informations.
+
+© 2025 Tonton Studio

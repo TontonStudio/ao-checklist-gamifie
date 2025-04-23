@@ -50,7 +50,7 @@ const Utils = {
         }
       });
     }).catch(err => {
-      console.error('Erreur lors de la copie dans le presse-papier:', err);
+      // Silencieux en production
     });
   },
   
@@ -82,14 +82,12 @@ const Utils = {
   },
   
   /**
-   * Vérifie le format du fichier chargé - version améliorée pour plus de souplesse
+   * Vérifie le format du fichier chargé
    * @param {string} content - Contenu du fichier
    * @returns {boolean} - true si le format est valide, false sinon
    */
   validateTasksFile: function(content) {
     try {
-      console.log("Validation du fichier tasks.js...");
-      
       // Vérification de base : le fichier doit contenir certains mots-clés
       const hasAoConfig = content.includes('aoConfig');
       const hasTasks = content.includes('tasks');
@@ -97,11 +95,10 @@ const Utils = {
       const hasSubtasks = content.includes('subtasks');
       
       if (!hasAoConfig || !hasTasks || !hasLabel || !hasSubtasks) {
-        console.error("Le fichier ne contient pas les structures nécessaires");
         return false;
       }
       
-      // Expressions régulières améliorées avec plus de souplesse
+      // Expressions régulières pour extraire aoConfig et tasks
       const aoConfigRegexes = [
         /const\s+aoConfig\s*=\s*({[\s\S]*?});/,
         /let\s+aoConfig\s*=\s*({[\s\S]*?});/,
@@ -136,11 +133,10 @@ const Utils = {
       }
       
       if (!aoConfigMatch || !tasksMatch) {
-        console.error("Impossible d'extraire aoConfig ou tasks");
         return false;
       }
       
-      // Utiliser une approche plus simple pour valider
+      // Valider le contenu
       try {
         // Extraire et évaluer la configuration
         const aoConfigJson = aoConfigMatch[1]
@@ -157,31 +153,25 @@ const Utils = {
         
         // Vérifier les propriétés minimales requises
         if (!evalAoConfig.title || !evalAoConfig.deadline) {
-          console.error("aoConfig ne contient pas title ou deadline");
           return false;
         }
         
         if (!Array.isArray(evalTasks) || evalTasks.length === 0) {
-          console.error("tasks n'est pas un tableau ou est vide");
           return false;
         }
         
         // Vérifier que chaque tâche a un label et des sous-tâches
         for (const task of evalTasks) {
           if (!task.label || !Array.isArray(task.subtasks)) {
-            console.error("Une tâche n'a pas de label ou de subtasks");
             return false;
           }
         }
         
-        console.log("Validation réussie !");
         return true;
       } catch (evalError) {
-        console.error('Erreur lors de l\'évaluation du contenu:', evalError);
         return false;
       }
     } catch (error) {
-      console.error('Erreur générale de validation du fichier:', error);
       return false;
     }
   },
@@ -192,8 +182,6 @@ const Utils = {
    */
   loadTasksAndConfig: function(content) {
     try {
-      console.log("Chargement des tâches et de la configuration...");
-      
       // Réinitialiser complètement l'état de l'application d'abord
       // Supprimer les modes warning et doré
       document.body.classList.remove('warning-mode');
@@ -264,7 +252,7 @@ const Utils = {
         TasksManager.isComplete = false;
       }
       
-      // Expressions régulières améliorées pour extraire aoConfig et tasks
+      // Expressions régulières pour extraire aoConfig et tasks
       const aoConfigRegexes = [
         /const\s+aoConfig\s*=\s*({[\s\S]*?});/,
         /let\s+aoConfig\s*=\s*({[\s\S]*?});/,
@@ -319,13 +307,7 @@ const Utils = {
         
         extractedAoConfig = (new Function('return ' + aoConfigJson))();
         extractedTasks = (new Function('return ' + tasksJson))();
-        
-        console.log("Extraction réussie:", {
-          config: extractedAoConfig,
-          tasksCount: extractedTasks.length
-        });
       } catch (e) {
-        console.error('Erreur lors du parsing des données:', e);
         throw e;
       }
       
@@ -350,20 +332,13 @@ const Utils = {
       // Initialiser les tâches
       if (TasksManager && TasksManager.initTasks) {
         TasksManager.initTasks();
-      } else {
-        console.error("TasksManager non disponible");
       }
       
       // Démarrer le compte à rebours si une date est définie
       if (extractedAoConfig.deadline && CountdownManager && CountdownManager.startCountdown) {
-        console.log("Démarrage du compte à rebours pour:", extractedAoConfig.deadline);
         CountdownManager.startCountdown(new Date(extractedAoConfig.deadline));
       }
-      
-      console.log("Chargement terminé avec succès");
-      
     } catch (error) {
-      console.error('Erreur lors du chargement des tâches:', error);
       document.getElementById('file-error-message').textContent = APP_CONFIG.messages.fileError;
     }
   },

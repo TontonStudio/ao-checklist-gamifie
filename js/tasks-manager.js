@@ -97,7 +97,9 @@ const TasksManager = {
           <input type="checkbox" class="task-main-checkbox" ${allChecked ? 'checked' : ''}>
           <h2>${task.label}</h2>
         </div>
-        <span class="task-progress">0/${subtaskCount}</span>
+        <div class="task-progress-wrapper">
+          <span class="task-progress">${completedCount}/${subtaskCount}</span>
+        </div>
       `;
       
       // Ajouter le tag DONE! s'il est complété
@@ -353,7 +355,9 @@ const TasksManager = {
     
     // Mise à jour du compteur
     const progressElement = taskElement.querySelector('.task-progress');
-    progressElement.textContent = `${completedCount}/${subtaskCount}`;
+    if (progressElement) {
+      progressElement.textContent = `${completedCount}/${subtaskCount}`;
+    }
     
     // Mise à jour de la checkbox principale
     const mainCheckbox = taskElement.querySelector('.task-main-checkbox');
@@ -435,7 +439,7 @@ const TasksManager = {
         this.isComplete = true;
         
         // Si le mode warning est actif, effectuer un fade out de la musique
-        if (CountdownManager.warningActive && typeof SoundControl !== 'undefined') {
+        if (CountdownManager && CountdownManager.warningActive && typeof SoundControl !== 'undefined') {
           SoundControl.stopWarningSound(true); // Fade out pendant 1 seconde
         }
         
@@ -478,6 +482,14 @@ const TasksManager = {
    * Active le mode doré (quand tout est complété)
    */
   activateGoldenMode: function() {
+    // Si la barre de progression était fixée, la défixer d'abord
+    if (this.progressWrapper && this.progressWrapper.classList.contains('fixed')) {
+      this.progressWrapper.classList.remove('fixed');
+      if (this.progressSpacer) {
+        this.progressSpacer.classList.remove('active');
+      }
+    }
+    
     // Assurer que l'écran défile en douceur vers le haut en premier
     window.scrollTo({
       top: 0,
@@ -487,14 +499,15 @@ const TasksManager = {
     // Attendre que le défilement soit terminé avant d'activer le mode doré
     // Délai plus long pour s'assurer que l'animation de défilement est terminée
     setTimeout(() => {
-      // Changer le logo
-      const logo = document.querySelector('.logo');
-      if (logo) {
+      // Changer TOUS les logos (celui de l'écran d'accueil et celui de la checklist)
+      document.querySelectorAll('.logo').forEach(logo => {
         logo.src = 'img/TTS_Logo_Checked.png';
-      }
+      });
       
-      // Activer le mode doré
-      this.gameContainer.classList.add('golden-mode');
+      // Activer le mode doré sur tous les conteneurs
+      document.querySelectorAll('.gameboy-container').forEach(container => {
+        container.classList.add('golden-mode');
+      });
       
       // Assurer que le message de complétion est visible
       const completionMessage = document.getElementById('completion-message');
@@ -508,13 +521,15 @@ const TasksManager = {
    * Désactive le mode doré
    */
   deactivateGoldenMode: function() {
-    this.gameContainer.classList.remove('golden-mode');
+    // Désactiver le mode doré sur tous les conteneurs
+    document.querySelectorAll('.gameboy-container').forEach(container => {
+      container.classList.remove('golden-mode');
+    });
     
-    // Restaurer le logo original
-    const logo = document.querySelector('.logo');
-    if (logo) {
+    // Restaurer tous les logos originaux
+    document.querySelectorAll('.logo').forEach(logo => {
       logo.src = 'img/TTS_Logo.png';
-    }
+    });
     
     // Cacher le message de complétion
     const completionMessage = document.getElementById('completion-message');

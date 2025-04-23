@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AO Checklist - Tonton Studio</title>
+  <title>AO Gamified Checklist - Tonton Studio</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap">
   <!-- Styles modulaires -->
   <link rel="stylesheet" href="css/base.css">
@@ -16,6 +16,8 @@
   <link rel="stylesheet" href="css/welcome.css">
   <link rel="stylesheet" href="css/countdown.css">
   <link rel="stylesheet" href="css/warning-override.css">
+  <link rel="stylesheet" href="css/donate-block.css">
+  <link rel="stylesheet" href="css/tasks-fix.css">
 </head>
 <body>
   <div id="welcome-screen" class="gameboy-container">
@@ -25,7 +27,7 @@
           <img src="img/TTS_Logo.png" alt="Tonton Studio Logo" class="logo">
         </a>
       </div>
-      <h1>AO Checklist</h1>
+      <h1>AO Gamified Checklist</h1>
       <div class="welcome-message">
         <p>Bienvenue sur l'outil de suivi gamifié de réponse aux marchés publics !</p>
         <p>Cet outil vous permet de suivre l'avancement de votre réponse à un appel d'offres.</p>
@@ -63,8 +65,11 @@
         <div class="separator"></div>
         
         <div class="donate-container">
-          <p>Vous trouvez cet outil utile ? 🙂</p>
-          <a href="https://www.paypal.com/donate/?business=RH4796JY56ZRE&no_recurring=0&item_name=Un+petit+caf%C3%A9+pour+mon+travail+?+%3A%29&currency_code=EUR" class="donate-btn" target="_blank">M'offrir un café</a>
+          <p class="donate-text">Vous trouvez cet outil utile ?</p>
+          <div class="donate-btn-wrapper">
+            <a href="https://www.paypal.com/donate/?business=RH4796JY56ZRE&no_recurring=0&item_name=Un+petit+caf%C3%A9+pour+mon+travail+?+%3A%29&currency_code=EUR" class="donate-btn" target="_blank">M'offrir un café</a>
+            <img src="img/tonton.png" alt="Tonton" class="tonton-icon">
+          </div>
         </div>
       </div>
     </main>
@@ -84,7 +89,7 @@
           <img src="img/TTS_Logo.png" alt="Tonton Studio Logo" class="logo">
         </a>
       </div>
-      <h1>AO Checklist</h1>
+      <h1>AO GAMIFIED CHECKLIST</h1>
       <div id="market-title" class="market-title"></div>
       <div id="countdown-container" class="countdown-container">
         <div class="countdown-label">Temps restant :</div>
@@ -114,8 +119,12 @@
         <button id="reset-btn" class="pixel-btn reset-btn">Réinitialiser</button>
         <button id="return-home-btn" class="pixel-btn home-btn">Retour Accueil</button>
       </div>
-      <div class="donate-mini-container">
-        <a href="https://www.paypal.com/donate/?business=RH4796JY56ZRE&no_recurring=0&item_name=Un+petit+caf%C3%A9+pour+mon+travail+?+%3A%29&currency_code=EUR" class="donate-mini-btn" target="_blank">M'offrir un café</a>
+      <div class="donate-container">
+        <p class="donate-text">Vous trouvez cet outil utile ?</p>
+        <div class="donate-btn-wrapper">
+          <a href="https://www.paypal.com/donate/?business=RH4796JY56ZRE&no_recurring=0&item_name=Un+petit+caf%C3%A9+pour+mon+travail+?+%3A%29&currency_code=EUR" class="donate-btn" target="_blank">M'offrir un café</a>
+          <img src="img/tonton.png" alt="Tonton" class="tonton-icon">
+        </div>
       </div>
       <div class="credits">
         <p>TONTON STUDIO © 2025</p>
@@ -138,21 +147,14 @@
   <!-- Bouton de contrôle du son (caché par défaut) -->
   <div id="sound-toggle" class="sound-toggle" title="Couper le son">🔊</div>
   
-  <!-- Chargement des scripts dans un ordre spécifique -->
+  <!-- Chargement des scripts -->
   <script src="js/config.js"></script>
-  <script src="js/logger.js"></script>
-  <script src="js/sound-control.js"></script>
   <script src="js/utils.js"></script>
+  <script src="js/sound-control.js"></script>
   <script src="js/countdown.js"></script>
   <script src="js/effects.js"></script>
   <script src="js/tasks-manager.js"></script>
+  <script src="js/fixed-progress-bar.js"></script>
   <script src="js/app.js"></script>
-  
-  <!-- Les correctifs doivent être chargés après les scripts principaux -->
-  <script src="js/fix-progress-bar.js"></script>
-  <!-- <script src="js/fix-sound-button.js"></script> --> <!-- Désactivé car intégré à countdown.js -->
-  <script src="js/fix-warning-mode.js"></script>
-  <script src="js/fix-audio.js"></script>
-  <script src="js/fix-separator.js"></script>
 </body>
 </html>

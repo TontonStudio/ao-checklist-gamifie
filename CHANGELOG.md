@@ -1,5 +1,37 @@
 # Changelog
 
+## Version 2.3.1 (Avril 2025)
+
+### Documentation et structure
+- **Documentation améliorée** : Mise à jour complète de la documentation du projet
+- **Structure GitHub** : Préparation du projet pour un déploiement sur GitHub
+- **Badges README** : Ajout de badges pour la version et la licence dans le README
+- **Guide d'installation** : Ajout de sections installation et déploiement dans le README
+- **Fichiers standardisés** : Mise en conformité avec les standards de documentation open source
+
+## Version 2.3.0 (Avril 2025)
+
+### Améliorations majeures
+- **Barre de progression fixe** : Implémentation robuste du système de barre de progression fixe en haut de l'écran
+- **Optimisation des titres longs** : Gestion améliorée des titres de tâches longs avec troncature et ellipsis
+- **Badges "DONE!" optimisés** : Visibilité garantie lors du défilement, même avec la barre fixée
+- **Bloc de donation redesigné** : Style plus cohérent avec médaillon et meilleure mise en valeur
+- **Espace uniforme des sous-tâches** : Correction des problèmes d'espacement dans les listes
+
+### Optimisations techniques
+- **Gestionnaire de barre fixe** : Nouveau système utilisant requestAnimationFrame pour une meilleure performance
+- **Z-index optimisés** : Hiérarchie claire pour éviter les problèmes de superposition
+- **Structure CSS modulaire** : Séparation claire des styles par fonctionnalité
+- **Animation des badges** : Correction de l'animation pour maintenir la position pendant la pulsation
+- **Gestion des débordements** : Meilleur contrôle des éléments qui débordent de leurs conteneurs
+
+### Architecture & refactorisation
+- **Nettoyage du code** : Suppression des logs et fonctions de débogage
+- **Consolidation des correctifs** : Intégration des correctifs temporaires dans le code principal
+- **Élimination des doublons** : Suppression des styles redondants et conflictuels
+- **Optimisation des fichiers** : Réduction du nombre de fichiers et meilleure organisation
+- **Amélioration de la maintenabilité** : Code plus lisible et mieux structuré
+
 ## Version 2.2.2 (Avril 2025)
 
 ### Nettoyage et optimisation

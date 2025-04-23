@@ -1,0 +1,22 @@
+# Configuration pour GitHub Pages
+title: AO Checklist Gamifié
+description: Outil de suivi gamifié de réponse aux marchés publics - Par Tonton Studio
+baseurl: "/ao-checklist-gamifie"
+url: ""
+
+# Options de construction
+lsi: false
+safe: true
+incremental: false
+highlighter: rouge
+gist:
+  noscript: false
+kramdown:
+  math_engine: mathjax
+  syntax_highlighter: rouge
+
+# Paramètres personnalisés
+author: Tonton Studio
+lang: fr-FR
+theme: jekyll-theme-cayman
+google_analytics: # UA-XXXXXXXX-X (à remplir si nécessaire)

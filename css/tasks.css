@@ -17,6 +17,8 @@
   cursor: pointer;
   transition: background-color 0.3s ease;
   position: relative;
+  min-height: 40px; /* Hauteur minimale pour les titres longs */
+  overflow: visible; /* Permettre aux badges de sortir */
 }
 
 .task-header:hover {
@@ -28,6 +30,8 @@
   align-items: center;
   flex-grow: 1;
   overflow: hidden; /* Empêche le débordement du contenu */
+  margin-right: 10px; /* Marge pour éviter que le texte touche le compteur */
+  max-width: calc(100% - 55px); /* Réserve de l'espace pour le compteur */
 }
 
 .task-main-checkbox {
@@ -72,6 +76,8 @@
   text-overflow: ellipsis; /* Ajoute des points de suspension si le texte déborde */
   white-space: nowrap; /* Empêche le texte de passer à la ligne */
   transition: color 0.2s ease;
+  max-width: 100%; /* Assurer que le texte reste dans son conteneur */
+  margin-right: 5px; /* Espace entre le texte et le compteur */
 }
 
 /* Changer la couleur du texte du titre quand l'en-tête est survolé */
@@ -89,16 +95,18 @@
   animation: pulse 1.5s infinite;
   position: absolute;
   left: -60px;
-  top: 15%;
+  top: 50%;
   transform: translateY(-50%);
-  z-index: 10;
+  z-index: 999;
   border: 2px solid var(--gb-darkest);
+  pointer-events: none; /* Pour que le clic passe à travers */
+  white-space: nowrap;
 }
 
 @keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
+  0% { transform: translateY(-50%) scale(1); }
+  50% { transform: translateY(-50%) scale(1.05); }
+  100% { transform: translateY(-50%) scale(1); }
 }
 
 .task-progress {
@@ -110,6 +118,10 @@
   margin-left: 10px;
   min-width: 45px;
   text-align: center;
+  flex-shrink: 0; /* Empêcher le compteur de rétrécir */
+  box-shadow: 0 0 0 1px var(--gb-darkest); /* Bordure subtile pour le contraste */
+  z-index: 2; /* Assurer que le compteur reste au-dessus */
+  position: relative; /* Nécessaire pour que le z-index fonctionne */
 }
 
 .task-content {
@@ -124,6 +136,7 @@
 
 .subtasks {
   padding: 0;
+  margin: 0;
   list-style-type: none;
 }
 
@@ -138,14 +151,22 @@
   cursor: pointer;
   position: relative;
   margin: 0;
-  padding: 8px 15px; /* Padding uniformisé */
+  padding: 10px 15px;
+  box-sizing: border-box; /* S'assurer que le padding est inclus dans la hauteur */
 }
 
 .subtask:last-child {
   border-bottom: none;
+  padding-bottom: 10px; /* Même padding que les autres */
+  margin-bottom: 0; /* S'assurer qu'il n'y a pas de marge en bas */
 }
 
 .subtask:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* S'assurer que le hover sur la dernière sous-tâche a la même apparence */
+.subtask:last-child:hover {
   background-color: rgba(255, 255, 255, 0.15);
 }
 
@@ -281,4 +302,33 @@
 
 .task-item.complete-animation {
   animation: complete 0.5s ease;
+}
+
+/* Adaptation de la taille du texte pour les écrans plus petits */
+@media (max-width: 768px) {
+  .task-header h2 {
+    font-size: 12px; /* Taille réduite sur mobile */
+  }
+  
+  .task-header {
+    padding: 10px 8px; /* Réduire légèrement le padding pour donner plus d'espace */
+    min-height: 38px; /* Légèrement plus petit sur mobile mais toujours avec un minimum */
+  }
+  
+  .task-title-container {
+    max-width: calc(100% - 45px); /* Espace légèrement réduit sur mobile */
+  }
+  
+  .task-progress {
+    min-width: 35px; /* Compteur légèrement plus petit sur mobile */
+    padding: 2px 4px; /* Padding réduit */
+    font-size: 9px; /* Taille de police réduite */
+    margin-left: 5px; /* Marge réduite */
+  }
+  
+  .task-done-tag {
+    left: -40px; /* Position ajustée sur mobile */
+    padding: 2px 4px; /* Padding réduit */
+    font-size: 8px; /* Taille réduite */
+  }
 }
