@@ -1,5 +1,12 @@
 # Changelog
 
+## Version 2.5.1 (Avril 2025)
+
+### Corrections de bugs en mode warning
+- **Lisibilité des noms de fichiers** : Correction du fond vert foncé en rouge très clair pour l'affichage des noms de fichiers
+- **Cohérence des boutons "Copier"** : Uniformisation des boutons "Copier" pour maintenir la même apparence, qu'ils soient associés à des tâches cochées ou non
+- **Améliorations visuelles** : Renforcement de la cohérence de la palette de couleurs rouge en mode warning
+
 ## Version 2.5.0 (Avril 2025)
 
 ### Nouvelles fonctionnalités

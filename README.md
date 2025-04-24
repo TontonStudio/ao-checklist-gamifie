@@ -1,8 +1,8 @@
-# AO Checklist - Tonton Studio (v2.5)
+# AO Checklist - Tonton Studio (v2.5.1)
 
 Outil de suivi gamifié de réponse aux marchés publics, inspiré par l'esthétique des jeux vidéo rétro de type Game Boy.
 
-![Version](https://img.shields.io/badge/version-2.5.0-green)
+![Version](https://img.shields.io/badge/version-2.5.1-green)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
 ## Fonctionnalités
@@ -115,6 +115,12 @@ const tasks = [
 - **Mode normal** : L'interface de base, inspirée de la Game Boy avec palette verte
 - **Mode warning** : Activé automatiquement lorsqu'il reste moins de 48h, utilise une palette rouge
 - **Mode doré** : Activé lorsque toutes les tâches sont complétées, avec effets spéciaux
+
+## Nouveautés de la version 2.5.1 (Avril 2025)
+
+- **Amélioration de la lisibilité en mode warning** : Correction du fond d'affichage des noms de fichiers
+- **Cohérence visuelle renforcée** : Les boutons "Copier" conservent une apparence uniforme pour toutes les tâches
+- **Expérience utilisateur optimisée** : Meilleure visibilité des informations en mode warning
 
 ## Nouveautés de la version 2.5 (Améliorations UX et corrections de bugs)
 
