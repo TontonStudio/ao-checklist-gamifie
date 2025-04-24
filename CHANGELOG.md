@@ -1,5 +1,20 @@
 # Changelog
 
+## Version 2.4.0 (Avril 2025)
+
+### Optimisations de performance
+- **Animations optimisées** : Utilisation de transform et opacity pour des animations plus fluides
+- **Réduction de la consommation de ressources** : Limitation intelligente du nombre d'éléments animés
+- **Object pooling** : Implémentation d'un système de réutilisation des éléments DOM pour les particules
+- **Chargement optimisé** : Préchargement des ressources critiques et chargement asynchrone des ressources secondaires
+- **Défilement fluide** : Amélioration du throttling pour la barre de progression fixe
+- **Meilleure gestion des événements** : Délégation d'événements optimisée et réduction des écouteurs
+- **Gestion efficace de la mémoire** : Nettoyage proactif des ressources
+- **Optimisation des opérations DOM** : Réduction des reflows et des manipulations DOM
+- **Mise en cache des éléments** : Mise en cache des éléments DOM fréquemment utilisés
+- **Optimisation du rendu CSS** : Utilisation de will-change pour préparer les animations
+- **Pause automatique des animations** : Suspension des effets quand la page n'est pas visible
+
 ## Version 2.3.1 (Avril 2025)
 
 ### Documentation et structure
