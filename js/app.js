@@ -198,7 +198,27 @@ const initApp = () => {
     if (e.target === returnHomeBtn) {
       TasksManager.returnToHome();
     }
+    
+    // Délégation d'événements pour le bouton de son
+    if (e.target.id === 'sound-toggle' || e.target.closest('#sound-toggle')) {
+      if (typeof SoundControl !== 'undefined') {
+        SoundControl.toggleMute();
+      }
+    }
   });
+  
+  // S'assurer que le contrôle du son est initialisé
+  if (typeof SoundControl !== 'undefined') {
+    // Réinitialiser et initialiser SoundControl
+    setTimeout(() => {
+      SoundControl.init();
+      
+      // Si nous sommes en mode warning, s'assurer que le bouton est affiché
+      if (document.body.classList.contains('warning-mode')) {
+        SoundControl.activateWarningMode();
+      }
+    }, 300);
+  }
   
   // Précharger les effets visuels dans un moment d'inactivité
   if ('requestIdleCallback' in window) {

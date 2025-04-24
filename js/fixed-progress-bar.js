@@ -176,6 +176,9 @@
       progressWrapper.classList.remove('fixed');
       progressSpacer.classList.remove('active');
       progressWrapper.style.width = '';
+      progressWrapper.style.backgroundColor = ''; // Réinitialiser le style de fond
+      progressWrapper.style.borderColor = ''; // Réinitialiser le style de bordure
+      progressSpacer.style.backgroundColor = ''; // Réinitialiser le style de fond du spacer
       document.body.removeAttribute('data-fixed-progress');
       
       // Recalculer complètement la position

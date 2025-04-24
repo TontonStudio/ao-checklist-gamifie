@@ -103,7 +103,7 @@ const SoundControl = {
   },
   
   /**
-   * Active ou désactive le son
+   * Active ou désactive le son (fonctionne comme un bouton pause/play)
    */
   toggleMute: function() {
     // Inverser l'état du son
@@ -117,11 +117,18 @@ const SoundControl = {
     
     // Appliquer l'état du son
     if (this.muted) {
-      // Si on désactive le son, arrêter la musique
-      this.stopWarningSound();
+      // Si on désactive le son, mettre la musique en pause (sans reset)
+      if (this.warningSound && !this.warningSound.paused) {
+        try {
+          this.warningSound.pause();
+        } catch (e) {
+          // Ignorer les erreurs potentielles
+        }
+      }
     } else if (this.warningActive) {
-      // Si on active le son et qu'on est en mode warning, relancer la musique
-      this.playWarningSound();
+      // Si on active le son et qu'on est en mode warning, jouer la musique
+      // Utiliser false pour fromStart pour reprendre là où on en était
+      this.playWarningSound(false);
     }
   },
   
@@ -158,16 +165,27 @@ const SoundControl = {
     // Masquer le bouton de contrôle du son
     this.hideSoundButton();
     
-    // Arrêter la musique d'avertissement
-    this.stopWarningSound();
+    // Arrêter la musique d'avertissement et réinitialiser la position
+    // On utilise true pour resetPosition car on quitte complètement le mode warning
+    this.stopWarningSound(false, true);
   },
   
   /**
    * Joue la musique d'avertissement avec optimisations
+   * @param {boolean} fromStart - Si vrai, démarre la lecture depuis le début (défaut: true)
    */
-  playWarningSound: function() {
+  playWarningSound: function(fromStart = true) {
     // Ne pas jouer si le son est désactivé, si on n'est pas en mode warning, ou si l'élément n'existe pas
-    if (this.muted || !this.warningActive || !this.warningSound) return;
+    if (this.muted || !this.warningActive || !this.warningSound) {
+      if (APP_CONFIG.debug) {
+        console.log("Impossible de jouer le son d'avertissement:", {
+          muted: this.muted,
+          warningActive: this.warningActive,
+          warningSound: !!this.warningSound
+        });
+      }
+      return;
+    }
     
     // Si le son est déjà en cours de lecture et n'est pas en pause, ne rien faire
     if (this.warningSound.currentTime > 0 && !this.warningSound.paused) return;
@@ -178,20 +196,33 @@ const SoundControl = {
       this.fadeInterval = null;
     }
     
-    // Réinitialiser le volume au cas où il aurait été modifié
+    // S'assurer que l'élément audio est correctement configuré
+    this.warningSound.preload = 'auto';
     this.warningSound.volume = 0.3;
-    
-    // Configurer le son
     this.warningSound.loop = true;
+    this.warningSound.muted = false; // S'assurer que le son n'est pas en sourdine
+    
+    // Afficher le bouton de son pour garantir qu'il est visible
+    this.showSoundButton();
     
     // Tenter de lire le son avec gestion optimisée des erreurs
     try {
+      // Si on doit démarrer la musique depuis le début
+      if (fromStart) {
+        this.warningSound.pause();
+        this.warningSound.currentTime = 0;
+      }
+      
       const playPromise = this.warningSound.play();
       
       // Gérer uniquement les promesses définies (certains navigateurs ne renvoient pas de promesse)
       if (playPromise !== undefined) {
-        playPromise.catch(() => {
+        playPromise.catch((error) => {
           // Si la lecture automatique est bloquée, tenter une autre approche après un court délai
+          if (APP_CONFIG.debug) {
+            console.warn("Erreur lors de la lecture du son d'avertissement:", error);
+          }
+          
           if (!this.muted && this.warningActive) {
             // Reporter la tentative pour éviter de spammer les erreurs
             setTimeout(() => this.tryUnblockAudio(), 500);
@@ -209,8 +240,9 @@ const SoundControl = {
   /**
    * Arrête la musique d'avertissement avec optimisations
    * @param {boolean} fadeOut - Si vrai, effectue un fade out de la musique
+   * @param {boolean} resetPosition - Si vrai, réinitialise la position de lecture (défaut: false)
    */
-  stopWarningSound: function(fadeOut = false) {
+  stopWarningSound: function(fadeOut = false, resetPosition = false) {
     // Vérifications rapides pour éviter les opérations inutiles
     if (!this.warningSound || this.warningSound.paused) return;
     
@@ -248,10 +280,15 @@ const SoundControl = {
           clearInterval(this.fadeInterval);
           this.fadeInterval = null;
           
-          // Arrêter et réinitialiser le son
+          // Arrêter le son et réinitialiser le volume
           try {
             this.warningSound.pause();
-            this.warningSound.currentTime = 0;
+            
+            // Ne réinitialiser la position que si demandé
+            if (resetPosition) {
+              this.warningSound.currentTime = 0;
+            }
+            
             this.warningSound.volume = initialVolume; // Restaurer le volume
           } catch (e) {
             // Ignorer les erreurs potentielles
@@ -262,7 +299,11 @@ const SoundControl = {
       // Arrêt immédiat plus sûr
       try {
         this.warningSound.pause();
-        this.warningSound.currentTime = 0;
+        
+        // Ne réinitialiser la position que si demandé
+        if (resetPosition) {
+          this.warningSound.currentTime = 0;
+        }
       } catch (e) {
         // Ignorer les erreurs potentielles
       }
@@ -279,6 +320,8 @@ const SoundControl = {
     // Afficher le bouton en une seule opération
     requestAnimationFrame(() => {
       this.soundButton.style.display = 'flex';
+      this.soundButton.style.visibility = 'visible'; // S'assurer que le bouton est aussi visible
+      this.soundButton.style.opacity = '0.95'; // S'assurer que l'opacité est correcte
       this.updateButtonAppearance();
     });
   },

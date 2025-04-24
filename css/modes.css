@@ -389,14 +389,18 @@ body.warning-mode {
 
 /* Bouton de son en mode warning */
 .warning-mode .sound-toggle {
-  background-color: #ff3333 !important; /* Rouge clair */
-  color: #ffffff !important; /* Texte blanc */
-  border-color: #990000 !important; /* Bordure rouge foncé */
+  background-color: #ff3333; /* Rouge clair */
+  color: #ffffff; /* Texte blanc */
+  border-color: #990000; /* Bordure rouge foncé */
+  display: flex !important; /* Forcer l'affichage en mode warning */
+  visibility: visible !important; /* S'assurer qu'il est visible */
+  opacity: 0.95; /* S'assurer que l'opacité est correcte */
 }
 
 .warning-mode .sound-toggle[data-muted="true"] {
-  background-color: #ffdddd !important; /* Rouge pâle */
-  color: #990000 !important; /* Texte rouge foncé */
+  background-color: #ffdddd; /* Rouge pâle */
+  color: #990000; /* Texte rouge foncé */
+  display: flex !important; /* Forcer l'affichage même en mode muet */
 }
 
 @keyframes border-blink {

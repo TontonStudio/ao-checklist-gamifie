@@ -224,6 +224,23 @@ const Utils = {
           this.domCache.progressText.textContent = '0%';
         }
         
+        // Réinitialiser spécifiquement le wrapper de la barre de progression
+        const progressWrapper = document.getElementById('progress-wrapper');
+        if (progressWrapper) {
+          progressWrapper.classList.remove('fixed', 'warning-mode');
+          progressWrapper.style.backgroundColor = '';
+          progressWrapper.style.borderColor = '';
+          progressWrapper.style.width = '';
+        }
+        
+        // Réinitialiser le spacer de la barre de progression
+        const progressSpacer = document.getElementById('progress-spacer');
+        if (progressSpacer) {
+          progressSpacer.classList.remove('active');
+          progressSpacer.style.backgroundColor = '';
+          progressSpacer.style.height = '';
+        }
+        
         // Arrêter les sons
         if (this.domCache.warningSound) {
           this.domCache.warningSound.pause();
@@ -317,6 +334,11 @@ const Utils = {
       
       // Initialiser de manière différée
       requestIdleCallback(() => {
+        // Réinitialiser complètement la barre de progression fixe si la fonction existe
+        if (window.resetProgressBarState) {
+          window.resetProgressBarState();
+        }
+        
         // Initialiser les tâches
         if (TasksManager && TasksManager.initTasks) {
           TasksManager.init();

@@ -1,5 +1,13 @@
 # Changelog
 
+## Version 2.5.2 (Avril 2025)
+
+### Corrections de bugs du bouton de son et de la barre de progression
+- **Bouton de son en mode pause/play** : Le bouton de son ne réinitialise plus la position de lecture, mais agit comme un bouton pause/play
+- **Conservation de l'apparence du bouton** : L'apparence visuelle du bouton (🔊/🔇) est maintenue tout en modifiant son comportement
+- **Correction de la barre de progression** : Correction de la barre de progression qui conservait son apparence warning après chargement d'une nouvelle liste de tâches
+- **Réinitialisation complète des styles** : Nettoyage complet des styles lors des transitions entre les modes normaux et warning
+
 ## Version 2.5.1 (Avril 2025)
 
 ### Corrections de bugs en mode warning

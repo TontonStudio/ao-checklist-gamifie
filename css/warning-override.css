@@ -248,6 +248,23 @@
   border-color: #990000 !important;
 }
 
+/* Style pour le bouton de son en mode warning - IMPORTANT avec haute priorité */
+.warning-mode .sound-toggle {
+  background-color: #ff3333 !important; /* Rouge clair */
+  color: #ffffff !important; /* Texte blanc */
+  border-color: #990000 !important; /* Bordure rouge foncé */
+  display: flex !important; /* Forcer l'affichage */
+  visibility: visible !important; /* Assurer la visibilité */
+  opacity: 0.95 !important; /* Opacité correcte */
+  z-index: 9999 !important; /* S'assurer qu'il est au-dessus de tout */
+}
+
+.warning-mode .sound-toggle[data-muted="true"] {
+  background-color: #ffdddd !important; /* Rouge pâle */
+  color: #990000 !important; /* Texte rouge foncé */
+  display: flex !important; /* Toujours forcer l'affichage */
+}
+
 /* Forcer les couleurs du countdown */
 .warning-mode .countdown-label,
 .warning-mode .countdown-timer {

@@ -1,8 +1,8 @@
-# AO Checklist - Tonton Studio (v2.5.1)
+# AO Checklist - Tonton Studio (v2.5.2)
 
 Outil de suivi gamifié de réponse aux marchés publics, inspiré par l'esthétique des jeux vidéo rétro de type Game Boy.
 
-![Version](https://img.shields.io/badge/version-2.5.1-green)
+![Version](https://img.shields.io/badge/version-2.5.2-green)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
 ## Fonctionnalités
@@ -12,7 +12,7 @@ Outil de suivi gamifié de réponse aux marchés publics, inspiré par l'esthét
 - **Gamification** : Effets visuels et sonores, animations lors de la complétion des tâches
 - **Compte à rebours** : Suivi du temps restant jusqu'à la date limite de l'AO
 - **Mode alerte** : Avertissement visuel et sonore quand il reste moins de 48h
-- **Contrôle du son** : Possibilité de couper/réactiver le son d'alerte avec fade-out automatique
+- **Contrôle du son** : Possibilité de mettre en pause/reprendre le son d'alerte avec fade-out automatique
 - **Copie des noms de fichier** : Facilité de copier les noms de fichiers formatés selon les exigences du marché
 - **Personnalisation** : Chargement automatique d'un fichier tasks.js spécifique à chaque appel d'offres
 - **Drag and Drop** : Possibilité de glisser-déposer le fichier tasks.js directement dans l'application
@@ -115,6 +115,13 @@ const tasks = [
 - **Mode normal** : L'interface de base, inspirée de la Game Boy avec palette verte
 - **Mode warning** : Activé automatiquement lorsqu'il reste moins de 48h, utilise une palette rouge
 - **Mode doré** : Activé lorsque toutes les tâches sont complétées, avec effets spéciaux
+
+## Nouveautés de la version 2.5.2 (Avril 2025)
+
+- **Amélioration du contrôle du son** : Le bouton de son agit maintenant comme un bouton pause/play, conservant la position de lecture
+- **Conservation de l'interface** : L'apparence du bouton reste inchangée (🔊/🔇) pour maintenir la cohérence visuelle
+- **Correction de la barre de progression** : La barre de progression fixée conserve maintenant correctement son apparence lors du changement de listes de tâches
+- **Transitions fluides entre modes** : Réinitialisation complète des styles lors du passage entre mode normal et warning
 
 ## Nouveautés de la version 2.5.1 (Avril 2025)
 

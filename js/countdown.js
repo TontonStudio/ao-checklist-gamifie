@@ -185,9 +185,19 @@ const CountdownManager = {
     this.warningActive = true;
     
     // Activer le mode warning dans le contrôleur de son
-    if (typeof SoundControl !== 'undefined') {
-      SoundControl.activateWarningMode();
-    }
+    // Utiliser setTimeout pour s'assurer que le DOM est prêt et que SoundControl est chargé
+    setTimeout(() => {
+      if (typeof SoundControl !== 'undefined') {
+        SoundControl.activateWarningMode();
+        
+        // Forcer l'affichage du bouton de son s'il n'est pas visible
+        const soundToggle = document.getElementById('sound-toggle');
+        if (soundToggle) {
+          soundToggle.style.display = 'flex';
+          soundToggle.style.visibility = 'visible';
+        }
+      }
+    }, 200);
   },
   
   /**

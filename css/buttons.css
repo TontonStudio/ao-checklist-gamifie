@@ -114,39 +114,39 @@
 
 /* Bouton de contrôle du son - Spécifique au mode warning */
 .sound-toggle {
-  position: fixed !important;
-  bottom: 20px !important;
-  right: 20px !important;
-  width: 45px !important;
-  height: 45px !important;
-  background-color: var(--warning-light) !important;
-  color: var(--warning-dark) !important;
-  border: 3px solid var(--warning-dark) !important;
-  border-radius: 50% !important;
-  display: none !important; /* Caché par défaut, sera affiché via JS uniquement en mode warning */
-  align-items: center !important;
-  justify-content: center !important;
-  font-size: 24px !important; /* Taille plus grande pour les emojis */
-  cursor: pointer !important;
-  z-index: 2000 !important; /* Assurez-vous qu'il est au-dessus de tout */
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4) !important;
-  transition: transform 0.2s, box-shadow 0.2s !important;
-  opacity: 0.95 !important; /* Légèrement transparent */
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2) !important;
-  user-select: none !important; /* Empêcher la sélection de texte */
-  -webkit-tap-highlight-color: transparent !important; /* Supprimer la surbrillance de tap sur mobile */
-  animation: sound-toggle-pulse 2s infinite !important; /* Animation de pulsation subtile */
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 45px;
+  height: 45px;
+  background-color: var(--warning-light);
+  color: var(--warning-dark);
+  border: 3px solid var(--warning-dark);
+  border-radius: 50%;
+  display: none; /* Caché par défaut, sera affiché via JS uniquement en mode warning */
+  align-items: center;
+  justify-content: center;
+  font-size: 24px; /* Taille plus grande pour les emojis */
+  cursor: pointer;
+  z-index: 2000; /* Assurez-vous qu'il est au-dessus de tout */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s, box-shadow 0.2s;
+  opacity: 0.95; /* Légèrement transparent */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  user-select: none; /* Empêcher la sélection de texte */
+  -webkit-tap-highlight-color: transparent; /* Supprimer la surbrillance de tap sur mobile */
+  animation: sound-toggle-pulse 2s infinite; /* Animation de pulsation subtile */
 }
 
 .sound-toggle:hover {
-  transform: scale(1.1) !important;
-  opacity: 1 !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
+  transform: scale(1.1);
+  opacity: 1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 }
 
 .sound-toggle:active {
-  transform: scale(0.95) !important;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+  transform: scale(0.95);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 /* Animation de pulsation subtile pour attirer l'attention */
