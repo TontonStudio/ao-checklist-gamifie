@@ -97,6 +97,23 @@
   color: #ffffff !important;
 }
 
+/* S'assurer que les boutons de copie gardent la même apparence pour les tâches cochées en mode warning */
+.warning-mode .subtask:has(.subtask-checkbox:checked) .subtask-copy-btn,
+.warning-mode .checked-subtask .subtask-copy-btn,
+.warning-mode .task-item.completed .copy-btn {
+  background-color: #990000 !important;
+  color: #ffffff !important;
+  border-color: #660000 !important;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.3) !important;
+}
+
+.warning-mode .subtask:has(.subtask-checkbox:checked) .subtask-copy-btn:hover,
+.warning-mode .checked-subtask .subtask-copy-btn:hover,
+.warning-mode .task-item.completed .copy-btn:hover {
+  background-color: #cc0000 !important;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.3) !important;
+}
+
 /* Forcer le style sur les sous-tâches cochées */
 .warning-mode .subtask:has(.subtask-checkbox:checked) {
   background-color: rgba(153, 0, 0, 0.15) !important;
