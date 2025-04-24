@@ -1,5 +1,14 @@
 # Changelog
 
+## Version 2.6.0 (Avril 2025)
+
+### Migration vers le format JSON
+- **Nouveau format de fichier** : Utilisation de tasks.json au lieu de tasks.js pour une meilleure standardisation
+- **Simplification du chargement** : Lecture directe du JSON sans évaluation de code JavaScript
+- **Sécurité améliorée** : Élimination des risques liés à l'évaluation de code JavaScript
+- **Meilleure interopérabilité** : Format JSON compatible avec davantage d'outils et de plateformes
+- **Facilité de génération** : Format plus simple à générer par des outils automatisés ou IA
+
 ## Version 2.5.2 (Avril 2025)
 
 ### Corrections de bugs du bouton de son et de la barre de progression

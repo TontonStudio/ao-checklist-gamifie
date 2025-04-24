@@ -1,8 +1,8 @@
-# AO Checklist - Tonton Studio (v2.5.2)
+# AO Checklist - Tonton Studio (v2.6.0)
 
 Outil de suivi gamifié de réponse aux marchés publics, inspiré par l'esthétique des jeux vidéo rétro de type Game Boy.
 
-![Version](https://img.shields.io/badge/version-2.5.2-green)
+![Version](https://img.shields.io/badge/version-2.6.0-green)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
 ## Fonctionnalités
@@ -14,12 +14,12 @@ Outil de suivi gamifié de réponse aux marchés publics, inspiré par l'esthét
 - **Mode alerte** : Avertissement visuel et sonore quand il reste moins de 48h
 - **Contrôle du son** : Possibilité de mettre en pause/reprendre le son d'alerte avec fade-out automatique
 - **Copie des noms de fichier** : Facilité de copier les noms de fichiers formatés selon les exigences du marché
-- **Personnalisation** : Chargement automatique d'un fichier tasks.js spécifique à chaque appel d'offres
-- **Drag and Drop** : Possibilité de glisser-déposer le fichier tasks.js directement dans l'application
+- **Personnalisation** : Chargement automatique d'un fichier tasks.json spécifique à chaque appel d'offres
+- **Drag and Drop** : Possibilité de glisser-déposer le fichier tasks.json directement dans l'application
 - **Barre de progression fixe** : La barre de progression reste visible lors du défilement
 - **Badges "DONE!"** : Indicateurs visuels animés pour les tâches complétées
 - **Sauvegarde locale** : Conservation de la progression entre les sessions
-- **Création IA** : Génération du fichier tasks.js par notre GPT spécialisé
+- **Création IA** : Génération du fichier tasks.json par notre GPT spécialisé
 - **Interface responsive** : S'adapte aux différentes tailles d'écran
 - **Haute performance** : Animations fluides et gestion efficace des ressources
 - **Feux d'artifice améliorés** : Célébration plus spectaculaire en mode victoire
@@ -66,43 +66,42 @@ Outil de suivi gamifié de réponse aux marchés publics, inspiré par l'esthét
     └── mail.png            # Icône de mail en pixel art
 ```
 
-## Format du fichier tasks.js
+## Format du fichier tasks.json
 
-```javascript
-// Configuration globale de l'appel d'offres
-const aoConfig = {
-  title: "Titre de l'appel d'offres",
-  deadline: "YYYY-MM-DDThh:mm:ss", // Format ISO pour la date limite
-  reference: "REF-YYYY-X" // Référence de l'AO
-};
-
-// Structure des tâches
-const tasks = [
-  {
-    label: 'Nom du livrable',
-    filename: 'Nom_de_fichier_global.pdf', // Fichier global optionnel
-    isMultiFile: false, // Indique si le livrable est un fichier unique ou multiple
-    subtasks: [
-      { label: "Sous-tâche 1", filename: "Fichier_Soustache1.pdf" }, // Avec fichier
-      { label: "Sous-tâche 2" } // Sans fichier
-    ]
+```json
+{
+  "aoConfig": {
+    "title": "Titre de l'appel d'offres",
+    "deadline": "YYYY-MM-DDThh:mm:ss",
+    "reference": "REF-YYYY-X"
   },
-  {
-    label: 'Livrable multi-fichiers',
-    isMultiFile: true, // Pour les livrables comportant plusieurs fichiers distincts
-    subtasks: [
-      { label: "Document 1", filename: "Document1.pdf" },
-      { label: "Document 2", filename: "Document2.pdf" }
-    ]
-  }
-];
+  "tasks": [
+    {
+      "label": "Nom du livrable",
+      "filename": "Nom_de_fichier_global.pdf",
+      "isMultiFile": false,
+      "subtasks": [
+        { "label": "Sous-tâche 1", "filename": "Fichier_Soustache1.pdf" },
+        { "label": "Sous-tâche 2" }
+      ]
+    },
+    {
+      "label": "Livrable multi-fichiers",
+      "isMultiFile": true,
+      "subtasks": [
+        { "label": "Document 1", "filename": "Document1.pdf" },
+        { "label": "Document 2", "filename": "Document2.pdf" }
+      ]
+    }
+  ]
+}
 ```
 
 ## Utilisation
 
 1. Ouvrez l'application dans un navigateur web
-2. Créez votre fichier tasks.js en utilisant notre [GPT spécialisé](https://chatgpt.com/g/g-680541e3745c8191b7bca4aa6861ad09-tonton-studio-gamified-ao-checklist-generator) ou en suivant le format décrit dans la documentation
-3. Sélectionnez votre fichier tasks.js (chargement automatique)
+2. Créez votre fichier tasks.json en utilisant notre [GPT spécialisé](https://chatgpt.com/g/g-680541e3745c8191b7bca4aa6861ad09-tonton-studio-gamified-ao-checklist-generator) ou en suivant le format décrit dans la documentation
+3. Sélectionnez votre fichier tasks.json (chargement automatique)
 4. Suivez votre progression en cochant les tâches accomplies
 5. Un compte à rebours vous indique le temps restant avant la date limite
 6. Lorsqu'il reste moins de 48h, un mode d'alerte visuel et sonore s'active
@@ -131,7 +130,7 @@ const tasks = [
 
 ## Nouveautés de la version 2.5 (Améliorations UX et corrections de bugs)
 
-- **Drag and drop natif** : Glissez-déposez votre fichier tasks.js directement depuis votre bureau
+- **Drag and drop natif** : Glissez-déposez votre fichier tasks.json directement depuis votre bureau
 - **Feux d'artifice améliorés** : Plus nombreux et plus spectaculaires en mode victoire
 - **Corrections visuelles** : Cohérence parfaite des couleurs en mode warning
 - **Meilleure stabilité** : Correction des problèmes d'interaction avec la zone de drop
@@ -140,11 +139,11 @@ const tasks = [
 
 ## Génération automatique avec notre GPT spécialisé
 
-Pour créer rapidement un fichier tasks.js parfaitement formaté, utilisez notre GPT dédié :
+Pour créer rapidement un fichier tasks.json parfaitement formaté, utilisez notre GPT dédié :
 
 [🤖 **Tonton Studio - Gamified AO Checklist Generator**](https://chatgpt.com/g/g-680541e3745c8191b7bca4aa6861ad09-tonton-studio-gamified-ao-checklist-generator)
 
-Il suffit de télécharger vos documents d'appel d'offres (RC, CCTP, etc.) et le GPT générera automatiquement un fichier tasks.js prêt à l'emploi, en suivant parfaitement le format requis.
+Il suffit de télécharger vos documents d'appel d'offres (RC, CCTP, etc.) et le GPT générera automatiquement un fichier tasks.json prêt à l'emploi, en suivant parfaitement le format requis.
 
 ## Installation
 

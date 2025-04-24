@@ -14,25 +14,7 @@ const Utils = {
     countdownElements: null
   },
   
-  // Cache des expressions régulières pour éviter de les recréer à chaque utilisation
-  regexCache: {
-    aoConfigRegexes: [
-      /const\s+aoConfig\s*=\s*({[\s\S]*?});/,
-      /let\s+aoConfig\s*=\s*({[\s\S]*?});/,
-      /var\s+aoConfig\s*=\s*({[\s\S]*?});/,
-      /aoConfig\s*=\s*({[\s\S]*?});/
-    ],
-    tasksRegexes: [
-      /const\s+tasks\s*=\s*(\[[\s\S]*?\]);/,
-      /let\s+tasks\s*=\s*(\[[\s\S]*?\]);/,
-      /var\s+tasks\s*=\s*(\[[\s\S]*?\]);/,
-      /tasks\s*=\s*(\[[\s\S]*?\]);/
-    ],
-    commentRegexes: {
-      inlineComments: /\/\/.*/g,
-      multilineComments: /\/\*[\s\S]*?\*\//g
-    }
-  },
+  // Plus besoin de cache d'expressions régulières puisqu'on traite directement du JSON
   
   // Initialisation du cache DOM
   initDomCache: function() {
@@ -122,80 +104,43 @@ const Utils = {
   },
   
   /**
-   * Vérifie le format du fichier chargé (optimisé avec mise en cache)
-   * @param {string} content - Contenu du fichier
+   * Vérifie le format du fichier JSON chargé
+   * @param {string} content - Contenu du fichier JSON
    * @returns {boolean} - true si le format est valide, false sinon
    */
   validateTasksFile: function(content) {
     try {
-      // Vérification rapide des mots-clés
-      if (!content.includes('aoConfig') || 
-          !content.includes('tasks') || 
-          !content.includes('label') || 
-          !content.includes('subtasks')) {
+      // Tenter d'analyser le JSON
+      const data = JSON.parse(content);
+      
+      // Vérifier la présence et le format de la clé aoConfig
+      if (!data.aoConfig || typeof data.aoConfig !== 'object' || 
+          !data.aoConfig.title || !data.aoConfig.deadline) {
         return false;
       }
       
-      // Extraire aoConfig et tasks avec les regex pré-compilées
-      let aoConfigMatch = null;
-      for (const regex of this.regexCache.aoConfigRegexes) {
-        const match = content.match(regex);
-        if (match && match[1]) {
-          aoConfigMatch = match;
-          break;
-        }
-      }
-      
-      let tasksMatch = null;
-      for (const regex of this.regexCache.tasksRegexes) {
-        const match = content.match(regex);
-        if (match && match[1]) {
-          tasksMatch = match;
-          break;
-        }
-      }
-      
-      if (!aoConfigMatch || !tasksMatch) {
+      // Vérifier la présence et le format de la clé tasks
+      if (!data.tasks || !Array.isArray(data.tasks) || data.tasks.length === 0) {
         return false;
       }
       
-      // Valider le contenu de manière optimisée
-      try {
-        // Supprimer les commentaires
-        const { inlineComments, multilineComments } = this.regexCache.commentRegexes;
-        const aoConfigJson = aoConfigMatch[1].replace(inlineComments, '').replace(multilineComments, '');
-        const tasksJson = tasksMatch[1].replace(inlineComments, '').replace(multilineComments, '');
-        
-        // Évaluer
-        const evalAoConfig = new Function('return ' + aoConfigJson)();
-        const evalTasks = new Function('return ' + tasksJson)();
-        
-        // Validation rapide
-        if (!evalAoConfig.title || !evalAoConfig.deadline || 
-            !Array.isArray(evalTasks) || evalTasks.length === 0) {
+      // Validation des tâches
+      for (let i = 0; i < data.tasks.length; i++) {
+        const task = data.tasks[i];
+        if (!task.label || !Array.isArray(task.subtasks) || task.subtasks.length === 0) {
           return false;
         }
-        
-        // Validation minimale des tâches
-        for (let i = 0; i < evalTasks.length; i++) {
-          const task = evalTasks[i];
-          if (!task.label || !Array.isArray(task.subtasks)) {
-            return false;
-          }
-        }
-        
-        return true;
-      } catch (evalError) {
-        return false;
       }
+      
+      return true;
     } catch (error) {
       return false;
     }
   },
   
   /**
-   * Charge les tâches et la configuration depuis le contenu du fichier (optimisé)
-   * @param {string} content - Contenu du fichier
+   * Charge les tâches et la configuration depuis le contenu du fichier JSON
+   * @param {string} content - Contenu du fichier JSON
    */
   loadTasksAndConfig: function(content) {
     try {
@@ -277,36 +222,16 @@ const Utils = {
         TasksManager.isComplete = false;
       }
       
-      // Extraction optimisée avec les regex pré-compilées
-      let aoConfigMatch = null;
-      for (const regex of this.regexCache.aoConfigRegexes) {
-        const match = content.match(regex);
-        if (match && match[1]) {
-          aoConfigMatch = match;
-          break;
-        }
+      // Analyser le fichier JSON
+      const jsonData = JSON.parse(content);
+      
+      // Extraire les données
+      const extractedAoConfig = jsonData.aoConfig;
+      const extractedTasks = jsonData.tasks;
+      
+      if (!extractedAoConfig || !extractedTasks) {
+        throw new Error("Impossible d'extraire aoConfig ou tasks du JSON");
       }
-      
-      let tasksMatch = null;
-      for (const regex of this.regexCache.tasksRegexes) {
-        const match = content.match(regex);
-        if (match && match[1]) {
-          tasksMatch = match;
-          break;
-        }
-      }
-      
-      if (!aoConfigMatch || !tasksMatch) {
-        throw new Error("Impossible d'extraire aoConfig ou tasks");
-      }
-      
-      // Extraction et nettoyage
-      const { inlineComments, multilineComments } = this.regexCache.commentRegexes;
-      const aoConfigJson = aoConfigMatch[1].replace(inlineComments, '').replace(multilineComments, '');
-      const tasksJson = tasksMatch[1].replace(inlineComments, '').replace(multilineComments, '');
-      
-      const extractedAoConfig = (new Function('return ' + aoConfigJson))();
-      const extractedTasks = (new Function('return ' + tasksJson))();
       
       // Définir les variables globales
       window.aoConfig = extractedAoConfig;

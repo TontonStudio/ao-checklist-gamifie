@@ -177,12 +177,12 @@ const initApp = () => {
   dropZone.addEventListener('drop', function(e) {
     const files = e.dataTransfer.files;
     if (files.length > 0) {
-      // Filtrer pour ne prendre que les fichiers .js
-      const jsFiles = Array.from(files).filter(file => file.name.endsWith('.js'));
-      if (jsFiles.length > 0) {
-        processFile(jsFiles[0]);
+      // Filtrer pour ne prendre que les fichiers .json
+      const jsonFiles = Array.from(files).filter(file => file.name.endsWith('.json'));
+      if (jsonFiles.length > 0) {
+        processFile(jsonFiles[0]);
       } else {
-        fileErrorMessage.textContent = "Veuillez déposer un fichier .js valide.";
+        fileErrorMessage.textContent = "Veuillez déposer un fichier .json valide.";
       }
     }
   }, false);
