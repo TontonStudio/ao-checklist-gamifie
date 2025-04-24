@@ -1,8 +1,8 @@
-# AO Checklist - Tonton Studio (v2.3)
+# AO Checklist - Tonton Studio (v2.4)
 
 Outil de suivi gamifié de réponse aux marchés publics, inspiré par l'esthétique des jeux vidéo rétro de type Game Boy.
 
-![Version](https://img.shields.io/badge/version-2.3.0-green)
+![Version](https://img.shields.io/badge/version-2.4.0-green)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
 ## Fonctionnalités
@@ -20,6 +20,7 @@ Outil de suivi gamifié de réponse aux marchés publics, inspiré par l'esthét
 - **Sauvegarde locale** : Conservation de la progression entre les sessions
 - **Création IA** : Génération du fichier tasks.js par notre GPT spécialisé
 - **Interface responsive** : S'adapte aux différentes tailles d'écran
+- **Haute performance** : Animations fluides et gestion efficace des ressources
 
 ## Structure du projet
 
@@ -113,15 +114,16 @@ const tasks = [
 - **Mode warning** : Activé automatiquement lorsqu'il reste moins de 48h, utilise une palette rouge
 - **Mode doré** : Activé lorsque toutes les tâches sont complétées, avec effets spéciaux
 
-## Nouveautés de la version 2.3
+## Nouveautés de la version 2.4 (Optimisation des performances)
 
-- **Barre de progression améliorée** : Reste visible lors du défilement pour un meilleur suivi
-- **Gestion optimisée des titres longs** : Troncature élégante avec points de suspension
-- **Visibilité des badges "DONE!"** : Assurée même lorsque la barre de progression est fixée
-- **Bloc de donation redesigné** : Style plus cohérent et mise en valeur
-- **Optimisation des performances** : Meilleure réactivité lors du défilement
-- **Compatibilité mobile améliorée** : Adaptation optimale sur petits écrans
-- **Stabilité renforcée** : Correction des problèmes de z-index et d'affichage
+- **Animations optimisées** : Utilisation de transform et opacity pour des animations plus fluides
+- **Réduction de la consommation des ressources** : Limitation intelligente du nombre d'éléments animés
+- **Chargement optimisé** : Préchargement des ressources critiques et chargement asynchrone des ressources secondaires
+- **Défilement fluide** : Amélioration du throttling pour la barre de progression fixe
+- **Meilleure gestion des événements** : Délégation d'événements optimisée et réduction des écouteurs
+- **Gestion efficace de la mémoire** : Utilisation de pool d'objets pour les animations et nettoyage proactif
+- **Optimisation des opérations DOM** : Réduction des reflows et des manipulations DOM
+- **Pause automatique des animations** : Suspension des effets quand la page n'est pas visible
 
 ## Génération automatique avec notre GPT spécialisé
 
