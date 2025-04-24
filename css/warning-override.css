@@ -175,6 +175,13 @@
   background-color: #ffe6e6 !important;
 }
 
+/* Correction du fond d'affichage des noms de fichier en mode warning */
+.warning-mode .filename-display {
+  background-color: #ffeeee !important; /* Fond rouge très clair */
+  color: #990000 !important; /* Texte en rouge foncé */
+  border: 1px solid #cc0000 !important; /* Bordure en rouge moyen */
+}
+
 /* Correction de la barre de progression et du compteur */
 .warning-mode .progress-bar {
   background-color: #330000 !important; /* Rouge très foncé pour le fond de la jauge */
