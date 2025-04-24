@@ -73,11 +73,20 @@
           
           // Ajouter un attribut data pour les styles CSS
           document.body.setAttribute('data-fixed-progress', 'true');
+          
+          // Appliquer les styles spécifiques au mode warning si actif
+          if (document.body.classList.contains('warning-mode')) {
+            progressWrapper.style.backgroundColor = '#ffeeee';
+            progressWrapper.style.borderColor = '#cc0000';
+            progressSpacer.style.backgroundColor = '#cc0000';
+          }
         } else {
           // Supprimer les classes
           progressWrapper.classList.remove('fixed');
           progressSpacer.classList.remove('active');
           progressWrapper.style.width = '';
+          progressWrapper.style.backgroundColor = '';
+          progressWrapper.style.borderColor = '';
           
           // Supprimer l'attribut data
           document.body.removeAttribute('data-fixed-progress');

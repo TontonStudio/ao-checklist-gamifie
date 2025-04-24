@@ -1,8 +1,8 @@
-# AO Checklist - Tonton Studio (v2.4)
+# AO Checklist - Tonton Studio (v2.5)
 
 Outil de suivi gamifié de réponse aux marchés publics, inspiré par l'esthétique des jeux vidéo rétro de type Game Boy.
 
-![Version](https://img.shields.io/badge/version-2.4.0-green)
+![Version](https://img.shields.io/badge/version-2.5.0-green)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
 ## Fonctionnalités
@@ -15,12 +15,14 @@ Outil de suivi gamifié de réponse aux marchés publics, inspiré par l'esthét
 - **Contrôle du son** : Possibilité de couper/réactiver le son d'alerte avec fade-out automatique
 - **Copie des noms de fichier** : Facilité de copier les noms de fichiers formatés selon les exigences du marché
 - **Personnalisation** : Chargement automatique d'un fichier tasks.js spécifique à chaque appel d'offres
+- **Drag and Drop** : Possibilité de glisser-déposer le fichier tasks.js directement dans l'application
 - **Barre de progression fixe** : La barre de progression reste visible lors du défilement
 - **Badges "DONE!"** : Indicateurs visuels animés pour les tâches complétées
 - **Sauvegarde locale** : Conservation de la progression entre les sessions
 - **Création IA** : Génération du fichier tasks.js par notre GPT spécialisé
 - **Interface responsive** : S'adapte aux différentes tailles d'écran
 - **Haute performance** : Animations fluides et gestion efficace des ressources
+- **Feux d'artifice améliorés** : Célébration plus spectaculaire en mode victoire
 
 ## Structure du projet
 
@@ -114,16 +116,14 @@ const tasks = [
 - **Mode warning** : Activé automatiquement lorsqu'il reste moins de 48h, utilise une palette rouge
 - **Mode doré** : Activé lorsque toutes les tâches sont complétées, avec effets spéciaux
 
-## Nouveautés de la version 2.4 (Optimisation des performances)
+## Nouveautés de la version 2.5 (Améliorations UX et corrections de bugs)
 
-- **Animations optimisées** : Utilisation de transform et opacity pour des animations plus fluides
-- **Réduction de la consommation des ressources** : Limitation intelligente du nombre d'éléments animés
-- **Chargement optimisé** : Préchargement des ressources critiques et chargement asynchrone des ressources secondaires
-- **Défilement fluide** : Amélioration du throttling pour la barre de progression fixe
-- **Meilleure gestion des événements** : Délégation d'événements optimisée et réduction des écouteurs
-- **Gestion efficace de la mémoire** : Utilisation de pool d'objets pour les animations et nettoyage proactif
-- **Optimisation des opérations DOM** : Réduction des reflows et des manipulations DOM
-- **Pause automatique des animations** : Suspension des effets quand la page n'est pas visible
+- **Drag and drop natif** : Glissez-déposez votre fichier tasks.js directement depuis votre bureau
+- **Feux d'artifice améliorés** : Plus nombreux et plus spectaculaires en mode victoire
+- **Corrections visuelles** : Cohérence parfaite des couleurs en mode warning
+- **Meilleure stabilité** : Correction des problèmes d'interaction avec la zone de drop
+- **Expérience utilisateur optimisée** : Feedback visuel amélioré lors du glisser-déposer
+- **Bordures uniformisées** : Cohérence visuelle complète dans tous les modes
 
 ## Génération automatique avec notre GPT spécialisé
 

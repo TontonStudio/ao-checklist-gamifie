@@ -1,5 +1,17 @@
 # Changelog
 
+## Version 2.5.0 (Avril 2025)
+
+### Nouvelles fonctionnalités
+- **Drag and drop amélioré** : Ajout de la possibilité de glisser-déposer le fichier tasks.js directement depuis le bureau
+- **Feux d'artifice plus spectaculaires** : Augmentation du nombre et de la qualité des feux d'artifice en mode doré
+- **Gestion robuste des zones de drag and drop** : Amélioration de l'expérience utilisateur lors du glisser-déposer
+
+### Corrections de bugs
+- **Cohérence visuelle en mode warning** : Correction des couleurs de la barre de progression fixe et du progress-spacer
+- **Uniformisation des bordures** : Modification de la couleur de la bordure inférieure du header en mode warning (#660000)
+- **Stabilité du drag and drop** : Correction du problème de comportement erratique de la zone de drop
+
 ## Version 2.4.0 (Avril 2025)
 
 ### Optimisations de performance

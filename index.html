@@ -65,7 +65,7 @@
     </header>
     
     <main class="welcome-main">
-      <div class="upload-container">
+      <div class="upload-container" id="drop-zone">
         <h2>Charger votre fichier de tâches</h2>
         <p class="small-text">Pour commencer, veuillez charger votre fichier tasks.js qui contient la liste des tâches à accomplir.</p>
         
@@ -74,6 +74,7 @@
           <input type="file" id="tasks-file" accept=".js" class="file-input">
           <div id="file-name" class="file-name-display">Aucun fichier sélectionné</div>
         </div>
+        <div class="drag-drop-message">ou glissez-déposez votre fichier tasks.js ici</div>
         <div class="error-message" id="file-error-message"></div>
         
         <div class="gpt-help-container">

@@ -205,8 +205,9 @@ const EffectsManager = {
   
   /**
    * Crée un effet de feu d'artifice
+   * @param {boolean} isGolden - Indique si le feu d'artifice est pour le mode doré (plus impressionnant)
    */
-  createFirework: function() {
+  createFirework: function(isGolden = false) {
     // Limiter le nombre de feux d'artifice actifs
     if (this.activeFireworks >= APP_CONFIG.effects.maxFireworks) {
       return;
@@ -218,9 +219,14 @@ const EffectsManager = {
     const x = Math.random() * window.innerWidth;
     const y = Math.random() * (window.innerHeight * 0.7); // Limiter à 70% de la hauteur
     
-    // Couleurs pour les feux d'artifice
-    const colors = ['#FFD700', '#FFA500', '#FF4500'];
+    // Couleurs pour les feux d'artifice - plus de variété en mode doré
+    const colors = isGolden 
+      ? ['#FFD700', '#FFA500', '#FF4500', '#FFDF00', '#DAA520', '#B8860B'] 
+      : ['#FFD700', '#FFA500', '#FF4500'];
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
+    
+    // Taille plus grande en mode doré
+    const size = isGolden ? (8 + Math.floor(Math.random() * 4)) : 8;
     
     // Créer le feu d'artifice central
     const firework = document.createElement('div');
@@ -228,16 +234,18 @@ const EffectsManager = {
     firework.style.backgroundColor = randomColor;
     firework.style.left = `${x}px`;
     firework.style.top = `${y}px`;
+    firework.style.width = `${size}px`;
+    firework.style.height = `${size}px`;
     this.fireworksContainer.appendChild(firework);
     
     // Créer les étincelles avec un fragment de document pour éviter les reflows multiples
     const fragment = document.createDocumentFragment();
-    const sparkCount = 6 + Math.floor(Math.random() * 4); // Réduit de 8-15 à 6-9
+    const sparkCount = isGolden ? (10 + Math.floor(Math.random() * 6)) : (6 + Math.floor(Math.random() * 4));
     const sparks = [];
     
     for (let i = 0; i < sparkCount; i++) {
       const spark = document.createElement('div');
-      spark.className = 'particle';
+      spark.className = isGolden && Math.random() > 0.7 ? 'particle star' : 'particle';
       spark.style.backgroundColor = randomColor;
       spark.style.left = `${x}px`;
       spark.style.top = `${y}px`;
@@ -306,12 +314,19 @@ const EffectsManager = {
     // Réinitialiser le compteur
     this.activeFireworks = 0;
     
-    // Créer immédiatement un premier feu d'artifice
-    this.createFirework();
+    // Créer immédiatement plusieurs feux d'artifice initiaux
+    this.createFirework(true);
+    setTimeout(() => this.createFirework(true), 200);
     
-    // Puis continuer à intervalles réguliers avec un intervalle plus long
+    // Puis continuer à intervalles réguliers avec un intervalle plus court
     this.fireworksInterval = setInterval(() => {
-      this.createFirework();
+      // Occasionnellement, créer un double feu d'artifice
+      if (Math.random() > 0.7) {
+        this.createFirework(true);
+        setTimeout(() => this.createFirework(true), 100);
+      } else {
+        this.createFirework(true);
+      }
     }, APP_CONFIG.effects.fireworkInterval);
   },
   

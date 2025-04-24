@@ -185,6 +185,37 @@
   background-color: #cc0000 !important; /* Rouge moyen pour la barre de progression */
 }
 
+/* Correction des couleurs pour la barre de progression fixe en mode warning */
+.warning-mode .progress-wrapper.fixed {
+  background-color: #ffeeee !important; /* Fond rouge pâle */
+  border-color: #cc0000 !important; /* Bordure rouge moyen */
+  border-left-color: #cc0000 !important;
+  border-right-color: #cc0000 !important;
+  border-bottom-color: #cc0000 !important;
+}
+
+/* Correction de la bordure inférieure du header en mode warning */
+.warning-mode header {
+  border-bottom-color: #660000 !important;
+}
+
+.warning-mode .progress-spacer {
+  background-color: #cc0000 !important; /* Rouge moyen pour le spacer */
+}
+
+/* Assurer que la hauteur du spacer en mode warning est correcte */
+.warning-mode .progress-spacer.active {
+  background-color: #cc0000 !important;
+  display: block !important;
+}
+
+/* Correction pour tous les éléments avec classe contenant le terme "spacer" */
+.warning-mode [class*="spacer"],
+.warning-mode #progress-spacer {
+  background-color: #cc0000 !important;
+  border-color: #cc0000 !important;
+}
+
 /* Correction du séparateur horizontal et de tous les éléments horizontaux verts */
 .warning-mode hr,
 .warning-mode .separator,

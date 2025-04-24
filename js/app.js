@@ -90,10 +90,8 @@ const initApp = () => {
     }
   }
   
-  // Gestionnaire d'événement pour le champ de fichier
-  tasksFileInput.addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    
+  // Fonction de traitement de fichier
+  const processFile = (file) => {
     if (file) {
       fileNameDisplay.textContent = file.name;
       fileErrorMessage.textContent = '';
@@ -120,7 +118,74 @@ const initApp = () => {
     } else {
       fileNameDisplay.textContent = "Aucun fichier sélectionné";
     }
+  };
+
+  // Gestionnaire d'événement pour le champ de fichier
+  tasksFileInput.addEventListener('change', function(e) {
+    processFile(e.target.files[0]);
   });
+  
+  // Configuration du drag and drop
+  const dropZone = document.getElementById('drop-zone');
+  
+  // Établir un compteur pour suivre les entrées/sorties de drag
+  let dragCounter = 0;
+  
+  // Empêcher le comportement par défaut pour ces événements pour toute la page
+  ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    // Écouter sur le document complet pour éviter les interférences
+    document.addEventListener(eventName, function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }, false);
+    
+    // Écouter spécifiquement sur la zone de drop
+    if (dropZone) {
+      dropZone.addEventListener(eventName, function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }, false);
+    }
+  });
+  
+  // Gestion améliorée du drag enter/leave avec compteur
+  if (dropZone) {
+    dropZone.addEventListener('dragenter', function(e) {
+      dragCounter++;
+      // Vérifier que c'est bien un fichier qui est glissé
+      if (e.dataTransfer.types.includes('Files')) {
+        dropZone.classList.add('drag-over');
+      }
+    }, false);
+    
+    dropZone.addEventListener('dragleave', function() {
+      dragCounter--;
+      // Ne retirer la classe que lorsqu'on a vraiment quitté l'élément
+      if (dragCounter === 0) {
+        dropZone.classList.remove('drag-over');
+      }
+    }, false);
+    
+    // Toujours retirer la classe lors d'un drop
+    dropZone.addEventListener('drop', function() {
+      dragCounter = 0;
+      dropZone.classList.remove('drag-over');
+    }, false);
+  }
+  
+  // Gérer le drop
+  dropZone.addEventListener('drop', function(e) {
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+      // Filtrer pour ne prendre que les fichiers .js
+      const jsFiles = Array.from(files).filter(file => file.name.endsWith('.js'));
+      if (jsFiles.length > 0) {
+        processFile(jsFiles[0]);
+      } else {
+        fileErrorMessage.textContent = "Veuillez déposer un fichier .js valide.";
+      }
+    }
+  }, false);
   
   // Utiliser la délégation d'événements pour les boutons principaux
   document.addEventListener('click', function(e) {

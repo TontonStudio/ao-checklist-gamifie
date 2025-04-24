@@ -19,6 +19,8 @@
   border-radius: 5px;
   margin-bottom: 15px;
   text-align: center;
+  position: relative;
+  z-index: 20;
 }
 
 .separator {
@@ -96,6 +98,20 @@
   white-space: nowrap;
   font-style: italic;
   text-align: center;
+}
+
+.drag-drop-message {
+  font-size: 9px;
+  margin: 10px 0;
+  color: var(--gb-dark);
+  font-style: italic;
+}
+
+.upload-container.drag-over {
+  border: 4px dashed var(--gb-dark);
+  background-color: rgba(155, 188, 15, 0.25);
+  transform: scale(1.01);
+  transition: all 0.3s ease;
 }
 
 .error-message {
