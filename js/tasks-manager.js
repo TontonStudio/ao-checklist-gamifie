@@ -2,7 +2,7 @@
  * Gestion des tâches et de la progression
  */
 const TasksManager = {
-  // Éléments DOM fréquemment utilisés
+  // Éléments DOM fréquemment utilisés (mis en cache)
   taskList: document.getElementById('task-list'),
   progressFill: document.getElementById('progress-fill'),
   progressText: document.getElementById('progress-text'),
@@ -10,10 +10,14 @@ const TasksManager = {
   progressSpacer: document.getElementById('progress-spacer'),
   gameContainer: document.querySelector('.gameboy-container'),
   logoContainer: document.querySelector('.logo-container'),
+  completionMessage: document.getElementById('completion-message'),
   
   // État de l'application
   savedProgress: {},
   isComplete: false,
+  saveDebounceTimer: null,
+  updateProgressDebounceTimer: null,
+  taskElements: new Map(), // Cache des éléments DOM pour les tâches
   
   /**
    * Initialise l'application
@@ -28,29 +32,181 @@ const TasksManager = {
     // Mettre à jour la progression globale
     this.updateOverallProgress();
     
-    // Note: La gestion de la barre de progression fixe est maintenant gérée par fix-progress-bar.js
+    // Ajouter la délégation d'événements optimisée
+    this.setupEventDelegation();
+  },
+  
+  /**
+   * Configure la délégation d'événements pour réduire le nombre d'écouteurs
+   */
+  setupEventDelegation: function() {
+    if (!this.taskList) return;
+    
+    // Un seul écouteur pour tous les clics dans la liste des tâches
+    this.taskList.addEventListener('click', (e) => {
+      const target = e.target;
+      
+      // Gestion des en-têtes de tâche (accordéon)
+      const taskHeader = target.closest('.task-header');
+      if (taskHeader && !target.classList.contains('task-main-checkbox')) {
+        const taskItem = taskHeader.closest('.task-item');
+        if (taskItem) {
+          taskItem.classList.toggle('open');
+          e.stopPropagation();
+          return;
+        }
+      }
+      
+      // Gestion des sous-tâches
+      const subtask = target.closest('.subtask');
+      if (subtask && !target.classList.contains('subtask-copy-btn')) {
+        const checkbox = subtask.querySelector('.subtask-checkbox');
+        if (checkbox && target !== checkbox) {
+          checkbox.checked = !checkbox.checked;
+          
+          // Déclencher manuellement l'événement change
+          const changeEvent = new Event('change', { bubbles: true });
+          checkbox.dispatchEvent(changeEvent);
+          e.stopPropagation();
+          return;
+        }
+      }
+      
+      // Gestion des boutons de copie
+      const copyBtn = target.closest('.subtask-copy-btn, .copy-btn');
+      if (copyBtn) {
+        const filename = copyBtn.dataset.filename;
+        Utils.copyToClipboard(filename);
+        e.stopPropagation();
+        return;
+      }
+    });
+    
+    // Un seul écouteur pour tous les changements de checkbox
+    this.taskList.addEventListener('change', (e) => {
+      const target = e.target;
+      
+      // Gestion des checkbox principales
+      if (target.classList.contains('task-main-checkbox')) {
+        const taskItem = target.closest('.task-item');
+        if (taskItem) {
+          const isChecked = target.checked;
+          const checkboxes = taskItem.querySelectorAll('.subtask-checkbox');
+          
+          // Optimisation: traiter par lots avec requestAnimationFrame
+          requestAnimationFrame(() => {
+            checkboxes.forEach(checkbox => {
+              if (checkbox.checked !== isChecked) {
+                checkbox.checked = isChecked;
+                
+                // Mettre à jour l'état visuel sans déclencher d'événements
+                const subtask = checkbox.closest('.subtask');
+                if (subtask) {
+                  if (isChecked) {
+                    subtask.classList.add('checked-subtask');
+                  } else {
+                    subtask.classList.remove('checked-subtask');
+                  }
+                }
+              }
+            });
+            
+            // Une seule mise à jour de l'état après avoir changé toutes les cases
+            this.batchUpdateSubtasks(taskItem);
+          });
+        }
+        e.stopPropagation();
+        return;
+      }
+      
+      // Gestion des checkbox de sous-tâches
+      if (target.classList.contains('subtask-checkbox')) {
+        this.handleSubtaskChange(e);
+      }
+    });
+  },
+  
+  /**
+   * Mise à jour par lots des sous-tâches pour un élément de tâche
+   * @param {HTMLElement} taskElement - Élément de tâche
+   */
+  batchUpdateSubtasks: function(taskElement) {
+    const taskIndex = parseInt(taskElement.dataset.index);
+    const checkboxes = taskElement.querySelectorAll('.subtask-checkbox');
+    const checkedIndices = [];
+    
+    // Collecter tous les indices cochés
+    checkboxes.forEach(checkbox => {
+      if (checkbox.checked) {
+        const subtaskIndex = parseInt(checkbox.dataset.subtask);
+        checkedIndices.push(subtaskIndex);
+        
+        // Mettre à jour l'état visuel
+        const subtask = checkbox.closest('.subtask');
+        if (subtask) {
+          subtask.classList.add('checked-subtask');
+        }
+      } else {
+        // Mettre à jour l'état visuel
+        const subtask = checkbox.closest('.subtask');
+        if (subtask) {
+          subtask.classList.remove('checked-subtask');
+        }
+      }
+    });
+    
+    // Mettre à jour la progression sauvegardée
+    this.savedProgress[taskIndex] = checkedIndices;
+    
+    // Différer la sauvegarde pour éviter des écritures trop fréquentes
+    this.debouncedSaveProgress();
+    
+    // Mettre à jour l'interface
+    this.updateTaskProgress(taskElement, taskIndex);
+    this.debouncedUpdateOverallProgress();
+    
+    // Jouer le son si nécessaire (mais une seule fois)
+    if (checkedIndices.length > 0) {
+      EffectsManager.playCheckSound();
+    } else {
+      EffectsManager.playUncheckSound();
+    }
   },
   
   /**
    * Charge la progression sauvegardée
    */
   loadProgress: function() {
-    this.savedProgress = JSON.parse(localStorage.getItem(APP_CONFIG.storageKey)) || {};
+    try {
+      this.savedProgress = JSON.parse(localStorage.getItem(APP_CONFIG.storageKey)) || {};
+    } catch (e) {
+      this.savedProgress = {};
+      if (APP_CONFIG.debug) {
+        console.error('Erreur lors du chargement de la progression:', e);
+      }
+    }
   },
   
   /**
-   * Sauvegarde la progression
+   * Sauvegarde la progression avec debouncing
+   */
+  debouncedSaveProgress: function() {
+    // Annuler tout timer existant
+    if (this.saveDebounceTimer) {
+      clearTimeout(this.saveDebounceTimer);
+    }
+    
+    // Différer la sauvegarde pour éviter des écritures trop fréquentes
+    this.saveDebounceTimer = setTimeout(() => {
+      localStorage.setItem(APP_CONFIG.storageKey, JSON.stringify(this.savedProgress));
+    }, 300);
+  },
+  
+  /**
+   * Sauvegarde la progression immédiatement
    */
   saveProgress: function() {
     localStorage.setItem(APP_CONFIG.storageKey, JSON.stringify(this.savedProgress));
-  },
-  
-  /**
-   * Ancienne méthode pour gérer la barre de progression fixe
-   * Désactivée car cette fonctionnalité est maintenant gérée par fix-progress-bar.js
-   */
-  handleProgressBarScroll: function() {
-    // Méthode désactivée - voir fix-progress-bar.js pour l'implémentation actuelle
   },
   
   /**
@@ -63,7 +219,12 @@ const TasksManager = {
       return;
     }
     
+    // Vider le conteneur
     this.taskList.innerHTML = '';
+    this.taskElements.clear();
+    
+    // Créer un fragment de document pour éviter les reflows multiples
+    const fragment = document.createDocumentFragment();
     
     tasks.forEach((task, taskIndex) => {
       // Création du conteneur de tâche
@@ -110,38 +271,6 @@ const TasksManager = {
         taskHeader.appendChild(doneTag);
       }
       
-      // Gestionnaire d'événement pour l'accordéon
-      taskHeader.addEventListener('click', (e) => {
-        // Ne pas déclencher l'accordéon si on clique sur la checkbox principale
-        if (e.target.classList.contains('task-main-checkbox')) {
-          return;
-        }
-        // Permettre de déplier même si complété
-        taskElement.classList.toggle('open');
-      });
-      
-      // Gestionnaire d'événement pour la checkbox principale
-      const mainCheckbox = taskHeader.querySelector('.task-main-checkbox');
-      mainCheckbox.addEventListener('change', function(e) {
-        // Empêcher la propagation pour éviter le déclenchement de l'accordéon
-        e.stopPropagation();
-        
-        const isChecked = this.checked;
-        const checkboxes = taskElement.querySelectorAll('.subtask-checkbox');
-        
-        // Cocher/décocher toutes les sous-tâches
-        checkboxes.forEach(checkbox => {
-          // Seulement changer l'état si nécessaire pour éviter des événements inutiles
-          if (checkbox.checked !== isChecked) {
-            checkbox.checked = isChecked;
-            
-            // Déclencher manuellement l'événement change
-            const changeEvent = new Event('change', { bubbles: true });
-            checkbox.dispatchEvent(changeEvent);
-          }
-        });
-      });
-      
       // Création du contenu de la tâche
       const taskContent = document.createElement('div');
       taskContent.className = 'task-content';
@@ -150,13 +279,16 @@ const TasksManager = {
       const subtasksList = document.createElement('ul');
       subtasksList.className = 'subtasks';
       
-      // Création des sous-tâches
+      // Création des sous-tâches avec un fragment de document
+      const subtasksFragment = document.createDocumentFragment();
+      
       task.subtasks.forEach((subtask, subtaskIndex) => {
         const subtaskItem = document.createElement('li');
         subtaskItem.className = 'subtask';
         
         const isChecked = savedSubtasks.includes(subtaskIndex);
         if (isChecked) completedCount++;
+        if (isChecked) subtaskItem.classList.add('checked-subtask');
         
         // Vérifier si la sous-tâche a un nom de fichier associé
         const hasFilename = typeof subtask === 'object' && subtask.filename;
@@ -182,51 +314,10 @@ const TasksManager = {
         }
         
         subtaskItem.innerHTML = subtaskHTML;
-        
-        // Gestionnaire d'événement pour cliquer sur toute la ligne
-        subtaskItem.addEventListener('click', function(e) {
-          // Ne pas déclencher le changement si on clique sur le bouton de copie
-          if (e.target.classList.contains('subtask-copy-btn') || e.target.closest('.subtask-copy-btn')) {
-            return;
-          }
-          
-          // Éviter de déclencher si on clique déjà sur la checkbox
-          if (e.target.type !== 'checkbox') {
-            const checkbox = this.querySelector('.subtask-checkbox');
-            checkbox.checked = !checkbox.checked;
-            
-            // Déclencher manuellement l'événement change
-            const changeEvent = new Event('change', { bubbles: true });
-            checkbox.dispatchEvent(changeEvent);
-          }
-        });
-        
-        // Ajouter le gestionnaire d'événement pour le bouton de copie
-        const copyBtn = subtaskItem.querySelector('.subtask-copy-btn');
-        if (copyBtn) {
-          copyBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            const filename = this.dataset.filename;
-            Utils.copyToClipboard(filename);
-          });
-        }
-        
-        // Ajouter une classe pour les tâches cochées (pour les navigateurs qui ne supportent pas :has)
-        const checkbox = subtaskItem.querySelector('.subtask-checkbox');
-        if (checkbox.checked) {
-          subtaskItem.classList.add('checked-subtask');
-        }
-        
-        checkbox.addEventListener('change', function() {
-          if (this.checked) {
-            subtaskItem.classList.add('checked-subtask');
-          } else {
-            subtaskItem.classList.remove('checked-subtask');
-          }
-        });
-        
-        subtasksList.appendChild(subtaskItem);
+        subtasksFragment.appendChild(subtaskItem);
       });
+      
+      subtasksList.appendChild(subtasksFragment);
       
       // Mise à jour du compteur
       taskHeader.querySelector('.task-progress').textContent = `${completedCount}/${subtaskCount}`;
@@ -240,13 +331,7 @@ const TasksManager = {
       const taskFooter = document.createElement('div');
       taskFooter.className = 'task-footer';
       
-      // Logique de contenu du footer selon le type de livrable (multi-fichiers ou fichier global)
-      // 1. Si le livrable est explicitement marqué comme multi-fichiers (isMultiFile: true) -> message d'information
-      // 2. Si le livrable a des sous-tâches avec des fichiers -> message d'information
-      // 3. Si le livrable a un nom de fichier global -> afficher ce nom de fichier avec un bouton copier
-      // 4. Sinon -> message "Aucun fichier associé"
-      
-      // Vérifier si le livrable est explicitement marqué comme multi-fichiers
+      // Logique de contenu du footer selon le type de livrable
       const isMultiFile = task.isMultiFile === true;
       
       if (isMultiFile || hasSubtaskFiles) {
@@ -269,29 +354,21 @@ const TasksManager = {
         `;
       }
       
-      // Ajout des éléments au DOM
+      // Ajout des éléments à la tâche
       taskContent.appendChild(subtasksList);
       taskElement.appendChild(taskHeader);
       taskElement.appendChild(taskContent);
       taskElement.appendChild(taskFooter);
-      this.taskList.appendChild(taskElement);
       
-      // Gestionnaires d'événements pour les cases à cocher
-      const checkboxes = subtasksList.querySelectorAll('.subtask-checkbox');
-      checkboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', this.handleSubtaskChange.bind(this));
-      });
+      // Stocker une référence à l'élément DOM pour un accès plus rapide
+      this.taskElements.set(taskIndex, taskElement);
       
-      // Gestionnaire d'événement pour le bouton de copie s'il existe
-      const copyBtn = taskFooter.querySelector('.copy-btn');
-      if (copyBtn) {
-        copyBtn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          const filename = e.target.dataset.filename;
-          Utils.copyToClipboard(filename);
-        });
-      }
+      // Ajouter au fragment
+      fragment.appendChild(taskElement);
     });
+    
+    // Ajouter le fragment au DOM en une seule opération
+    this.taskList.appendChild(fragment);
   },
   
   /**
@@ -317,12 +394,24 @@ const TasksManager = {
       
       // Jouer le son de check
       EffectsManager.playCheckSound();
+      
+      // Mettre à jour visuellement sans manipuler le DOM
+      const subtask = checkbox.closest('.subtask');
+      if (subtask) {
+        subtask.classList.add('checked-subtask');
+      }
     } else {
       // Supprimer la sous-tâche des complétées
       this.savedProgress[taskIndex] = this.savedProgress[taskIndex].filter(index => index !== subtaskIndex);
       
       // Jouer le son de uncheck
       EffectsManager.playUncheckSound();
+      
+      // Mettre à jour visuellement sans manipuler le DOM
+      const subtask = checkbox.closest('.subtask');
+      if (subtask) {
+        subtask.classList.remove('checked-subtask');
+      }
       
       // Si le livrable était complété, ouvrir l'accordéon après avoir décoché
       const savedSubtasks = this.savedProgress[taskIndex] || [];
@@ -333,13 +422,29 @@ const TasksManager = {
       }
     }
     
-    this.saveProgress();
+    // Différer la sauvegarde
+    this.debouncedSaveProgress();
     
     // Mise à jour du compteur de progression
     this.updateTaskProgress(taskElement, taskIndex);
     
-    // Mise à jour de la progression globale
-    this.updateOverallProgress();
+    // Mise à jour de la progression globale (différée)
+    this.debouncedUpdateOverallProgress();
+  },
+  
+  /**
+   * Met à jour la progression globale avec debouncing
+   */
+  debouncedUpdateOverallProgress: function() {
+    // Annuler tout timer existant
+    if (this.updateProgressDebounceTimer) {
+      clearTimeout(this.updateProgressDebounceTimer);
+    }
+    
+    // Différer la mise à jour pour éviter des recalculs trop fréquents
+    this.updateProgressDebounceTimer = setTimeout(() => {
+      this.updateOverallProgress();
+    }, 50);
   },
   
   /**
@@ -361,10 +466,9 @@ const TasksManager = {
     
     // Mise à jour de la checkbox principale
     const mainCheckbox = taskElement.querySelector('.task-main-checkbox');
-    mainCheckbox.checked = (completedCount === subtaskCount && subtaskCount > 0);
-    
-    // Sauvegarde de la progression dans localStorage
-    this.saveProgress();
+    if (mainCheckbox) {
+      mainCheckbox.checked = (completedCount === subtaskCount && subtaskCount > 0);
+    }
     
     // Vérification si la tâche est complète
     if (completedCount === subtaskCount) {
@@ -373,9 +477,9 @@ const TasksManager = {
         taskElement.classList.add('completed');
         taskElement.classList.remove('open');
         
-        // Ajouter le tag "DONE!"
+        // Ajouter le tag "DONE!" seulement s'il n'existe pas déjà
         const taskHeader = taskElement.querySelector('.task-header');
-        if (!taskHeader.querySelector('.task-done-tag')) {
+        if (taskHeader && !taskHeader.querySelector('.task-done-tag')) {
           const doneTag = document.createElement('span');
           doneTag.className = 'task-done-tag';
           doneTag.textContent = 'DONE!';
@@ -384,18 +488,23 @@ const TasksManager = {
         
         // Attendre que l'accordéon soit fermé avant de lancer les effets
         setTimeout(() => {
-          // Flash blanc d'abord
-          EffectsManager.createFlash();
-          
-          // Animation et effets
-          EffectsManager.createParticleEffect(taskElement);
-          EffectsManager.playSuccessSound();
-          taskElement.classList.add('complete-animation');
-          
-          setTimeout(() => {
-            taskElement.classList.remove('complete-animation');
-          }, 500);
-        }, 300); // Délai pour l'animation de fermeture de l'accordéon
+          // Flash blanc d'abord (léger délai pour éviter les pics de performance)
+          requestAnimationFrame(() => {
+            EffectsManager.createFlash();
+            
+            // Légère temporisation pour séparer les effets
+            setTimeout(() => {
+              // Animation et effets
+              EffectsManager.createParticleEffect(taskElement);
+              EffectsManager.playSuccessSound();
+              
+              taskElement.classList.add('complete-animation');
+              setTimeout(() => {
+                taskElement.classList.remove('complete-animation');
+              }, 500);
+            }, 50);
+          });
+        }, 300);
       }
     } else {
       taskElement.classList.remove('completed');
@@ -425,57 +534,59 @@ const TasksManager = {
       ? Math.round((completedTotal / totalSubtasks) * 100) 
       : 0;
     
-    // Mettre à jour l'interface
-    this.progressFill.style.width = `${progressPercentage}%`;
-    this.progressText.textContent = `${progressPercentage}%`;
-    
-    // Vérifier si tout est complété (100%)
-    if (progressPercentage === 100) {
-      // Ajouter la classe 'completed' pour le style doré pour la barre
-      this.progressFill.classList.add('completed');
+    // Mettre à jour l'interface avec requestAnimationFrame pour éviter les reflows forcés
+    requestAnimationFrame(() => {
+      // Mettre à jour la barre de progression
+      this.progressFill.style.width = `${progressPercentage}%`;
+      this.progressText.textContent = `${progressPercentage}%`;
       
-      // Si c'est la première fois qu'on atteint 100%
-      if (!this.isComplete) {
-        this.isComplete = true;
+      // Vérifier si tout est complété (100%)
+      if (progressPercentage === 100) {
+        // Ajouter la classe 'completed' pour le style doré pour la barre
+        this.progressFill.classList.add('completed');
         
-        // Si le mode warning est actif, effectuer un fade out de la musique
-        if (CountdownManager && CountdownManager.warningActive && typeof SoundControl !== 'undefined') {
-          SoundControl.stopWarningSound(true); // Fade out pendant 1 seconde
+        // Si c'est la première fois qu'on atteint 100%
+        if (!this.isComplete) {
+          this.isComplete = true;
+          
+          // Si le mode warning est actif, effectuer un fade out de la musique
+          if (CountdownManager && CountdownManager.warningActive && typeof SoundControl !== 'undefined') {
+            SoundControl.stopWarningSound(true); // Fade out pendant 1 seconde
+          }
+          
+          // Activer le mode doré
+          this.activateGoldenMode();
+          
+          // Effet de flash (après le défilement)
+          setTimeout(() => {
+            requestAnimationFrame(() => {
+              EffectsManager.createFlash();
+              
+              // Jouer le son de fin
+              EffectsManager.playFinishSound();
+              
+              // Lancer les feux d'artifice continus de manière différée
+              setTimeout(() => {
+                EffectsManager.startContinuousFireworks();
+              }, 200);
+            });
+          }, 600);
+        }
+      } else {
+        // Si on était à 100% mais qu'on a décoché une tâche
+        if (this.isComplete) {
+          this.isComplete = false;
+          
+          // Désactiver le mode doré
+          this.deactivateGoldenMode();
+          
+          // Arrêter les feux d'artifice
+          EffectsManager.stopContinuousFireworks();
         }
         
-        // Activer le mode doré (qui fera défiler vers le haut)
-        this.activateGoldenMode();
-        
-        // Effet de flash (après le défilement)
-        setTimeout(() => {
-          EffectsManager.createFlash();
-          
-          // Jouer le son de fin
-          EffectsManager.playFinishSound();
-          
-          // Lancer les feux d'artifice continus
-          EffectsManager.startContinuousFireworks();
-          
-          // Créer un effet de particules supplémentaire pour 100%
-          setTimeout(() => {
-            EffectsManager.createParticleEffect(document.querySelector('header'));
-          }, 300);
-        }, 600); // Délai légèrement plus long que celui du défilement
+        this.progressFill.classList.remove('completed');
       }
-    } else {
-      // Si on était à 100% mais qu'on a décoché une tâche
-      if (this.isComplete) {
-        this.isComplete = false;
-        
-        // Désactiver le mode doré
-        this.deactivateGoldenMode();
-        
-        // Arrêter les feux d'artifice
-        EffectsManager.stopContinuousFireworks();
-      }
-      
-      this.progressFill.classList.remove('completed');
-    }
+    });
   },
   
   /**
@@ -490,52 +601,64 @@ const TasksManager = {
       }
     }
     
-    // Assurer que l'écran défile en douceur vers le haut en premier
+    // Scroller vers le haut en douceur
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
     });
     
     // Attendre que le défilement soit terminé avant d'activer le mode doré
-    // Délai plus long pour s'assurer que l'animation de défilement est terminée
     setTimeout(() => {
-      // Changer TOUS les logos (celui de l'écran d'accueil et celui de la checklist)
-      document.querySelectorAll('.logo').forEach(logo => {
-        logo.src = 'img/TTS_Logo_Checked.png';
+      // Changer les logos et activer le mode doré en une seule opération
+      requestAnimationFrame(() => {
+        // Mettre à jour les logos
+        document.querySelectorAll('.logo').forEach(logo => {
+          logo.src = 'img/TTS_Logo_Checked.png';
+        });
+        
+        // Activer le mode doré sur tous les conteneurs
+        document.querySelectorAll('.gameboy-container').forEach(container => {
+          container.classList.add('golden-mode');
+        });
+        
+        // Assurer que le message de complétion est visible
+        if (this.completionMessage) {
+          this.completionMessage.style.display = 'block';
+        }
+        
+        // Forcer la recalcul de la barre de progression fixe
+        if (window.recalculateProgressBar) {
+          window.recalculateProgressBar();
+        }
       });
-      
-      // Activer le mode doré sur tous les conteneurs
-      document.querySelectorAll('.gameboy-container').forEach(container => {
-        container.classList.add('golden-mode');
-      });
-      
-      // Assurer que le message de complétion est visible
-      const completionMessage = document.getElementById('completion-message');
-      if (completionMessage) {
-        completionMessage.style.display = 'block';
-      }
-    }, 800); // Délai augmenté pour permettre au défilement de se terminer complètement
+    }, 800);
   },
   
   /**
    * Désactive le mode doré
    */
   deactivateGoldenMode: function() {
-    // Désactiver le mode doré sur tous les conteneurs
-    document.querySelectorAll('.gameboy-container').forEach(container => {
-      container.classList.remove('golden-mode');
+    requestAnimationFrame(() => {
+      // Désactiver le mode doré sur tous les conteneurs
+      document.querySelectorAll('.gameboy-container').forEach(container => {
+        container.classList.remove('golden-mode');
+      });
+      
+      // Restaurer tous les logos originaux
+      document.querySelectorAll('.logo').forEach(logo => {
+        logo.src = 'img/TTS_Logo.png';
+      });
+      
+      // Cacher le message de complétion
+      if (this.completionMessage) {
+        this.completionMessage.style.display = 'none';
+      }
+      
+      // Forcer la recalcul de la barre de progression fixe
+      if (window.recalculateProgressBar) {
+        window.recalculateProgressBar();
+      }
     });
-    
-    // Restaurer tous les logos originaux
-    document.querySelectorAll('.logo').forEach(logo => {
-      logo.src = 'img/TTS_Logo.png';
-    });
-    
-    // Cacher le message de complétion
-    const completionMessage = document.getElementById('completion-message');
-    if (completionMessage) {
-      completionMessage.style.display = 'none';
-    }
   },
   
   /**
@@ -545,6 +668,19 @@ const TasksManager = {
     if (confirm(APP_CONFIG.messages.resetConfirm)) {
       localStorage.removeItem(APP_CONFIG.storageKey);
       this.savedProgress = {};
+      
+      // Réinitialiser l'état
+      this.isComplete = false;
+      
+      // Si le mode doré était actif, le désactiver
+      if (document.querySelector('.gameboy-container.golden-mode')) {
+        this.deactivateGoldenMode();
+      }
+      
+      // Arrêter les feux d'artifice
+      EffectsManager.stopContinuousFireworks();
+      
+      // Réinitialiser l'interface
       this.initTasks();
       this.updateOverallProgress();
     }
@@ -555,6 +691,17 @@ const TasksManager = {
    */
   returnToHome: function() {
     if (confirm(APP_CONFIG.messages.returnHomeConfirm)) {
+      // Nettoyer tous les intervalles et timers
+      if (this.saveDebounceTimer) {
+        clearTimeout(this.saveDebounceTimer);
+        this.saveDebounceTimer = null;
+      }
+      
+      if (this.updateProgressDebounceTimer) {
+        clearTimeout(this.updateProgressDebounceTimer);
+        this.updateProgressDebounceTimer = null;
+      }
+      
       // Supprimer les tâches et la progression
       localStorage.removeItem(APP_CONFIG.storageKey);
       localStorage.removeItem('tontonAoTasks');
@@ -572,6 +719,7 @@ const TasksManager = {
       // Réinitialiser l'état
       this.savedProgress = {};
       this.isComplete = false;
+      this.taskElements.clear();
       
       // Désactiver le mode doré s'il était actif
       this.deactivateGoldenMode();
@@ -579,20 +727,22 @@ const TasksManager = {
       // Arrêter les feux d'artifice
       EffectsManager.stopContinuousFireworks();
       
-      // Arrêter le compte à rebours et désactiver le mode warning
-      if (CountdownManager.interval) {
+      // Arrêter le compte à rebours
+      if (CountdownManager && CountdownManager.interval) {
         clearInterval(CountdownManager.interval);
         CountdownManager.interval = null;
       }
       
-      // S'assurer que les modes warning sont désactivés
-      document.body.classList.remove('warning-mode');
-      document.querySelectorAll('.gameboy-container').forEach(container => {
-        container.classList.remove('warning-mode');
-      });
-      document.querySelectorAll('.countdown-container, .countdown-message').forEach(element => {
-        element.classList.remove('warning-mode');
-        element.classList.remove('countdown-warning');
+      // S'assurer que les modes warning sont désactivés en une seule opération
+      requestAnimationFrame(() => {
+        document.body.classList.remove('warning-mode');
+        document.querySelectorAll('.gameboy-container').forEach(container => {
+          container.classList.remove('warning-mode');
+        });
+        document.querySelectorAll('.countdown-container, .countdown-message').forEach(element => {
+          element.classList.remove('warning-mode');
+          element.classList.remove('countdown-warning');
+        });
       });
       
       // Arrêter le son d'avertissement s'il est en cours
@@ -617,11 +767,7 @@ const TasksManager = {
       if (fileNameDisplay) {
         fileNameDisplay.textContent = 'Aucun fichier sélectionné';
       }
-      const loadBtn = document.getElementById('load-tasks-btn');
-      if (loadBtn) {
-        loadBtn.disabled = true;
-        loadBtn.dataset.fileContent = ''; // Vider le contenu du fichier temporaire
-      }
+      
       // Effacer tout message d'erreur
       const errorMessage = document.getElementById('file-error-message');
       if (errorMessage) {

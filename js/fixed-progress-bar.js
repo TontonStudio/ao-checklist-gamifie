@@ -16,99 +16,135 @@
   let lastKnownScrollPosition = 0;
   let ticking = false;
   let isFixed = false;
+  let cachedWidth = 0;
+  let resizeDebounceTimer = null;
+  let scrollThrottleTimer = null;
   
-  // Récalcule la position de la barre
+  // Calcul optimisé de la position de la barre
   function calculatePosition() {
     if (!progressWrapper) return;
     
-    const header = document.querySelector('header');
-    if (header) {
-      progressWrapperPos = progressWrapper.getBoundingClientRect().top + window.scrollY;
+    const rect = progressWrapper.getBoundingClientRect();
+    progressWrapperPos = rect.top + window.scrollY;
+    
+    // Pré-calculer la largeur
+    updateProgressBarWidth();
+  }
+  
+  // Mettre à jour la largeur de la barre de progression (seulement quand nécessaire)
+  function updateProgressBarWidth() {
+    if (!progressWrapper) return;
+    
+    const activeContainer = document.querySelector('.gameboy-container:not([style*="display: none"])');
+    if (activeContainer) {
+      const containerWidth = activeContainer.offsetWidth;
+      const paddingAdjustment = 40; // Ajustement pour le padding
+      cachedWidth = (containerWidth - paddingAdjustment) + 'px';
     }
   }
   
-  // Mise à jour de la position fixe (appelée lors du défilement)
-  function updateFixedState(scrollPos) {
+  // Mise à jour de la position fixe (appelée lors du défilement) avec throttling amélioré
+  function updateFixedState() {
     if (!progressWrapper || !progressSpacer) return;
     
     // Déterminer si la barre doit être fixée
-    const shouldBeFixed = scrollPos >= progressWrapperPos;
+    const shouldBeFixed = window.scrollY >= progressWrapperPos;
     
     // N'agir que si l'état doit changer
     if (shouldBeFixed !== isFixed) {
       isFixed = shouldBeFixed;
       
-      if (shouldBeFixed) {
-        // Définir la hauteur du spacer
-        progressSpacer.style.height = progressWrapper.offsetHeight + 'px';
-        
-        // Définir la largeur de la barre fixée
-        const activeContainer = document.querySelector('.gameboy-container:not([style*="display: none"])');
-        if (activeContainer) {
-          const containerWidth = activeContainer.offsetWidth;
-          const paddingAdjustment = 40; // Ajustement pour le padding
-          progressWrapper.style.width = (containerWidth - paddingAdjustment) + 'px';
+      // Utiliser requestAnimationFrame pour éviter les reflows forcés
+      requestAnimationFrame(() => {
+        if (shouldBeFixed) {
+          // Définir la hauteur du spacer une seule fois
+          if (!progressSpacer.style.height) {
+            progressSpacer.style.height = progressWrapper.offsetHeight + 'px';
+          }
+          
+          // Utiliser la largeur pré-calculée
+          progressWrapper.style.width = cachedWidth;
+          
+          // Ajouter les classes sans modifier les styles individuellement
+          progressWrapper.classList.add('fixed');
+          progressSpacer.classList.add('active');
+          
+          // Ajouter un attribut data pour les styles CSS au lieu de modifier chaque tag
+          document.body.setAttribute('data-fixed-progress', 'true');
+        } else {
+          // Supprimer les classes
+          progressWrapper.classList.remove('fixed');
+          progressSpacer.classList.remove('active');
+          progressWrapper.style.width = '';
+          
+          // Supprimer l'attribut data
+          document.body.removeAttribute('data-fixed-progress');
         }
-        
-        // S'assurer que les badges DONE restent visibles en ajustant leurs positions z-index
-        document.querySelectorAll('.task-done-tag').forEach(tag => {
-          tag.style.zIndex = '1000';
-        });
-        
-        // Activer la position fixe
-        progressWrapper.classList.add('fixed');
-        progressSpacer.classList.add('active');
-      } else {
-        // Désactiver la position fixe
-        progressWrapper.classList.remove('fixed');
-        progressSpacer.classList.remove('active');
-        progressWrapper.style.width = '';
-      }
-    }
-  }
-  
-  // Gestionnaire principal pour le défilement (avec throttling)
-  function onScroll() {
-    lastKnownScrollPosition = window.scrollY;
-    
-    if (!ticking) {
-      // Utiliser requestAnimationFrame pour limiter les mises à jour
-      window.requestAnimationFrame(function() {
-        updateFixedState(lastKnownScrollPosition);
-        ticking = false;
       });
-      
-      ticking = true;
     }
   }
   
-  // Initialisation après un court délai pour s'assurer que la page est chargée
-  setTimeout(function() {
+  // Gestionnaire de défilement optimisé avec throttling amélioré
+  function onScroll() {
+    // Utiliser un throttling plus efficace
+    if (!scrollThrottleTimer) {
+      scrollThrottleTimer = setTimeout(() => {
+        scrollThrottleTimer = null;
+        updateFixedState();
+      }, 10); // 10ms throttle est suffisant pour une expérience fluide
+    }
+  }
+  
+  // Gestionnaire de redimensionnement avec debouncing
+  function onResize() {
+    // Annuler tout timer existant
+    if (resizeDebounceTimer) {
+      clearTimeout(resizeDebounceTimer);
+    }
+    
+    // Débouncer les événements de redimensionnement
+    resizeDebounceTimer = setTimeout(() => {
+      updateProgressBarWidth();
+      if (isFixed) {
+        progressWrapper.style.width = cachedWidth;
+      }
+    }, 250); // 250ms debounce pour le redimensionnement
+  }
+  
+  // Initialisation avec requestIdleCallback si disponible, sinon setTimeout
+  const initialize = function() {
     // Calculer la position initiale
     calculatePosition();
     
     // Appliquer l'état initial
-    updateFixedState(window.scrollY);
+    updateFixedState();
     
-    // Attacher les gestionnaires d'événements
+    // Attacher les gestionnaires d'événements optimisés
     window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', function() {
-      calculatePosition();
-      updateFixedState(window.scrollY);
-    });
+    window.addEventListener('resize', onResize, { passive: true });
     
-    // S'assurer que les ajustements sont appliqués lors des transitions de page
-    document.addEventListener('click', function(e) {
-      // Recalculer après un court délai si on clique sur un élément qui pourrait changer la page
-      if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON') {
-        setTimeout(calculatePosition, 100);
-      }
-    });
-  }, 100);
+    // Préparer le navigateur pour les animations
+    if (progressWrapper) {
+      progressWrapper.style.willChange = 'transform';
+    }
+  };
+  
+  // Utiliser requestIdleCallback si disponible pour un meilleur timing d'initialisation
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(initialize);
+  } else {
+    setTimeout(initialize, 200);
+  }
   
   // Événement spécial pour recalculer après que tous les éléments sont chargés
   window.addEventListener('load', function() {
-    calculatePosition();
-    updateFixedState(window.scrollY);
+    // Recalculer après un court délai pour s'assurer que tous les éléments sont rendus
+    setTimeout(calculatePosition, 300);
   });
+  
+  // Exposer une fonction pour forcer le recalcul (utilisée lors des changements de mode)
+  window.recalculateProgressBar = function() {
+    calculatePosition();
+    updateFixedState();
+  };
 })();

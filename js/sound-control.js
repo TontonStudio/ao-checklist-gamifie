@@ -1,16 +1,17 @@
 /**
- * Contrôleur de son centralisé
+ * Contrôleur de son centralisé optimisé
  * Gère la lecture et la mise en sourdine des sons d'avertissement
  */
 const SoundControl = {
   // État du son (désactivé ou non)
   muted: false,
   
-  // Référence à l'élément audio d'avertissement
-  warningSound: document.getElementById('warning-sound'),
+  // Référence aux éléments audio (chargés une seule fois)
+  warningSound: null,
+  soundButton: null,
   
-  // Référence au bouton de contrôle
-  soundButton: document.getElementById('sound-toggle'),
+  // Cache pour l'écran de checklist
+  checklistScreen: null,
   
   // Clé pour le localStorage
   STORAGE_KEY: 'tontonAoMusicMuted',
@@ -18,11 +19,23 @@ const SoundControl = {
   // État actif de la musique d'avertissement
   warningActive: false,
   
+  // Variables pour le fade out
+  fadeInterval: null,
+  
   /**
    * Initialise le contrôleur de son
    */
   init: function() {
-    if (APP_CONFIG.debug) console.log("Initialisation du contrôleur de son");
+    // Mettre en cache les éléments DOM une seule fois
+    this.warningSound = document.getElementById('warning-sound');
+    this.soundButton = document.getElementById('sound-toggle');
+    this.checklistScreen = document.getElementById('checklist-screen');
+    
+    // Précharger le son d'avertissement pour éviter les délais
+    if (this.warningSound) {
+      this.warningSound.preload = 'auto';
+      this.warningSound.load();
+    }
     
     // Charger l'état du son depuis localStorage
     this.loadMuteState();
@@ -40,25 +53,35 @@ const SoundControl = {
         this.toggleMute();
       });
     }
+    
+    // Créer un attribut personnalisé sur document.body pour indiquer l'état du son (utile pour CSS)
+    document.body.setAttribute('data-sound-muted', this.muted.toString());
   },
   
   /**
    * Charge l'état du son depuis localStorage
    */
   loadMuteState: function() {
-    const savedState = localStorage.getItem(this.STORAGE_KEY);
-    if (savedState !== null) {
-      this.muted = savedState === 'true';
+    try {
+      const savedState = localStorage.getItem(this.STORAGE_KEY);
+      if (savedState !== null) {
+        this.muted = savedState === 'true';
+      }
+    } catch (e) {
+      // En cas d'erreur localStorage (ex: navigation privée), continuer avec l'état par défaut
+      this.muted = false;
     }
-    if (APP_CONFIG.debug) console.log("État du son chargé:", this.muted ? "muet" : "actif");
   },
   
   /**
    * Sauvegarde l'état du son dans localStorage
    */
   saveMuteState: function() {
-    localStorage.setItem(this.STORAGE_KEY, this.muted);
-    if (APP_CONFIG.debug) console.log("État du son sauvegardé:", this.muted ? "muet" : "actif");
+    try {
+      localStorage.setItem(this.STORAGE_KEY, this.muted);
+    } catch (e) {
+      // Ignorer les erreurs de localStorage
+    }
   },
   
   /**
@@ -67,12 +90,16 @@ const SoundControl = {
   updateButtonAppearance: function() {
     if (!this.soundButton) return;
     
-    // Mettre à jour l'icône et le titre
-    this.soundButton.textContent = this.muted ? '🔇' : '🔊';
-    this.soundButton.title = this.muted ? 'Activer le son' : 'Couper le son';
-    
-    // Ajouter/supprimer l'attribut data-muted pour le style CSS
-    this.soundButton.setAttribute('data-muted', this.muted);
+    // Utiliser requestAnimationFrame pour les changements DOM
+    requestAnimationFrame(() => {
+      // Mettre à jour l'icône et le titre en une seule opération
+      this.soundButton.textContent = this.muted ? '🔇' : '🔊';
+      this.soundButton.title = this.muted ? 'Activer le son' : 'Couper le son';
+      
+      // Utiliser un attribut data pour le style CSS
+      this.soundButton.setAttribute('data-muted', this.muted);
+      document.body.setAttribute('data-sound-muted', this.muted.toString());
+    });
   },
   
   /**
@@ -102,17 +129,19 @@ const SoundControl = {
    * Active le mode warning et joue la musique si nécessaire
    */
   activateWarningMode: function() {
-    if (APP_CONFIG.debug) console.log("Activation du mode warning dans SoundControl");
+    // Éviter les activations redondantes
+    if (this.warningActive) return;
     
     // Marquer le mode warning comme actif
     this.warningActive = true;
     
-    // Afficher le bouton de contrôle du son s'il existe
+    // Afficher le bouton de contrôle du son
     this.showSoundButton();
     
     // Jouer la musique d'avertissement si le son n'est pas désactivé
     if (!this.muted) {
-      this.playWarningSound();
+      // Utiliser un court délai pour éviter les conflits d'opérations audio
+      setTimeout(() => this.playWarningSound(), 50);
     }
   },
   
@@ -120,7 +149,8 @@ const SoundControl = {
    * Désactive le mode warning et arrête la musique
    */
   deactivateWarningMode: function() {
-    if (APP_CONFIG.debug) console.log("Désactivation du mode warning dans SoundControl");
+    // Éviter les désactivations redondantes
+    if (!this.warningActive) return;
     
     // Marquer le mode warning comme inactif
     this.warningActive = false;
@@ -133,95 +163,124 @@ const SoundControl = {
   },
   
   /**
-   * Joue la musique d'avertissement
+   * Joue la musique d'avertissement avec optimisations
    */
   playWarningSound: function() {
-    // Ne pas jouer si le son est désactivé ou si on n'est pas en mode warning
-    if (this.muted || !this.warningActive) return;
+    // Ne pas jouer si le son est désactivé, si on n'est pas en mode warning, ou si l'élément n'existe pas
+    if (this.muted || !this.warningActive || !this.warningSound) return;
     
-    if (APP_CONFIG.debug) console.log("Tentative de lecture du son d'avertissement");
+    // Si le son est déjà en cours de lecture et n'est pas en pause, ne rien faire
+    if (this.warningSound.currentTime > 0 && !this.warningSound.paused) return;
     
-    // Vérifier que l'élément audio existe
-    if (!this.warningSound) return;
+    // Nettoyer tout fade out en cours
+    if (this.fadeInterval) {
+      clearInterval(this.fadeInterval);
+      this.fadeInterval = null;
+    }
+    
+    // Réinitialiser le volume au cas où il aurait été modifié
+    this.warningSound.volume = 0.3;
     
     // Configurer le son
     this.warningSound.loop = true;
-    this.warningSound.volume = 0.3;
     
-    // Tenter de lire le son
-    const playPromise = this.warningSound.play();
-    
-    // Gérer les erreurs
-    if (playPromise !== undefined) {
-      playPromise.catch(() => {
-        // Tenter une autre approche après un court délai
-        setTimeout(() => {
-          // Vérifier à nouveau l'état avant de réessayer
+    // Tenter de lire le son avec gestion optimisée des erreurs
+    try {
+      const playPromise = this.warningSound.play();
+      
+      // Gérer uniquement les promesses définies (certains navigateurs ne renvoient pas de promesse)
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // Si la lecture automatique est bloquée, tenter une autre approche après un court délai
           if (!this.muted && this.warningActive) {
-            this.tryUnblockAudio();
+            // Reporter la tentative pour éviter de spammer les erreurs
+            setTimeout(() => this.tryUnblockAudio(), 500);
           }
-        }, 500);
-      });
+        });
+      }
+    } catch (e) {
+      // Gérer les erreurs de lecture audio (très rares)
+      if (APP_CONFIG.debug) {
+        console.warn('Erreur de lecture audio :', e);
+      }
     }
   },
   
   /**
-   * Arrête la musique d'avertissement
+   * Arrête la musique d'avertissement avec optimisations
    * @param {boolean} fadeOut - Si vrai, effectue un fade out de la musique
    */
   stopWarningSound: function(fadeOut = false) {
-    // Vérifier que l'élément audio existe
+    // Vérifications rapides pour éviter les opérations inutiles
     if (!this.warningSound || this.warningSound.paused) return;
     
+    // Nettoyer tout fade out en cours
+    if (this.fadeInterval) {
+      clearInterval(this.fadeInterval);
+      this.fadeInterval = null;
+    }
+    
     if (fadeOut) {
-      // Effectuer un fade out progressif
-      if (APP_CONFIG.debug) console.log("Arrêt progressif du son d'avertissement (fade out)");
-      
-      const fadeDuration = 1000; // 1 seconde
+      // Effectuer un fade out progressif optimisé
       const initialVolume = this.warningSound.volume;
-      const fadeSteps = 20; // Nombre d'étapes du fade
+      
+      // Utiliser moins d'étapes pour plus d'efficacité
+      const fadeSteps = 10; // Réduit de 20 à 10
       const volumeStep = initialVolume / fadeSteps;
-      const stepDuration = fadeDuration / fadeSteps;
+      const stepDuration = 100; // 100ms par étape (total 1s)
       
       let currentStep = 0;
       
-      const fadeInterval = setInterval(() => {
+      this.fadeInterval = setInterval(() => {
         currentStep++;
         
-        // Calculer le nouveau volume
-        const newVolume = initialVolume - (volumeStep * currentStep);
+        // Appliquer le nouveau volume avec vérification de sécurité
+        const newVolume = Math.max(0, initialVolume - (volumeStep * currentStep));
         
-        // Appliquer le nouveau volume (avec sécurité pour ne pas descendre sous 0)
-        this.warningSound.volume = Math.max(0, newVolume);
+        try {
+          this.warningSound.volume = newVolume;
+        } catch (e) {
+          // Ignorer les erreurs potentielles de modification de volume
+        }
         
         // Quand le fade est complet
         if (currentStep >= fadeSteps) {
-          clearInterval(fadeInterval);
-          this.warningSound.pause();
-          this.warningSound.currentTime = 0;
-          // Réinitialiser le volume pour la prochaine lecture
-          this.warningSound.volume = initialVolume;
+          clearInterval(this.fadeInterval);
+          this.fadeInterval = null;
+          
+          // Arrêter et réinitialiser le son
+          try {
+            this.warningSound.pause();
+            this.warningSound.currentTime = 0;
+            this.warningSound.volume = initialVolume; // Restaurer le volume
+          } catch (e) {
+            // Ignorer les erreurs potentielles
+          }
         }
       }, stepDuration);
     } else {
-      // Arrêt immédiat
-      this.warningSound.pause();
-      this.warningSound.currentTime = 0;
+      // Arrêt immédiat plus sûr
+      try {
+        this.warningSound.pause();
+        this.warningSound.currentTime = 0;
+      } catch (e) {
+        // Ignorer les erreurs potentielles
+      }
     }
   },
   
   /**
-   * Affiche le bouton de contrôle du son
+   * Affiche le bouton de contrôle du son avec optimisations
    */
   showSoundButton: function() {
-    // Ne montrer le bouton que si on est sur l'écran de checklist
+    // Vérification rapide pour éviter les opérations DOM inutiles
     if (!this.soundButton || !this.isChecklist()) return;
     
-    // Utiliser setProperty pour s'assurer que le style est appliqué avec !important
-    this.soundButton.style.setProperty('display', 'flex', 'important');
-    
-    // Mettre à jour l'apparence
-    this.updateButtonAppearance();
+    // Afficher le bouton en une seule opération
+    requestAnimationFrame(() => {
+      this.soundButton.style.display = 'flex';
+      this.updateButtonAppearance();
+    });
   },
   
   /**
@@ -230,84 +289,65 @@ const SoundControl = {
   hideSoundButton: function() {
     if (!this.soundButton) return;
     
-    this.soundButton.style.setProperty('display', 'none', 'important');
+    requestAnimationFrame(() => {
+      this.soundButton.style.display = 'none';
+    });
   },
   
   /**
-   * Vérifie si on est sur l'écran de checklist
+   * Vérifie si on est sur l'écran de checklist (optimisé)
    * @returns {boolean} - true si on est sur l'écran de checklist
    */
   isChecklist: function() {
-    // Vérifier si l'écran de checklist est visible
-    const checklistScreen = document.getElementById('checklist-screen');
-    return checklistScreen && checklistScreen.style.display !== 'none';
+    return this.checklistScreen && this.checklistScreen.style.display !== 'none';
   },
   
   /**
-   * Tente de débloquer l'audio pour Chrome
+   * Tente de débloquer l'audio pour les navigateurs restrictifs
    */
   tryUnblockAudio: function() {
-    // Créer un contexte audio temporaire
+    // Éviter les tentatives multiples
+    if (!this.warningActive || this.muted) return;
+    
     try {
-      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      if (audioContext.state === 'suspended') {
-        audioContext.resume();
+      // Méthode plus légère pour tenter de débloquer l'audio
+      const temp = new Audio();
+      temp.autoplay = true;
+      temp.volume = 0;
+      temp.src = "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA";
+      
+      // Lecture silencieuse
+      const promise = temp.play();
+      if (promise !== undefined) {
+        promise.then(() => {
+          // Si la lecture silencieuse réussit, tenter de jouer le son d'avertissement
+          setTimeout(() => {
+            if (this.warningActive && !this.muted) {
+              this.playWarningSound();
+            }
+          }, 100);
+        }).catch(() => {
+          // Si la lecture silencieuse échoue, ne rien faire de plus
+        }).finally(() => {
+          // Nettoyer
+          temp.onended = null;
+          temp.onerror = null;
+          temp.oncanplaythrough = null;
+        });
       }
-      
-      // Simuler une interaction utilisateur
-      this.simulateUserInteraction();
-      
-      // Réessayer de jouer le son après le déblocage
-      setTimeout(() => {
-        if (!this.muted && this.warningActive) {
-          this.playWarningSound();
-        }
-      }, 100);
     } catch(e) {
-      if (APP_CONFIG.debug) console.error("Erreur lors du déblocage audio:", e);
+      // Ignorer les erreurs
     }
-  },
-  
-  /**
-   * Simule une interaction utilisateur pour débloquer l'audio
-   */
-  simulateUserInteraction: function() {
-    // Créer un élément de bouton invisible
-    const button = document.createElement('button');
-    button.style.position = 'fixed';
-    button.style.top = '-100px';
-    button.style.width = '1px';
-    button.style.height = '1px';
-    button.style.opacity = '0';
-    document.body.appendChild(button);
-    
-    // Simuler un clic
-    button.click();
-    
-    // Simuler divers événements
-    ['click', 'touchstart', 'touchend', 'mousedown'].forEach(eventType => {
-      try {
-        const event = new Event(eventType, { bubbles: true });
-        button.dispatchEvent(event);
-        document.dispatchEvent(event);
-      } catch(e) {
-        // Ignorer les erreurs
-      }
-    });
-    
-    // Supprimer l'élément
-    setTimeout(() => {
-      document.body.removeChild(button);
-    }, 100);
   }
 };
 
-// Initialiser au chargement du DOM
-document.addEventListener('DOMContentLoaded', function() {
-  SoundControl.init();
-});
-
-// Initialiser aussi dès que possible
-if (document.readyState !== 'loading') {
-  SoundControl.init();
+// Initialisation optimisée pour éviter les blocages de rendu
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    // Initialiser après un court délai pour ne pas bloquer le rendu initial
+    setTimeout(() => SoundControl.init(), 100);
+  });
+} else {
+  // Si le DOM est déjà chargé, initialiser pendant une période d'inactivité
+  requestIdleCallback ? requestIdleCallback(() => SoundControl.init()) : setTimeout(() => SoundControl.init(), 100);
 }

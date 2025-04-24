@@ -15,8 +15,9 @@ const APP_CONFIG = {
   
   // Paramètres pour les effets visuels
   effects: {
-    particleCount: 50, // Nombre de particules pour l'effet de complétion
-    fireworkInterval: 1500 // Intervalle entre les feux d'artifice (en ms)
+    particleCount: 20, // Nombre de particules pour l'effet de complétion (réduit de 50 à 20)
+    fireworkInterval: 2500, // Intervalle entre les feux d'artifice (en ms) (augmenté de 1500 à 2500)
+    maxFireworks: 2 // Nombre maximum de feux d'artifice simultanés (nouveau paramètre)
   },
   
   // Messages

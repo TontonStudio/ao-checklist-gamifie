@@ -1,121 +1,144 @@
 /**
- * Fonctions utilitaires pour l'application
+ * Fonctions utilitaires pour l'application (optimisées)
  */
 const Utils = {
+  // Cache des éléments DOM fréquemment utilisés
+  domCache: {
+    marketTitle: null,
+    progressFill: null,
+    progressText: null,
+    fileErrorMessage: null,
+    warningSound: null,
+    soundToggle: null,
+    gameContainers: null,
+    countdownElements: null
+  },
+  
+  // Cache des expressions régulières pour éviter de les recréer à chaque utilisation
+  regexCache: {
+    aoConfigRegexes: [
+      /const\s+aoConfig\s*=\s*({[\s\S]*?});/,
+      /let\s+aoConfig\s*=\s*({[\s\S]*?});/,
+      /var\s+aoConfig\s*=\s*({[\s\S]*?});/,
+      /aoConfig\s*=\s*({[\s\S]*?});/
+    ],
+    tasksRegexes: [
+      /const\s+tasks\s*=\s*(\[[\s\S]*?\]);/,
+      /let\s+tasks\s*=\s*(\[[\s\S]*?\]);/,
+      /var\s+tasks\s*=\s*(\[[\s\S]*?\]);/,
+      /tasks\s*=\s*(\[[\s\S]*?\]);/
+    ],
+    commentRegexes: {
+      inlineComments: /\/\/.*/g,
+      multilineComments: /\/\*[\s\S]*?\*\//g
+    }
+  },
+  
+  // Initialisation du cache DOM
+  initDomCache: function() {
+    this.domCache.marketTitle = document.getElementById('market-title');
+    this.domCache.progressFill = document.getElementById('progress-fill');
+    this.domCache.progressText = document.getElementById('progress-text');
+    this.domCache.fileErrorMessage = document.getElementById('file-error-message');
+    this.domCache.warningSound = document.getElementById('warning-sound');
+    this.domCache.soundToggle = document.getElementById('sound-toggle');
+    this.domCache.gameContainers = document.querySelectorAll('.gameboy-container');
+    this.domCache.countdownElements = document.querySelectorAll('.countdown-container, .countdown-message, .countdown-timer');
+  },
+  
   /**
    * Copie un texte dans le presse-papier
    * @param {string} text - Texte à copier
    */
   copyToClipboard: function(text) {
     navigator.clipboard.writeText(text).then(() => {
-      // Feedback visuel pour tous les boutons de copie
-      const allCopyBtns = document.querySelectorAll('.copy-btn, .subtask-copy-btn');
-      allCopyBtns.forEach(btn => {
-        if (btn.dataset.filename === text) {
+      // Trouver uniquement les boutons correspondant au texte copié pour réduire les opérations DOM
+      const matchingBtns = document.querySelectorAll(`.copy-btn[data-filename="${text}"], .subtask-copy-btn[data-filename="${text}"]`);
+      
+      if (matchingBtns.length === 0) return;
+      
+      // Utiliser un ensemble d'animations groupées avec requestAnimationFrame
+      requestAnimationFrame(() => {
+        matchingBtns.forEach(btn => {
           const originalText = btn.textContent;
           
-          // Stocker la largeur actuelle du bouton pour la préserver
-          const currentWidth = btn.offsetWidth;
-          const currentHeight = btn.offsetHeight;
-          
-          // Appliquer une largeur fixe temporaire pour éviter le redimensionnement
+          // Stocker la largeur actuelle pour éviter les reflows
           if (!btn.dataset.originalWidth) {
+            const currentWidth = btn.offsetWidth;
             btn.dataset.originalWidth = `${currentWidth}px`;
-            btn.dataset.originalHeight = `${currentHeight}px`;
             btn.style.width = `${currentWidth}px`;
             btn.style.minWidth = `${currentWidth}px`;
           }
           
-          // Changer le texte pour indiquer la copie
+          // Appliquer l'animation et le texte en une seule opération
           btn.textContent = 'Copié !';
-          
-          // Ajouter une classe pour l'animation de succès
           btn.classList.add('copy-success');
           
-          // Rétablir le texte original après un délai
+          // Utiliser setTimeout pour la restauration
           setTimeout(() => {
             btn.textContent = originalText;
             btn.classList.remove('copy-success');
             
-            // Retirer la largeur fixe après que le texte soit revenu à l'original
+            // Nettoyer les dimensions
             setTimeout(() => {
               if (btn.dataset.originalWidth) {
                 btn.style.width = '';
                 btn.style.minWidth = '';
                 delete btn.dataset.originalWidth;
-                delete btn.dataset.originalHeight;
               }
             }, 100);
           }, 1500);
-        }
+        });
       });
     }).catch(err => {
       // Silencieux en production
+      if (APP_CONFIG.debug) {
+        console.error('Erreur lors de la copie :', err);
+      }
     });
   },
   
   /**
-   * Formate une date au format jours, heures, minutes, secondes
+   * Formate une date au format jours, heures, minutes, secondes (optimisé)
    * @param {Date} deadline - Date limite
    * @returns {Object} - Objet contenant les jours, heures, minutes, secondes
    */
   formatTimeRemaining: function(deadline) {
-    const now = new Date();
-    const diff = deadline - now;
+    const now = Date.now();
+    const target = deadline.getTime ? deadline.getTime() : deadline;
+    const diff = target - now;
     
     if (diff <= 0) {
       return { days: 0, hours: 0, minutes: 0, seconds: 0, total: 0 };
     }
     
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+    // Calcul direct sans conversions inutiles
+    const days = Math.floor(diff / 86400000); // 1000 * 60 * 60 * 24
+    const hours = Math.floor((diff % 86400000) / 3600000); // 1000 * 60 * 60
+    const minutes = Math.floor((diff % 3600000) / 60000); // 1000 * 60
+    const seconds = Math.floor((diff % 60000) / 1000);
     
-    return {
-      days,
-      hours,
-      minutes,
-      seconds,
-      total: diff
-    };
+    return { days, hours, minutes, seconds, total: diff };
   },
   
   /**
-   * Vérifie le format du fichier chargé
+   * Vérifie le format du fichier chargé (optimisé avec mise en cache)
    * @param {string} content - Contenu du fichier
    * @returns {boolean} - true si le format est valide, false sinon
    */
   validateTasksFile: function(content) {
     try {
-      // Vérification de base : le fichier doit contenir certains mots-clés
-      const hasAoConfig = content.includes('aoConfig');
-      const hasTasks = content.includes('tasks');
-      const hasLabel = content.includes('label');
-      const hasSubtasks = content.includes('subtasks');
-      
-      if (!hasAoConfig || !hasTasks || !hasLabel || !hasSubtasks) {
+      // Vérification rapide des mots-clés
+      if (!content.includes('aoConfig') || 
+          !content.includes('tasks') || 
+          !content.includes('label') || 
+          !content.includes('subtasks')) {
         return false;
       }
       
-      // Expressions régulières pour extraire aoConfig et tasks
-      const aoConfigRegexes = [
-        /const\s+aoConfig\s*=\s*({[\s\S]*?});/,
-        /let\s+aoConfig\s*=\s*({[\s\S]*?});/,
-        /var\s+aoConfig\s*=\s*({[\s\S]*?});/,
-        /aoConfig\s*=\s*({[\s\S]*?});/
-      ];
-      
-      const tasksRegexes = [
-        /const\s+tasks\s*=\s*(\[[\s\S]*?\]);/,
-        /let\s+tasks\s*=\s*(\[[\s\S]*?\]);/,
-        /var\s+tasks\s*=\s*(\[[\s\S]*?\]);/,
-        /tasks\s*=\s*(\[[\s\S]*?\]);/
-      ];
-      
-      // Tester chaque expression régulière jusqu'à trouver un match
+      // Extraire aoConfig et tasks avec les regex pré-compilées
       let aoConfigMatch = null;
-      for (const regex of aoConfigRegexes) {
+      for (const regex of this.regexCache.aoConfigRegexes) {
         const match = content.match(regex);
         if (match && match[1]) {
           aoConfigMatch = match;
@@ -124,7 +147,7 @@ const Utils = {
       }
       
       let tasksMatch = null;
-      for (const regex of tasksRegexes) {
+      for (const regex of this.regexCache.tasksRegexes) {
         const match = content.match(regex);
         if (match && match[1]) {
           tasksMatch = match;
@@ -136,32 +159,26 @@ const Utils = {
         return false;
       }
       
-      // Valider le contenu
+      // Valider le contenu de manière optimisée
       try {
-        // Extraire et évaluer la configuration
-        const aoConfigJson = aoConfigMatch[1]
-          .replace(/\/\/.*/g, '') // Supprimer les commentaires inline
-          .replace(/\/\*[\s\S]*?\*\//g, ''); // Supprimer les commentaires multi-lignes
+        // Supprimer les commentaires
+        const { inlineComments, multilineComments } = this.regexCache.commentRegexes;
+        const aoConfigJson = aoConfigMatch[1].replace(inlineComments, '').replace(multilineComments, '');
+        const tasksJson = tasksMatch[1].replace(inlineComments, '').replace(multilineComments, '');
         
-        const tasksJson = tasksMatch[1]
-          .replace(/\/\/.*/g, '')
-          .replace(/\/\*[\s\S]*?\*\//g, '');
-        
-        // Test d'évaluation
+        // Évaluer
         const evalAoConfig = new Function('return ' + aoConfigJson)();
         const evalTasks = new Function('return ' + tasksJson)();
         
-        // Vérifier les propriétés minimales requises
-        if (!evalAoConfig.title || !evalAoConfig.deadline) {
+        // Validation rapide
+        if (!evalAoConfig.title || !evalAoConfig.deadline || 
+            !Array.isArray(evalTasks) || evalTasks.length === 0) {
           return false;
         }
         
-        if (!Array.isArray(evalTasks) || evalTasks.length === 0) {
-          return false;
-        }
-        
-        // Vérifier que chaque tâche a un label et des sous-tâches
-        for (const task of evalTasks) {
+        // Validation minimale des tâches
+        for (let i = 0; i < evalTasks.length; i++) {
+          const task = evalTasks[i];
           if (!task.label || !Array.isArray(task.subtasks)) {
             return false;
           }
@@ -177,99 +194,75 @@ const Utils = {
   },
   
   /**
-   * Charge les tâches et la configuration depuis le contenu du fichier
+   * Charge les tâches et la configuration depuis le contenu du fichier (optimisé)
    * @param {string} content - Contenu du fichier
    */
   loadTasksAndConfig: function(content) {
     try {
-      // Réinitialiser complètement l'état de l'application d'abord
-      // Supprimer les modes warning et doré
-      document.body.classList.remove('warning-mode');
-      document.querySelectorAll('.gameboy-container').forEach(container => {
-        container.classList.remove('warning-mode', 'golden-mode');
-      });
-      
-      // Réinitialiser la barre de progression
-      const progressFill = document.getElementById('progress-fill');
-      const progressText = document.getElementById('progress-text');
-      if (progressFill) {
-        progressFill.style.width = '0%';
-        progressFill.classList.remove('completed');
-      }
-      if (progressText) {
-        progressText.textContent = '0%';
+      // Initialiser le cache DOM si ce n'est pas déjà fait
+      if (!this.domCache.marketTitle) {
+        this.initDomCache();
       }
       
-      // Arrêter les sons et animations
-      const warningSound = document.getElementById('warning-sound');
-      if (warningSound) {
-        warningSound.pause();
-        warningSound.currentTime = 0;
-      }
-      
-      // Réinitialiser l'état d'avertissement
-      if (CountdownManager) {
-        // Désactiver explicitement le mode warning
-        CountdownManager.warningActive = false;
-        
-        // Masquer le bouton de musique si disponible
-        const soundToggle = document.getElementById('sound-toggle');
-        if (soundToggle) {
-          soundToggle.style.display = 'none';
-        }
-        
-        // Arrêter le compte à rebours existant
-        if (CountdownManager.interval) {
-          clearInterval(CountdownManager.interval);
-          CountdownManager.interval = null;
-        }
-        
-        // Arrêter le son d'avertissement s'il joue
-        if (warningSound) {
-          warningSound.pause();
-          warningSound.currentTime = 0;
-        }
-        
-        // Force la suppression du mode warning sur tous les éléments
+      // Réinitialiser l'état de l'application en une seule opération
+      requestAnimationFrame(() => {
+        // Réinitialiser les classes
         document.body.classList.remove('warning-mode');
-        document.querySelectorAll('.gameboy-container').forEach(container => {
-          container.classList.remove('warning-mode');
+        document.body.setAttribute('data-warning-mode', 'false');
+        
+        this.domCache.gameContainers.forEach(container => {
+          container.classList.remove('warning-mode', 'golden-mode');
         });
         
-        // Nettoyer tous les éléments d'avertissement
-        document.querySelectorAll('.countdown-container, .countdown-message, .countdown-timer').forEach(element => {
+        // Réinitialiser la barre de progression
+        if (this.domCache.progressFill) {
+          this.domCache.progressFill.style.width = '0%';
+          this.domCache.progressFill.classList.remove('completed');
+        }
+        
+        if (this.domCache.progressText) {
+          this.domCache.progressText.textContent = '0%';
+        }
+        
+        // Arrêter les sons
+        if (this.domCache.warningSound) {
+          this.domCache.warningSound.pause();
+          this.domCache.warningSound.currentTime = 0;
+        }
+        
+        // Réinitialiser les éléments countdown
+        this.domCache.countdownElements.forEach(element => {
           element.classList.remove('warning-mode', 'countdown-warning');
           if (element.classList.contains('countdown-message')) {
             element.textContent = '';
           }
         });
+      });
+      
+      // Réinitialiser l'état du CountdownManager
+      if (CountdownManager) {
+        CountdownManager.warningActive = false;
+        
+        if (this.domCache.soundToggle) {
+          this.domCache.soundToggle.style.display = 'none';
+        }
+        
+        if (CountdownManager.interval) {
+          clearInterval(CountdownManager.interval);
+          CountdownManager.interval = null;
+        }
       }
       
-      // Réinitialiser la progression
+      // Réinitialiser les tâches
       localStorage.removeItem(APP_CONFIG.storageKey);
       if (TasksManager) {
         TasksManager.savedProgress = {};
         TasksManager.isComplete = false;
       }
       
-      // Expressions régulières pour extraire aoConfig et tasks
-      const aoConfigRegexes = [
-        /const\s+aoConfig\s*=\s*({[\s\S]*?});/,
-        /let\s+aoConfig\s*=\s*({[\s\S]*?});/,
-        /var\s+aoConfig\s*=\s*({[\s\S]*?});/,
-        /aoConfig\s*=\s*({[\s\S]*?});/
-      ];
-      
-      const tasksRegexes = [
-        /const\s+tasks\s*=\s*(\[[\s\S]*?\]);/,
-        /let\s+tasks\s*=\s*(\[[\s\S]*?\]);/,
-        /var\s+tasks\s*=\s*(\[[\s\S]*?\]);/,
-        /tasks\s*=\s*(\[[\s\S]*?\]);/
-      ];
-      
-      // Trouver le match pour aoConfig
+      // Extraction optimisée avec les regex pré-compilées
       let aoConfigMatch = null;
-      for (const regex of aoConfigRegexes) {
+      for (const regex of this.regexCache.aoConfigRegexes) {
         const match = content.match(regex);
         if (match && match[1]) {
           aoConfigMatch = match;
@@ -277,9 +270,8 @@ const Utils = {
         }
       }
       
-      // Trouver le match pour tasks
       let tasksMatch = null;
-      for (const regex of tasksRegexes) {
+      for (const regex of this.regexCache.tasksRegexes) {
         const match = content.match(regex);
         if (match && match[1]) {
           tasksMatch = match;
@@ -291,36 +283,30 @@ const Utils = {
         throw new Error("Impossible d'extraire aoConfig ou tasks");
       }
       
-      // Extraire et nettoyer les données
-      let extractedAoConfig = {};
-      let extractedTasks = [];
+      // Extraction et nettoyage
+      const { inlineComments, multilineComments } = this.regexCache.commentRegexes;
+      const aoConfigJson = aoConfigMatch[1].replace(inlineComments, '').replace(multilineComments, '');
+      const tasksJson = tasksMatch[1].replace(inlineComments, '').replace(multilineComments, '');
       
-      try {
-        // Convertir le texte en objet/tableau JavaScript en supprimant les commentaires
-        const aoConfigJson = aoConfigMatch[1]
-          .replace(/\/\/.*/g, '')
-          .replace(/\/\*[\s\S]*?\*\//g, '');
-          
-        const tasksJson = tasksMatch[1]
-          .replace(/\/\/.*/g, '')
-          .replace(/\/\*[\s\S]*?\*\//g, '');
-        
-        extractedAoConfig = (new Function('return ' + aoConfigJson))();
-        extractedTasks = (new Function('return ' + tasksJson))();
-      } catch (e) {
-        throw e;
-      }
+      const extractedAoConfig = (new Function('return ' + aoConfigJson))();
+      const extractedTasks = (new Function('return ' + tasksJson))();
       
-      // Définir les variables globales pour l'application
+      // Définir les variables globales
       window.aoConfig = extractedAoConfig;
       window.tasks = extractedTasks;
       
-      // Sauvegarder le contenu dans localStorage pour persistance
-      localStorage.setItem('tontonAoTasks', content);
-      
-      // Sauvegarder les données extraites dans localStorage également
-      localStorage.setItem('tontonAoConfigData', JSON.stringify(extractedAoConfig));
-      localStorage.setItem('tontonAoTasksData', JSON.stringify(extractedTasks));
+      // Sauvegarder dans localStorage de manière optimisée
+      try {
+        // Stocker les données dans un try-catch pour gérer les erreurs de quotas
+        localStorage.setItem('tontonAoTasks', content);
+        localStorage.setItem('tontonAoConfigData', JSON.stringify(extractedAoConfig));
+        localStorage.setItem('tontonAoTasksData', JSON.stringify(extractedTasks));
+      } catch (storageError) {
+        // Fallback silencieux si localStorage n'est pas disponible
+        if (APP_CONFIG.debug) {
+          console.warn('Erreur de stockage localStorage :', storageError);
+        }
+      }
       
       // Mettre à jour l'interface
       this.updateMarketInfo();
@@ -329,38 +315,62 @@ const Utils = {
       document.getElementById('welcome-screen').style.display = 'none';
       document.getElementById('checklist-screen').style.display = 'block';
       
-      // Initialiser les tâches
-      if (TasksManager && TasksManager.initTasks) {
-        TasksManager.initTasks();
+      // Initialiser de manière différée
+      requestIdleCallback(() => {
+        // Initialiser les tâches
+        if (TasksManager && TasksManager.initTasks) {
+          TasksManager.init();
+        }
+        
+        // Démarrer le compte à rebours si une date est définie
+        if (extractedAoConfig.deadline && CountdownManager && CountdownManager.startCountdown) {
+          setTimeout(() => {
+            CountdownManager.startCountdown(new Date(extractedAoConfig.deadline));
+          }, 100);
+        }
+      });
+    } catch (error) {
+      if (this.domCache.fileErrorMessage) {
+        this.domCache.fileErrorMessage.textContent = APP_CONFIG.messages.fileError;
+      } else {
+        document.getElementById('file-error-message').textContent = APP_CONFIG.messages.fileError;
       }
       
-      // Démarrer le compte à rebours si une date est définie
-      if (extractedAoConfig.deadline && CountdownManager && CountdownManager.startCountdown) {
-        CountdownManager.startCountdown(new Date(extractedAoConfig.deadline));
+      if (APP_CONFIG.debug) {
+        console.error('Erreur de chargement :', error);
       }
-    } catch (error) {
-      document.getElementById('file-error-message').textContent = APP_CONFIG.messages.fileError;
     }
   },
   
   /**
-   * Met à jour les informations du marché dans l'interface
+   * Met à jour les informations du marché dans l'interface (optimisé)
    */
   updateMarketInfo: function() {
-    if (window.aoConfig) {
-      // Mettre à jour le titre du marché s'il existe
-      if (window.aoConfig.title) {
-        const marketTitle = document.getElementById('market-title');
-        if (marketTitle) {
-          marketTitle.textContent = window.aoConfig.title;
-          marketTitle.style.display = 'block';
-        }
-      }
-      
-      // Mettre à jour le titre de la page
-      if (window.aoConfig.reference) {
-        document.title = `AO ${window.aoConfig.reference} - Tonton Studio`;
-      }
+    if (!window.aoConfig) return;
+    
+    // Initialiser le cache DOM si ce n'est pas déjà fait
+    if (!this.domCache.marketTitle) {
+      this.initDomCache();
+    }
+    
+    // Mettre à jour le titre du marché
+    if (window.aoConfig.title && this.domCache.marketTitle) {
+      this.domCache.marketTitle.textContent = window.aoConfig.title;
+      this.domCache.marketTitle.style.display = 'block';
+    }
+    
+    // Mettre à jour le titre de la page en une seule opération
+    if (window.aoConfig.reference) {
+      document.title = `AO ${window.aoConfig.reference} - Tonton Studio`;
     }
   }
 };
+
+// Initialiser le cache DOM dès que possible sans bloquer le rendu
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    requestIdleCallback(() => Utils.initDomCache());
+  });
+} else {
+  requestIdleCallback(() => Utils.initDomCache());
+}
