@@ -159,22 +159,33 @@ if (document.readyState === 'loading') {
   initApp();
 }
 
-// Ajouter un gestionnaire pour les événements de visibilité de page
-document.addEventListener('visibilitychange', () => {
-  // Optimisation: pause des animations quand la page n'est pas visible
-  if (document.hidden) {
-    // Mettre en pause les animations intensives
-    if (EffectsManager && EffectsManager.fireworksInterval) {
-      EffectsManager.stopContinuousFireworks();
-      document.body.setAttribute('data-paused-fireworks', 'true');
+// Mécanisme de sécurité supplémentaire pour la barre de progression fixe
+// Vérifier si la fonction resetProgressBarState est disponible et l'appeler périodiquement
+if (window.resetProgressBarState) {
+  // Réinitialiser l'état après le chargement complet
+  setTimeout(window.resetProgressBarState, 1500);
+  
+  // Vérifier également après un changement d'onglet ou un retour à l'application
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden && window.resetProgressBarState) {
+      setTimeout(window.resetProgressBarState, 100);
     }
-  } else {
-    // Reprendre les animations si nécessaire
-    if (document.body.getAttribute('data-paused-fireworks') === 'true') {
-      if (TasksManager && TasksManager.isComplete && EffectsManager) {
-        EffectsManager.startContinuousFireworks();
+    
+    // Comportement original: gestion des feux d'artifice
+    if (document.hidden) {
+      // Mettre en pause les animations intensives
+      if (EffectsManager && EffectsManager.fireworksInterval) {
+        EffectsManager.stopContinuousFireworks();
+        document.body.setAttribute('data-paused-fireworks', 'true');
       }
-      document.body.removeAttribute('data-paused-fireworks');
+    } else {
+      // Reprendre les animations si nécessaire
+      if (document.body.getAttribute('data-paused-fireworks') === 'true') {
+        if (TasksManager && TasksManager.isComplete && EffectsManager) {
+          EffectsManager.startContinuousFireworks();
+        }
+        document.body.removeAttribute('data-paused-fireworks');
+      }
     }
-  }
-});
+  });
+}

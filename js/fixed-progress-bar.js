@@ -1,8 +1,7 @@
 /**
  * Gestionnaire amélioré pour la barre de progression fixe
  * 
- * Ce script remplace l'ancien système de gestion de la barre fixe
- * avec une implémentation plus robuste et plus réactive
+ * Correction du bug où la barre reste parfois bloquée en position fixe
  */
 
 // Exécution immédiate pour ne pas attendre le DOMContentLoaded
@@ -13,12 +12,11 @@
   
   // Variables pour la détection de position
   let progressWrapperPos = 0;
-  let lastKnownScrollPosition = 0;
-  let ticking = false;
   let isFixed = false;
   let cachedWidth = 0;
   let resizeDebounceTimer = null;
   let scrollThrottleTimer = null;
+  let fixationThreshold = 5; // Marge de tolérance en pixels
   
   // Calcul optimisé de la position de la barre
   function calculatePosition() {
@@ -29,6 +27,9 @@
     
     // Pré-calculer la largeur
     updateProgressBarWidth();
+    
+    // Forcer une mise à jour immédiate de l'état
+    updateFixedState(true);
   }
   
   // Mettre à jour la largeur de la barre de progression (seulement quand nécessaire)
@@ -43,22 +44,23 @@
     }
   }
   
-  // Mise à jour de la position fixe (appelée lors du défilement) avec throttling amélioré
-  function updateFixedState() {
+  // Mise à jour de la position fixe avec vérification plus robuste
+  function updateFixedState(forceUpdate = false) {
     if (!progressWrapper || !progressSpacer) return;
     
-    // Déterminer si la barre doit être fixée
-    const shouldBeFixed = window.scrollY >= progressWrapperPos;
+    // Déterminer si la barre doit être fixée avec une marge de tolérance
+    // Ajout d'une marge de tolérance pour éviter les problèmes aux limites
+    const shouldBeFixed = window.scrollY >= (progressWrapperPos - fixationThreshold);
     
-    // N'agir que si l'état doit changer
-    if (shouldBeFixed !== isFixed) {
+    // N'agir que si l'état doit changer ou si nous forçons la mise à jour
+    if (shouldBeFixed !== isFixed || forceUpdate) {
       isFixed = shouldBeFixed;
       
       // Utiliser requestAnimationFrame pour éviter les reflows forcés
       requestAnimationFrame(() => {
         if (shouldBeFixed) {
-          // Définir la hauteur du spacer une seule fois
-          if (!progressSpacer.style.height) {
+          // Définir la hauteur du spacer une seule fois ou lors d'un forceUpdate
+          if (!progressSpacer.style.height || forceUpdate) {
             progressSpacer.style.height = progressWrapper.offsetHeight + 'px';
           }
           
@@ -69,7 +71,7 @@
           progressWrapper.classList.add('fixed');
           progressSpacer.classList.add('active');
           
-          // Ajouter un attribut data pour les styles CSS au lieu de modifier chaque tag
+          // Ajouter un attribut data pour les styles CSS
           document.body.setAttribute('data-fixed-progress', 'true');
         } else {
           // Supprimer les classes
@@ -84,18 +86,59 @@
     }
   }
   
-  // Gestionnaire de défilement optimisé avec throttling amélioré
-  function onScroll() {
-    // Utiliser un throttling plus efficace
-    if (!scrollThrottleTimer) {
-      scrollThrottleTimer = setTimeout(() => {
-        scrollThrottleTimer = null;
-        updateFixedState();
-      }, 10); // 10ms throttle est suffisant pour une expérience fluide
-    }
+  // Nouvelle fonction: vérifier si l'élément est réellement visible
+  function isElementFullyInViewport() {
+    if (!progressWrapper) return false;
+    
+    const rect = progressWrapper.getBoundingClientRect();
+    
+    // Vérifier si l'élément est entièrement visible dans la fenêtre
+    return (
+      rect.top >= 0 &&
+      rect.left >= 0 &&
+      rect.bottom <= window.innerHeight &&
+      rect.right <= window.innerWidth
+    );
   }
   
-  // Gestionnaire de redimensionnement avec debouncing
+  // Gestionnaire de défilement amélioré avec vérification supplémentaire
+  function onScroll() {
+    // Annuler tout timer existant pour éviter l'accumulation
+    if (scrollThrottleTimer) {
+      clearTimeout(scrollThrottleTimer);
+    }
+    
+    // Correction immédiate: si nous sommes au début de la page, on s'assure que la barre n'est pas fixe
+    if (window.scrollY <= 10 && isFixed) {
+      isFixed = false;
+      requestAnimationFrame(() => {
+        progressWrapper.classList.remove('fixed');
+        progressSpacer.classList.remove('active');
+        progressWrapper.style.width = '';
+        document.body.removeAttribute('data-fixed-progress');
+      });
+    }
+    
+    // Throttle normal pour les autres cas
+    scrollThrottleTimer = setTimeout(() => {
+      scrollThrottleTimer = null;
+      
+      // Vérification supplémentaire pour les cas limites
+      if (isFixed && isElementFullyInViewport() && window.scrollY < progressWrapperPos) {
+        isFixed = false;
+        requestAnimationFrame(() => {
+          progressWrapper.classList.remove('fixed');
+          progressSpacer.classList.remove('active');
+          progressWrapper.style.width = '';
+          document.body.removeAttribute('data-fixed-progress');
+        });
+      } else {
+        updateFixedState();
+      }
+    }, 10);
+  }
+  
+  // Gestionnaire de redimensionnement avec debouncing et recalcul complet
   function onResize() {
     // Annuler tout timer existant
     if (resizeDebounceTimer) {
@@ -104,29 +147,47 @@
     
     // Débouncer les événements de redimensionnement
     resizeDebounceTimer = setTimeout(() => {
-      updateProgressBarWidth();
+      // Recalcul complet après redimensionnement
+      calculatePosition();
+      
+      // Forcer une mise à jour immédiate de l'état si fixé
       if (isFixed) {
         progressWrapper.style.width = cachedWidth;
       }
-    }, 250); // 250ms debounce pour le redimensionnement
+    }, 250);
+  }
+  
+  // Fonction pour forcer une réinitialisation complète (appeler en cas de problème)
+  function forceReset() {
+    // Retirer l'état fixe quoi qu'il arrive
+    isFixed = false;
+    
+    // Nettoyer toutes les classes et styles
+    requestAnimationFrame(() => {
+      progressWrapper.classList.remove('fixed');
+      progressSpacer.classList.remove('active');
+      progressWrapper.style.width = '';
+      document.body.removeAttribute('data-fixed-progress');
+      
+      // Recalculer complètement la position
+      setTimeout(calculatePosition, 50);
+    });
   }
   
   // Initialisation avec requestIdleCallback si disponible, sinon setTimeout
   const initialize = function() {
+    if (!progressWrapper || !progressSpacer) return;
+    
     // Calculer la position initiale
     calculatePosition();
-    
-    // Appliquer l'état initial
-    updateFixedState();
     
     // Attacher les gestionnaires d'événements optimisés
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onResize, { passive: true });
     
     // Préparer le navigateur pour les animations
-    if (progressWrapper) {
-      progressWrapper.style.willChange = 'transform';
-    }
+    progressWrapper.style.willChange = 'transform';
+
   };
   
   // Utiliser requestIdleCallback si disponible pour un meilleur timing d'initialisation
@@ -140,11 +201,25 @@
   window.addEventListener('load', function() {
     // Recalculer après un court délai pour s'assurer que tous les éléments sont rendus
     setTimeout(calculatePosition, 300);
+    
+    // Vérifier à nouveau après un délai plus long pour être sûr
+    setTimeout(calculatePosition, 1000);
   });
   
-  // Exposer une fonction pour forcer le recalcul (utilisée lors des changements de mode)
-  window.recalculateProgressBar = function() {
-    calculatePosition();
-    updateFixedState();
-  };
+  // Expose des fonctions pour forcer le recalcul et la réinitialisation
+  window.recalculateProgressBar = calculatePosition;
+  window.resetProgressBarState = forceReset;
+  
+  // Mécanisme de sécurité: vérification périodique de l'état de la barre
+  setInterval(function() {
+    // Si nous sommes tout en haut de la page mais que la barre est fixe, force reset
+    if (window.scrollY < 10 && isFixed) {
+      forceReset();
+    }
+    
+    // Si la barre est complètement visible mais toujours fixe, force reset
+    if (isFixed && isElementFullyInViewport() && window.scrollY < progressWrapperPos) {
+      forceReset();
+    }
+  }, 2000); // Vérifier toutes les 2 secondes
 })();
