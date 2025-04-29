@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta property="og:title" content="AO Gamified Checklist" />
+  <meta property="og:description" content="Gagnez du temps dans la structuration de vos réponses aux appels d'offre grâce à cette checklist gamifiée et son générateur dopé à l'IA !" />
+  <meta property="og:image" content="https://tontonstudio.com/public/AGC/img/AGC_SM.png" />
+  <meta property="og:url" content="https://tontonstudio.com/public/AGC/" />
+  <title>AO Gamified Checklist - Tonton Studio</title>
+  
+  <!-- Préchargement des ressources critiques -->
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" as="style">
+  <link rel="preload" href="css/base.css" as="style">
+  <link rel="preload" href="js/config.js" as="script">
+  <link rel="preload" href="js/utils.js" as="script">
+  <link rel="preload" href="js/app.js" as="script">
+  
+  <!-- Préchargement des images essentielles -->
+  <link rel="preload" href="img/TTS_Logo.png" as="image" type="image/png">
+  
+  <!-- Styles CSS avec chargement optimisé -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap">
+  
+  <!-- Styles de base (chargement bloquant) -->
+  <link rel="stylesheet" href="css/base.css">
+  
+  <!-- Styles non-critiques (chargement non-bloquant) -->
+  <link rel="stylesheet" href="css/tasks.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="css/buttons.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="css/progress.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="css/effects.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="css/modes.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="css/responsive.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="css/welcome.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="css/countdown.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="css/warning-override.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="css/donate-block.css" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="css/tasks-fix.css" media="print" onload="this.media='all'">
+  
+  <!-- Fallback pour les navigateurs qui ne supportent pas onload -->
+  <noscript>
+    <link rel="stylesheet" href="css/tasks.css">
+    <link rel="stylesheet" href="css/buttons.css">
+    <link rel="stylesheet" href="css/progress.css">
+    <link rel="stylesheet" href="css/effects.css">
+    <link rel="stylesheet" href="css/modes.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/welcome.css">
+    <link rel="stylesheet" href="css/countdown.css">
+    <link rel="stylesheet" href="css/warning-override.css">
+    <link rel="stylesheet" href="css/donate-block.css">
+    <link rel="stylesheet" href="css/tasks-fix.css">
+  </noscript>
+  <meta name="author" content="Tonton Studio">
+
+</head>
+<body>
+  <div id="welcome-screen" class="gameboy-container">
+    <header>
+      <div class="logo-container">
+        <a href="https://www.tontonstudio.com" target="_blank" title="Visiter le site Tonton Studio">
+          <img src="img/TTS_Logo.png" alt="Tonton Studio Logo" class="logo" width="100" height="100">
+        </a>
+      </div>
+      <h1>AO Gamified Checklist</h1>
+      <div class="welcome-message">
+        <p>Bienvenue sur l'outil de suivi gamifié de réponse aux marchés publics !</p>
+        <p>Cet outil vous permet de suivre l'avancement de votre réponse à un appel d'offres.</p>
+      </div>
+    </header>
+    
+    <main class="welcome-main">
+      <div class="upload-container" id="drop-zone">
+        <h2>Charger votre fichier de tâches</h2>
+        <p class="small-text">Pour commencer, veuillez charger votre fichier tasks.json qui contient la liste des tâches à accomplir.</p>
+        
+        <div class="file-input-container">
+          <label for="tasks-file" class="file-input-label">Sélectionner un fichier tasks.json</label>
+          <input type="file" id="tasks-file" accept=".json" class="file-input">
+          <div id="file-name" class="file-name-display">Aucun fichier sélectionné</div>
+        </div>
+        <div class="drag-drop-message">ou glissez-déposez votre fichier tasks.json ici</div>
+        <div class="error-message" id="file-error-message"></div>
+        
+        <div class="gpt-help-container">
+          <a href="https://chatgpt.com/g/g-680541e3745c8191b7bca4aa6861ad09-tonton-studio-gamified-ao-checklist-generator" class="gpt-btn" target="_blank" rel="noopener">
+            <span class="gpt-icon">🤖</span> Créer mon fichier tasks.json avec l'IA
+          </a>
+        </div>
+      </div>
+      
+      <div class="info-section">
+        <h3>À propos</h3>
+        <p>Cette application vous aide à suivre et organiser votre réponse aux appels d'offres de manière ludique et engageante, inspirée par l'esthétique des jeux vidéo rétro.</p>
+        
+        <p>Pour toute question, suggestion ou assistance, n'hésitez pas à me contacter :</p>
+        <a href="mailto:contact@tontonstudio.com" class="email-link">
+          <img src="img/mail.png" alt="Email" class="mail-icon" width="16" height="16"> contact@tontonstudio.com
+        </a>
+        
+        <div class="separator"></div>
+        
+        <div class="donate-container">
+          <p class="donate-text">Vous trouvez cet outil utile ?</p>
+          <div class="donate-btn-wrapper">
+            <a href="https://www.paypal.com/donate/?business=RH4796JY56ZRE&no_recurring=0&item_name=Un+petit+caf%C3%A9+pour+mon+travail+?+%3A%29&currency_code=EUR" class="donate-btn" target="_blank" rel="noopener">M'offrir un café</a>
+            <img src="img/tonton.png" alt="Tonton" class="tonton-icon" width="48" height="48">
+          </div>
+        </div>
+      </div>
+    </main>
+    
+    <footer>
+      <div class="credits">
+        <p>TONTON STUDIO © 2025</p>
+        <p><a href="mailto:contact@tontonstudio.com" class="footer-link">contact@tontonstudio.com</a></p>
+      </div>
+    </footer>
+  </div>
+  
+  <div id="checklist-screen" class="gameboy-container" style="display: none;">
+    <header>
+      <div class="logo-container">
+        <a href="https://www.tontonstudio.com" target="_blank" title="Visiter le site Tonton Studio">
+          <img src="img/TTS_Logo.png" alt="Tonton Studio Logo" class="logo" width="100" height="100">
+        </a>
+      </div>
+      <h1>AO GAMIFIED CHECKLIST</h1>
+      <div id="market-title" class="market-title"></div>
+      <div id="countdown-container" class="countdown-container">
+        <div class="countdown-label">Temps restant :</div>
+        <div class="countdown-timer" id="countdown-timer"></div>
+        <div class="countdown-message" id="countdown-message"></div>
+      </div>
+      <div id="completion-message" class="completion-message">
+        T'as plus qu'à envoyer ton dossier ! Bonne chance !!!
+      </div>
+      <div class="progress-wrapper" id="progress-wrapper">
+        <div class="progress-container">
+          <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
+          <div class="progress-text" id="progress-text">0%</div>
+        </div>
+      </div>
+      <div class="progress-spacer" id="progress-spacer"></div>
+    </header>
+    
+    <main id="task-list">
+      <!-- Les tâches seront injectées ici via JavaScript -->
+    </main>
+    
+    <footer>
+      <div class="controls">
+        <button id="reset-btn" class="pixel-btn reset-btn">Réinitialiser</button>
+        <button id="return-home-btn" class="pixel-btn home-btn">Retour Accueil</button>
+      </div>
+      <div class="donate-container">
+        <p class="donate-text">Vous trouvez cet outil utile ?</p>
+        <div class="donate-btn-wrapper">
+          <a href="https://www.paypal.com/donate/?business=RH4796JY56ZRE&no_recurring=0&item_name=Un+petit+caf%C3%A9+pour+mon+travail+?+%3A%29&currency_code=EUR" class="donate-btn" target="_blank" rel="noopener">M'offrir un café</a>
+          <img src="img/tonton.png" alt="Tonton" class="tonton-icon" width="48" height="48">
+        </div>
+      </div>
+      <div class="credits">
+        <p>TONTON STUDIO © 2025</p>
+        <p><a href="mailto:contact@tontonstudio.com" class="footer-link">contact@tontonstudio.com</a></p>
+      </div>
+    </footer>
+  </div>
+  
+  <!-- Conteneurs spéciaux pour les effets -->
+  <div id="particles-container" class="particles-container"></div>
+  <div id="flash-overlay" class="flash-overlay"></div>
+  <div id="fireworks-container" class="fireworks-container"></div>
+  
+  <!-- Bouton de contrôle du son (caché par défaut) -->
+  <div id="sound-toggle" class="sound-toggle" title="Couper le son">🔊</div>
+  
+  <!-- Préchargement des sons avec paramètres optimisés -->
+  <audio id="success-sound" src="audio/success.mp3" preload="auto"></audio>
+  <audio id="check-sound" src="audio/check.mp3" preload="auto"></audio>
+  <audio id="uncheck-sound" src="audio/uncheck.mp3" preload="auto"></audio>
+  <audio id="finish-sound" src="audio/finish.mp3" preload="auto"></audio>
+  <audio id="warning-sound" src="audio/warning.mp3" preload="auto"></audio>
+  
+  <!-- Chargement optimisé des scripts -->
+  <!-- Scripts critiques chargés en priorité -->
+  <script src="js/config.js"></script>
+  <script src="js/utils.js"></script>
+  
+  <!-- Scripts non-critiques chargés de manière asynchrone -->
+  <script src="js/sound-control.js" defer></script>
+  <script src="js/countdown.js" defer></script>
+  <script src="js/effects.js" defer></script>
+  <script src="js/tasks-manager.js" defer></script>
+  <script src="js/fixed-progress-bar.js" defer></script>
+  
+  <!-- Script principal chargé en dernier -->
+  <script src="js/app.js" defer></script>
+</body>
+</html>

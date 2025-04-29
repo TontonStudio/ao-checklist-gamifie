@@ -1,0 +1,380 @@
+/* 
+ * OVERRIDES POUR LE MODE WARNING
+ * Priorité maximale pour les couleurs rouges en mode warning
+ * Fichier séparé pour garantir la priorité des règles
+ */
+
+/* Forcer tous les fonds verts à être rouges */
+.warning-mode .task-item {
+  border-color: #cc0000 !important;
+  background-color: #ffe0e0 !important;
+}
+
+.warning-mode .task-header {
+  background-color: #cc0000 !important;
+  color: #ffffff !important;
+}
+
+.warning-mode .task-header:hover {
+  background-color: #990000 !important;
+}
+
+.warning-mode .task-footer {
+  background-color: #cc0000 !important;
+  color: #ffffff !important;
+}
+
+/* Forcer les boutons à être rouges */
+.warning-mode .home-btn {
+  background-color: #ff5555 !important;
+  color: #ffffff !important;
+  box-shadow: 3px 3px 0 #cc3333 !important;
+  border: 1px solid #cc3333 !important;
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5) !important;
+}
+
+.warning-mode .home-btn:hover {
+  background-color: #ff7777 !important;
+  box-shadow: 5px 5px 0 #cc3333 !important;
+}
+
+.warning-mode .home-btn:active {
+  background-color: #cc3333 !important;
+  box-shadow: 1px 1px 0 #cc3333 !important;
+}
+
+.warning-mode .reset-btn {
+  background-color: #990000 !important;
+  color: #ffffff !important;
+  box-shadow: 3px 3px 0 #660000 !important;
+  border: 1px solid #660000 !important;
+}
+
+.warning-mode .reset-btn:hover {
+  background-color: #cc0000 !important;
+  box-shadow: 5px 5px 0 #660000 !important;
+}
+
+.warning-mode .reset-btn:active {
+  background-color: #660000 !important;
+  box-shadow: 1px 1px 0 #660000 !important;
+}
+
+/* Changement des couleurs vertes et sections */
+.warning-mode .subtask {
+  background-color: #ffeeee !important;
+  border-color: #ffcccc !important;
+}
+
+.warning-mode .subtask:hover {
+  background-color: #ffdddd !important;
+}
+
+.warning-mode .subtask-checkbox:checked ~ .subtask-label,
+.warning-mode .subtask-checkbox:checked ~ *,
+.warning-mode .subtask:has(.subtask-checkbox:checked),
+.warning-mode .checked-subtask {
+  background-color: rgba(153, 0, 0, 0.15) !important;
+}
+
+.warning-mode .copy-btn,
+.warning-mode .subtask-copy-btn {
+  background-color: #990000 !important;
+  color: #ffffff !important;
+  border-color: #660000 !important;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.3) !important;
+}
+
+.warning-mode .copy-btn:hover,
+.warning-mode .subtask-copy-btn:hover {
+  background-color: #cc0000 !important;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.3) !important;
+}
+
+.warning-mode .copy-btn.copy-success,
+.warning-mode .subtask-copy-btn.copy-success {
+  background-color: #ff3333 !important;
+  color: #ffffff !important;
+}
+
+/* S'assurer que les boutons de copie gardent la même apparence pour les tâches cochées en mode warning */
+.warning-mode .subtask:has(.subtask-checkbox:checked) .subtask-copy-btn,
+.warning-mode .checked-subtask .subtask-copy-btn,
+.warning-mode .task-item.completed .copy-btn {
+  background-color: #990000 !important;
+  color: #ffffff !important;
+  border-color: #660000 !important;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.3) !important;
+}
+
+.warning-mode .subtask:has(.subtask-checkbox:checked) .subtask-copy-btn:hover,
+.warning-mode .checked-subtask .subtask-copy-btn:hover,
+.warning-mode .task-item.completed .copy-btn:hover {
+  background-color: #cc0000 !important;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Forcer le style sur les sous-tâches cochées */
+.warning-mode .subtask:has(.subtask-checkbox:checked) {
+  background-color: rgba(153, 0, 0, 0.15) !important;
+}
+
+.warning-mode .checked-subtask {
+  background-color: rgba(153, 0, 0, 0.15) !important;
+}
+
+/* Forcer le style sur tous les éléments du compteur */
+.warning-mode .task-progress {
+  background-color: #ffdddd !important;
+  color: #990000 !important;
+  border: 1px solid #cc0000 !important;
+}
+
+/* Forcer les couleurs des séparateurs */
+.warning-mode .task-header {
+  border-bottom: 2px solid #cc0000 !important;
+}
+
+/* Forcer le style du tag "DONE!" */
+.warning-mode .task-done-tag {
+  background-color: #990000 !important;
+  color: #ffffff !important;
+  border-color: #ff3333 !important;
+}
+
+/* Surcharge pour le bouton "M'offrir un café" */
+.warning-mode .donate-mini-btn {
+  background-color: #990000 !important;
+  color: #ffffff !important;
+  border-color: #660000 !important;
+}
+
+.warning-mode .donate-mini-btn:hover {
+  background-color: #cc0000 !important;
+}
+
+/* Surcharge pour les info-messages */
+.warning-mode .info-message {
+  background-color: #990000 !important;
+  color: #ffffff !important;
+}
+
+/* Surcharge pour les checkboxes */
+.warning-mode .subtask-checkbox {
+  border-color: #990000 !important;
+  background-color: #ffeeee !important;
+}
+
+.warning-mode .subtask-checkbox:checked {
+  background-color: #cc0000 !important;
+}
+
+.warning-mode .subtask-checkbox:checked::after {
+  color: #ffffff !important;
+}
+
+.warning-mode .task-main-checkbox {
+  border-color: #ffffff !important;
+  background-color: #cc0000 !important;
+}
+
+.warning-mode .task-main-checkbox:checked {
+  background-color: #ff3333 !important;
+  border-color: #ffffff !important;
+}
+
+.warning-mode .task-main-checkbox:checked::after {
+  color: #ffffff !important;
+}
+
+/* Forcer les couleurs dans les accordéons fermés */
+.warning-mode .task-item.completed {
+  background-color: #ffe6e6 !important;
+}
+
+/* Correction du fond d'affichage des noms de fichier en mode warning */
+.warning-mode .filename-display {
+  background-color: #ffeeee !important; /* Fond rouge très clair */
+  color: #990000 !important; /* Texte en rouge foncé */
+  border: 1px solid #cc0000 !important; /* Bordure en rouge moyen */
+}
+
+/* Correction de la barre de progression et du compteur */
+.warning-mode .progress-bar {
+  background-color: #330000 !important; /* Rouge très foncé pour le fond de la jauge */
+  border-color: #660000 !important;
+}
+
+.warning-mode .progress-fill {
+  background-color: #cc0000 !important; /* Rouge moyen pour la barre de progression */
+}
+
+/* Correction des couleurs pour la barre de progression fixe en mode warning */
+.warning-mode .progress-wrapper.fixed {
+  background-color: #ffeeee !important; /* Fond rouge pâle */
+  border-color: #cc0000 !important; /* Bordure rouge moyen */
+  border-left-color: #cc0000 !important;
+  border-right-color: #cc0000 !important;
+  border-bottom-color: #cc0000 !important;
+}
+
+/* Correction de la bordure inférieure du header en mode warning */
+.warning-mode header {
+  border-bottom-color: #660000 !important;
+}
+
+.warning-mode .progress-spacer {
+  background-color: #cc0000 !important; /* Rouge moyen pour le spacer */
+}
+
+/* Assurer que la hauteur du spacer en mode warning est correcte */
+.warning-mode .progress-spacer.active {
+  background-color: #cc0000 !important;
+  display: block !important;
+}
+
+/* Correction pour tous les éléments avec classe contenant le terme "spacer" */
+.warning-mode [class*="spacer"],
+.warning-mode #progress-spacer {
+  background-color: #cc0000 !important;
+  border-color: #cc0000 !important;
+}
+
+/* Correction du séparateur horizontal et de tous les éléments horizontaux verts */
+.warning-mode hr,
+.warning-mode .separator,
+.warning-mode .progress-spacer {
+  background-color: #990000 !important;
+  border-color: #990000 !important;
+}
+
+/* Style pour le bouton de son en mode warning - IMPORTANT avec haute priorité */
+.warning-mode .sound-toggle {
+  background-color: #ff3333 !important; /* Rouge clair */
+  color: #ffffff !important; /* Texte blanc */
+  border-color: #990000 !important; /* Bordure rouge foncé */
+  display: flex !important; /* Forcer l'affichage */
+  visibility: visible !important; /* Assurer la visibilité */
+  opacity: 0.95 !important; /* Opacité correcte */
+  z-index: 9999 !important; /* S'assurer qu'il est au-dessus de tout */
+}
+
+.warning-mode .sound-toggle[data-muted="true"] {
+  background-color: #ffdddd !important; /* Rouge pâle */
+  color: #990000 !important; /* Texte rouge foncé */
+  display: flex !important; /* Toujours forcer l'affichage */
+}
+
+/* Forcer les couleurs du countdown */
+.warning-mode .countdown-label,
+.warning-mode .countdown-timer {
+  color: #990000 !important; /* Rouge foncé pour le texte */
+}
+
+.warning-mode .countdown-container {
+  background-color: #ffeeee !important;
+  border: 3px solid #cc0000 !important;
+}
+
+/* Cibler le texte "Temps restant" spécifiquement */
+.warning-mode .countdown-label {
+  color: #990000 !important;
+  font-weight: bold !important;
+}
+
+/* Garantir que le compteur lui-même est en rouge */
+.warning-mode .countdown-timer {
+  color: #990000 !important;
+  font-weight: bold !important;
+}
+
+/* Cibler la ligne de séparation verte sous la barre de progression */
+.warning-mode .task-list > *:first-child {
+  border-top-color: #990000 !important;
+}
+
+.warning-mode .task-list {
+  border-top: 2px solid #990000 !important;
+}
+
+/* Style pour les séparateurs horizontaux dans le mode warning */
+.warning-mode .task-list::before,
+.warning-mode .task-list::after,
+.warning-mode .controls::before {
+  background-color: #990000 !important;
+  border-color: #990000 !important;
+}
+
+/* Style pour tous les séparateurs qui pourraient être en vert */
+.warning-mode *[class*="separator"],
+.warning-mode *[class*="divider"],
+.warning-mode *[class*="spacer"] {
+  background-color: #990000 !important;
+  border-color: #990000 !important;
+}
+
+/* Règle universelle pour éviter toute couleur verte */
+.warning-mode *[style*="green"],
+.warning-mode *[style*="rgb(0, 128, 0)"],
+.warning-mode *[style*="rgb(0, 255, 0)"],
+.warning-mode *[style*="#00ff00"],
+.warning-mode *[style*="#008000"],
+.warning-mode *[style*="306230"],
+.warning-mode *[style*="8bac0f"],
+.warning-mode *[style*="9bbc0f"] {
+  color: #990000 !important;
+  background-color: #ffeeee !important;
+  border-color: #cc0000 !important;
+}
+
+/* Règles pour cibler tous les éléments horizontaux en vert */
+.warning-mode hr, 
+.warning-mode .hline, 
+.warning-mode div[role="separator"] {
+  background-color: #990000 !important;
+  border-color: #990000 !important;
+}
+
+/* Cibler spécifiquement le séparateur horizontal sous le compte à rebours */
+.warning-mode #task-list {
+  border-top: 2px solid #990000 !important;
+}
+
+.warning-mode main {
+  border-top: 2px solid #990000 !important;
+}
+
+/* Cibler toute bordure verte par sélecteurs plus génériques */
+.warning-mode *[style*="border"] {
+  border-color: #990000 !important;
+}
+
+.warning-mode *:not(.logo):not(img)[style*="background"] {
+  background-color: #ffeeee !important;
+}
+
+/* Séparateur direct */
+.warning-mode .task-list::before,
+.warning-mode main::before,
+.warning-mode #task-list::before {
+  background-color: #990000 !important;
+  border-color: #990000 !important;
+  content: '';
+  display: block;
+  height: 2px;
+  width: 100%;
+}
+
+/* Cibler spécifiquement le compteur et sa formulation */
+.warning-mode header *:not(.logo):not(img) {
+  color: #990000 !important;
+}
+
+/* Rendre toutes les barres horizontales rouges */
+.warning-mode header::after,
+.warning-mode footer::before,
+.warning-mode main::before,
+.warning-mode main::after {
+  background-color: #990000 !important;
+  border-color: #990000 !important;
+}

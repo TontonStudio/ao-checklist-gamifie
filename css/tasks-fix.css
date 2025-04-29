@@ -1,0 +1,81 @@
+/* Correctifs pour les titres longs et les problèmes de compteur */
+
+/* Structure de base de l'en-tête de tâche */
+.task-header {
+  overflow: visible; /* Permettre au badge DONE! d'être visible */
+}
+
+/* Container du titre avec meilleure gestion de l'espace */
+.task-title-container {
+  flex-grow: 1;
+  max-width: calc(100% - 65px); /* Espace réservé pour le compteur */
+  min-width: 0; /* Important: permet aux flex items de rétrécir en dessous de leur minimum content */
+  overflow: hidden;
+}
+
+.task-title-container h2 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding-right: 5px;
+  width: 100%;
+}
+
+/* Wrapper du compteur propre et simple */
+.task-progress-wrapper {
+  flex-shrink: 0; /* Ne pas rétrécir */
+  display: inline-flex; /* Contient exactement son contenu */
+  align-items: center;
+  justify-content: center;
+  margin-left: 10px;
+  position: relative;
+  background: none; /* Pas de fond */
+  padding: 0; /* Pas de padding supplémentaire */
+  z-index: 5;
+}
+
+/* Style du compteur de tâches */
+.task-progress {
+  display: inline-block;
+  background-color: var(--gb-lightest);
+  color: var(--gb-darkest);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  min-width: 45px;
+  text-align: center;
+  border: 1px solid var(--gb-darkest);
+  box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+/* Adaptations pour le mode golden */
+.golden-mode .task-progress {
+  background-color: #ff9518; /* Orange doré */
+  color: #000000;
+  border: 1px solid var(--gold-dark-border);
+}
+
+/* Adaptations pour le mode warning */
+.warning-mode .task-progress {
+  background-color: var(--warning-light);
+  color: #000000;
+  border: 1px solid var(--warning-medium);
+}
+
+/* Adaptations pour les écrans plus petits */
+@media (max-width: 768px) {
+  .task-title-container {
+    max-width: calc(100% - 50px); /* Espace légèrement réduit sur mobile */
+  }
+  
+  .task-progress {
+    min-width: 40px;
+    padding: 3px 6px;
+    font-size: 9px;
+  }
+  
+  .task-progress-wrapper {
+    margin-left: 5px;
+  }
+}

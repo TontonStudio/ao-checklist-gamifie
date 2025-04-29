@@ -1,0 +1,285 @@
+/* Boutons et contrôles */
+.controls {
+  margin-bottom: 10px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 20px; /* Espacement entre les boutons */
+}
+
+.pixel-btn {
+  background-color: var(--gb-darkest);
+  color: var(--gb-lightest);
+  border: none;
+  font-family: 'Press Start 2P', monospace;
+  padding: 8px 15px;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 var(--gb-dark);
+  transition: transform 0.2s, box-shadow 0.2s;
+  font-size: 10px;
+}
+
+/* Style spécifique pour le bouton de réinitialisation */
+.reset-btn {
+  background-color: #ff6347; /* Rouge plus clair */
+  color: #ffffff; /* Texte blanc pour meilleure lisibilité */
+  box-shadow: 3px 3px 0 #b84631;
+  border: 1px solid #b84631; /* Bordure plus visible */
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5); /* Ombre pour améliorer la lisibilité */
+}
+
+.reset-btn:hover {
+  background-color: #ff4500; /* Rouge légèrement plus foncé au survol */
+  box-shadow: 5px 5px 0 #b84631;
+}
+
+.reset-btn:active {
+  background-color: #b84631;
+  box-shadow: 1px 1px 0 #b84631;
+}
+
+/* Style spécifique pour le bouton d'accueil */
+.home-btn {
+  background-color: #2e8b57; /* Vert forêt au lieu de bleu */
+  color: #ffffff; /* Texte blanc pour meilleure lisibilité */
+  box-shadow: 3px 3px 0 #1d5c38;
+  border: 1px solid #1d5c38; /* Bordure plus visible */
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5); /* Ombre pour améliorer la lisibilité */
+}
+
+.home-btn:hover {
+  background-color: #3cb371; /* Vert légèrement plus clair au survol */
+  box-shadow: 5px 5px 0 #1d5c38;
+}
+
+.home-btn:active {
+  background-color: #1d5c38;
+  box-shadow: 1px 1px 0 #1d5c38;
+}
+
+/* Style du bouton retour accueil en mode warning */
+.warning-mode .home-btn {
+  background-color: #ff5555; /* Rouge plus clair pour le bouton Retour Accueil */
+  color: #ffffff;
+  box-shadow: 3px 3px 0 #cc3333;
+  border: 1px solid #cc3333;
+}
+
+.warning-mode .home-btn:hover {
+  background-color: #ff7777;
+  box-shadow: 5px 5px 0 #cc3333;
+}
+
+.warning-mode .home-btn:active {
+  background-color: #cc3333;
+  box-shadow: 1px 1px 0 #cc3333;
+}
+
+/* Style du bouton réinitialiser en mode warning */
+.warning-mode .reset-btn {
+  background-color: #990000; /* Rouge foncé pour le bouton Réinitialiser */
+  color: #ffffff;
+  box-shadow: 3px 3px 0 #660000;
+  border: 1px solid #660000;
+}
+
+.warning-mode .reset-btn:hover {
+  background-color: #cc0000;
+  box-shadow: 5px 5px 0 #660000;
+}
+
+.warning-mode .reset-btn:active {
+  background-color: #660000;
+  box-shadow: 1px 1px 0 #660000;
+}
+
+.pixel-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 5px 5px 0 var(--gb-dark);
+}
+
+.pixel-btn:active {
+  transform: translateY(2px);
+  box-shadow: 1px 1px 0 var(--gb-dark);
+}
+
+/* Override pour les boutons standard en mode warning */
+.warning-mode .pixel-btn:hover {
+  box-shadow: 5px 5px 0 #cc0000;
+}
+
+.warning-mode .pixel-btn:active {
+  box-shadow: 1px 1px 0 #cc0000;
+}
+
+/* Bouton de contrôle du son - Spécifique au mode warning */
+.sound-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 45px;
+  height: 45px;
+  background-color: var(--warning-light);
+  color: var(--warning-dark);
+  border: 3px solid var(--warning-dark);
+  border-radius: 50%;
+  display: none; /* Caché par défaut, sera affiché via JS uniquement en mode warning */
+  align-items: center;
+  justify-content: center;
+  font-size: 24px; /* Taille plus grande pour les emojis */
+  cursor: pointer;
+  z-index: 2000; /* Assurez-vous qu'il est au-dessus de tout */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s, box-shadow 0.2s;
+  opacity: 0.95; /* Légèrement transparent */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  user-select: none; /* Empêcher la sélection de texte */
+  -webkit-tap-highlight-color: transparent; /* Supprimer la surbrillance de tap sur mobile */
+  animation: sound-toggle-pulse 2s infinite; /* Animation de pulsation subtile */
+}
+
+.sound-toggle:hover {
+  transform: scale(1.1);
+  opacity: 1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.sound-toggle:active {
+  transform: scale(0.95);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Animation de pulsation subtile pour attirer l'attention */
+@keyframes sound-toggle-pulse {
+  0% { box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4); }
+  50% { box-shadow: 0 2px 12px rgba(255, 0, 0, 0.6); }
+  100% { box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4); }
+}
+
+/* Styles spécifiques pour l'état muet */
+.sound-toggle[data-muted="true"] {
+  background-color: #ffcccc !important;
+  color: #990000 !important;
+}
+
+/* Style pour les boutons des tâches */
+.copy-btn {
+  background-color: var(--gb-lightest);
+  color: var(--gb-darkest);
+  border: 2px solid var(--gb-darkest);
+  font-family: 'Press Start 2P', monospace;
+  padding: 6px 12px; /* Padding légèrement plus grand */
+  cursor: pointer;
+  font-size: 10px;
+  transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
+  margin-right: 5px; /* Marge supplémentaire à droite */
+  min-width: 90px; /* Largeur fixe minimale augmentée */
+  width: 90px; /* Largeur fixe */
+  text-align: center;
+  white-space: nowrap; /* Empêche le texte de passer à la ligne */
+  height: auto;
+  min-height: 32px; /* Hauteur fixe minimale */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; /* Empêche le débordement */
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.3); /* Ombre neutre pour éviter les verts */
+  border-radius: 3px; /* Border radius pour adoucir les coins */
+}
+
+.copy-btn:hover {
+  background-color: var(--gb-light);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.3);
+}
+
+.copy-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* Style pour l'animation de succès après copie */
+.copy-success {
+  background-color: #4a90e2 !important; /* Bleu neutre pour remplacer le vert */
+  color: white !important;
+  animation: copyPulse 0.5s ease-in-out;
+}
+
+@keyframes copyPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+/* Boutons de sous-tâches */
+.subtask-copy-btn {
+  font-size: 8px; /* Taille réduite pour la police pixelisée */
+  font-family: 'Press Start 2P', monospace; /* Même police que les autres boutons */
+  background: var(--gb-lightest);
+  border: 2px solid var(--gb-darkest);
+  border-radius: 3px;
+  cursor: pointer;
+  padding: 4px 8px; /* Plus de padding vertical pour compenser la hauteur de ligne */
+  height: auto; /* Hauteur auto pour s'adapter au contenu */
+  min-height: 26px; /* Hauteur minimale pour assurer une bonne taille de clic */
+  min-width: 80px; /* Largeur minimale pour assurer la visibilité */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 8px;
+  transition: transform 0.2s, background-color 0.2s;
+  flex-shrink: 0;
+  white-space: nowrap;
+  letter-spacing: -0.5px; /* Léger ajustement de l'espacement des lettres */
+  z-index: 2; /* S'assurer que le bouton est au-dessus des autres éléments */
+  position: relative; /* Nécessaire pour que z-index fonctionne */
+}
+
+.subtask-copy-btn:hover {
+  background-color: var(--gb-light);
+  transform: translateY(-2px);
+  box-shadow: 2px 2px 0 var(--gb-dark);
+}
+
+.subtask-copy-btn:active {
+  transform: translateY(1px);
+  box-shadow: 1px 1px 0 var(--gb-dark);
+}
+
+/* Override pour les boutons de sous-tâches en mode warning */
+.warning-mode .subtask-copy-btn:hover {
+  background-color: #cc0000;
+  box-shadow: 2px 2px 0 #990000;
+}
+
+.warning-mode .subtask-copy-btn:active {
+  box-shadow: 1px 1px 0 #990000;
+}
+
+/* Amélioration des boutons de copie des grands livrables */
+.copy-btn-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: auto;
+  min-width: 120px; /* Largeur minimum pour s'aligner avec le compteur */
+  margin-left: 10px;
+}
+
+/* Média queries pour s'assurer que le bouton de son reste visible et accessible sur mobile */
+@media (max-width: 768px) {
+  .sound-toggle {
+    bottom: 15px !important;
+    right: 15px !important;
+    width: 40px !important;
+    height: 40px !important;
+    font-size: 20px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .sound-toggle {
+    bottom: 10px !important;
+    right: 10px !important;
+  }
+}

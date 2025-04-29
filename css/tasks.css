@@ -1,0 +1,334 @@
+/* Styles des tâches et accordéons */
+
+/* Task Accordion */
+.task-item {
+  margin-bottom: 15px;
+  border: 4px solid var(--gb-darkest);
+  background-color: var(--gb-lightest);
+}
+
+.task-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  background-color: var(--gb-dark);
+  color: var(--gb-lightest);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  position: relative;
+  min-height: 40px; /* Hauteur minimale pour les titres longs */
+  overflow: visible; /* Permettre aux badges de sortir */
+}
+
+.task-header:hover {
+  background-color: var(--gb-darkest);
+}
+
+.task-title-container {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+  overflow: hidden; /* Empêche le débordement du contenu */
+  margin-right: 10px; /* Marge pour éviter que le texte touche le compteur */
+  max-width: calc(100% - 55px); /* Réserve de l'espace pour le compteur */
+}
+
+.task-main-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 24px;
+  height: 24px;
+  min-width: 24px; /* Empêche le rétrécissement - taille augmentée */
+  min-height: 24px; /* Empêche le rétrécissement - taille augmentée */
+  border: 3px solid var(--gb-lightest);
+  background-color: var(--gb-dark);
+  cursor: pointer;
+  margin-right: 10px;
+  position: relative;
+  flex-shrink: 0; /* Empêche la checkbox de rétrécir */
+}
+
+.task-main-checkbox:checked {
+  background-color: var(--gold-light); /* Couleur dorée plus visible */
+  border-color: var(--gb-darkest); /* Bordure plus contrastée */
+  box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); /* Ajout d'une légère lueur */
+}
+
+.task-main-checkbox:checked::after {
+  content: "✓"; /* Symbole de coche */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--gb-darkest); /* Couleur de la coche */
+  font-size: 16px; /* Taille de la coche légèrement plus grande */
+  font-weight: bold;
+  text-shadow: 0 0 2px rgba(255, 255, 255, 0.5); /* Ombre claire pour augmenter la visibilité */
+  line-height: 1;
+}
+
+.task-header h2 {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  overflow: hidden; /* Empêche le débordement du texte */
+  text-overflow: ellipsis; /* Ajoute des points de suspension si le texte déborde */
+  white-space: nowrap; /* Empêche le texte de passer à la ligne */
+  transition: color 0.2s ease;
+  max-width: 100%; /* Assurer que le texte reste dans son conteneur */
+  margin-right: 5px; /* Espace entre le texte et le compteur */
+}
+
+/* Changer la couleur du texte du titre quand l'en-tête est survolé */
+.task-header:hover h2 {
+  color: white;
+}
+
+.task-done-tag {
+  display: inline-block;
+  background-color: var(--done-color);
+  color: var(--gb-darkest);
+  font-size: 10px;
+  padding: 3px 6px;
+  border-radius: 3px;
+  animation: pulse 1.5s infinite;
+  position: absolute;
+  left: -60px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 999;
+  border: 2px solid var(--gb-darkest);
+  pointer-events: none; /* Pour que le clic passe à travers */
+  white-space: nowrap;
+}
+
+@keyframes pulse {
+  0% { transform: translateY(-50%) scale(1); }
+  50% { transform: translateY(-50%) scale(1.05); }
+  100% { transform: translateY(-50%) scale(1); }
+}
+
+.task-progress {
+  background-color: var(--gb-lightest);
+  color: var(--gb-darkest);
+  font-size: 10px;
+  padding: 3px 6px;
+  border-radius: 3px;
+  margin-left: 10px;
+  min-width: 45px;
+  text-align: center;
+  flex-shrink: 0; /* Empêcher le compteur de rétrécir */
+  box-shadow: 0 0 0 1px var(--gb-darkest); /* Bordure subtile pour le contraste */
+  z-index: 2; /* Assurer que le compteur reste au-dessus */
+  position: relative; /* Nécessaire pour que le z-index fonctionne */
+}
+
+.task-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.task-item.open .task-content {
+  max-height: 2000px; /* Augmentation de la hauteur maximale pour les listes longues */
+}
+
+.subtasks {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+
+.subtasks li {
+  padding: 10px 15px;
+}
+
+.subtask {
+  display: flex;
+  align-items: center;
+  border-bottom: 2px dashed var(--gb-dark);
+  cursor: pointer;
+  position: relative;
+  margin: 0;
+  padding: 10px 15px;
+  box-sizing: border-box; /* S'assurer que le padding est inclus dans la hauteur */
+}
+
+.subtask:last-child {
+  border-bottom: none;
+  padding-bottom: 10px; /* Même padding que les autres */
+  margin-bottom: 0; /* S'assurer qu'il n'y a pas de marge en bas */
+}
+
+.subtask:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* S'assurer que le hover sur la dernière sous-tâche a la même apparence */
+.subtask:last-child:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.subtask-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  min-width: 20px; /* Empêche le rétrécissement */
+  min-height: 20px; /* Empêche le rétrécissement */
+  border: 3px solid var(--gb-darkest);
+  background-color: var(--gb-background);
+  cursor: pointer;
+  margin-right: 10px;
+  position: relative;
+  flex-shrink: 0; /* Empêche la checkbox de rétrécir */
+}
+
+.subtask-checkbox:checked {
+  background-color: var(--gb-dark);
+}
+
+.subtask-checkbox:checked::after {
+  content: "✓"; /* Symbole de coche */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--gb-lightest); /* Couleur de la coche */
+  font-size: 14px; /* Taille de la coche */
+  font-weight: bold;
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.5); /* Ombre pour augmenter la visibilité */
+  line-height: 1;
+}
+
+.subtask-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+.subtask-label {
+  font-size: 12px;
+  transition: text-decoration 0.3s, opacity 0.3s;
+}
+
+.subtask-filename {
+  font-size: 10px;
+  color: var(--gb-dark);
+  font-style: italic;
+  margin-top: 2px;
+  opacity: 0.8;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+/* Style pour les tâches cochées */
+.subtask-checkbox:checked + .subtask-content .subtask-label {
+  text-decoration: line-through;
+  opacity: 0.8;
+}
+
+.subtask-checkbox:checked + .subtask-content .subtask-filename {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+/* Style pour toute la ligne de la sous-tâche cochée */
+.subtask:has(.subtask-checkbox:checked) {
+  background-color: rgba(48, 98, 48, 0.5); /* Teinte verte plus foncée et plus opaque */
+}
+
+/* Style alternatif pour les navigateurs ne supportant pas :has() */
+.checked-subtask {
+  background-color: rgba(48, 98, 48, 0.5); /* Teinte verte plus foncée et plus opaque */
+}
+
+/* Ces styles seront écrasés par le mode warning via warning-override.css */
+
+.task-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  background-color: var(--gb-dark);
+  color: var(--gb-lightest);
+  font-size: 12px;
+  transition: all 0.3s ease;
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.task-item.completed .task-footer {
+  opacity: 1;
+  height: auto;
+}
+
+.filename-display {
+  background-color: var(--gb-darkest);
+  padding: 5px 10px;
+  border-radius: 3px;
+  min-width: 200px;
+  flex-grow: 1;
+  margin-right: 15px; /* Augmenté pour plus d'espace avant le bouton */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.info-message {
+  background-color: var(--gb-dark);
+  color: var(--gb-lightest);
+  font-style: italic;
+  font-size: 10px;
+  text-align: center;
+  padding: 8px 10px;
+  border-radius: 3px;
+  width: 100%;
+  box-sizing: border-box;
+  display: block;
+}
+
+/* Animation complete */
+@keyframes complete {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.task-item.complete-animation {
+  animation: complete 0.5s ease;
+}
+
+/* Adaptation de la taille du texte pour les écrans plus petits */
+@media (max-width: 768px) {
+  .task-header h2 {
+    font-size: 12px; /* Taille réduite sur mobile */
+  }
+  
+  .task-header {
+    padding: 10px 8px; /* Réduire légèrement le padding pour donner plus d'espace */
+    min-height: 38px; /* Légèrement plus petit sur mobile mais toujours avec un minimum */
+  }
+  
+  .task-title-container {
+    max-width: calc(100% - 45px); /* Espace légèrement réduit sur mobile */
+  }
+  
+  .task-progress {
+    min-width: 35px; /* Compteur légèrement plus petit sur mobile */
+    padding: 2px 4px; /* Padding réduit */
+    font-size: 9px; /* Taille de police réduite */
+    margin-left: 5px; /* Marge réduite */
+  }
+  
+  .task-done-tag {
+    left: -40px; /* Position ajustée sur mobile */
+    padding: 2px 4px; /* Padding réduit */
+    font-size: 8px; /* Taille réduite */
+  }
+}
