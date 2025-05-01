@@ -127,7 +127,9 @@ const Utils = {
       // Validation des tâches
       for (let i = 0; i < data.tasks.length; i++) {
         const task = data.tasks[i];
-        if (!task.label || !Array.isArray(task.subtasks) || task.subtasks.length === 0) {
+        // Vérifier la présence du label et que subtasks est bien un tableau
+        // Nous ne vérifions plus si le tableau subtasks a au moins un élément
+        if (!task.label || !Array.isArray(task.subtasks)) {
           return false;
         }
       }

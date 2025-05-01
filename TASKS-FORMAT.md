@@ -126,6 +126,17 @@ Chaque objet dans le tableau `tasks` contient :
 }
 ```
 
+## Exemple 3 : Document simple sans sous-tâches
+
+```json
+{
+  "label": "Acte d'engagement",
+  "filename": "Acte_Engagement.pdf",
+  "isMultiFile": false,
+  "subtasks": []
+}
+```
+
 ## Comportement des fichiers
 
 - Si un livrable a `isMultiFile: true`, l'application affichera le message "Les fichiers individuels sont accessibles depuis chaque sous-tâche" lorsque le livrable est complété.
@@ -140,6 +151,7 @@ Chaque objet dans le tableau `tasks` contient :
 - Structurez les livrables de manière logique et cohérente
 - Limitez le nombre de sous-tâches par livrable pour garder l'interface lisible
 - Assurez-vous que votre JSON est valide (sans virgules superflues, guillemets manquants, etc.)
+- Pour les documents simples qui n'ont pas besoin de sous-tâches, vous pouvez utiliser un tableau `subtasks` vide `[]`
 
 ## Exemple complet
 

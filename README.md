@@ -1,9 +1,16 @@
-# AO Checklist - Tonton Studio (v2.6.1)
+# AO Checklist - Tonton Studio (v2.6.2)
 
 Outil de suivi gamifié de réponse aux marchés publics, inspiré par l'esthétique des jeux vidéo rétro de type Game Boy.
 
-![Version](https://img.shields.io/badge/version-2.6.1-green)
+![Version](https://img.shields.io/badge/version-2.6.2-green)
 ![License](https://img.shields.io/badge/license-MIT-blue)
+
+## Nouveautés de la version 2.6.2 (Avril 2025)
+
+- **Support de documents simples** : Possibilité d'utiliser des tableaux de sous-tâches vides pour les documents simples
+- **Validation plus flexible** : Simplification des règles de validation pour les fichiers JSON
+- **Meilleure compatibilité** : Support amélioré des formats de données variés
+- **Documentation enrichie** : Exemples supplémentaires pour les cas d'usage courants
 
 ## Nouveautés de la version 2.6.1 (Avril 2025)
 
@@ -102,6 +109,12 @@ Outil de suivi gamifié de réponse aux marchés publics, inspiré par l'esthét
         { "label": "Document 1", "filename": "Document1.pdf" },
         { "label": "Document 2", "filename": "Document2.pdf" }
       ]
+    },
+    {
+      "label": "Document simple",
+      "filename": "Document_Simple.pdf",
+      "isMultiFile": false,
+      "subtasks": []
     }
   ]
 }

@@ -1,5 +1,13 @@
 # Changelog
 
+## Version 2.6.2 (Avril 2025)
+
+### Améliorations de compatibilité
+- **Support des documents simples** : Possibilité d'utiliser des tableaux de sous-tâches vides pour les documents simples
+- **Validation adaptative** : Suppression de la vérification obligatoire de sous-tâches non vides
+- **Flexibilité accrue** : Support de formats de données plus variés pour s'adapter à différents types de dossiers
+- **Documentation enrichie** : Ajout d'exemples pour les cas de documents sans sous-tâches
+
 ## Version 2.6.1 (Avril 2025)
 
 ### Optimisation pour les réseaux sociaux
