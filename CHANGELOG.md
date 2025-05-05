@@ -1,5 +1,13 @@
 # Changelog
 
+## Version 2.6.3 (Avril 2025)
+
+### Correction de bugs et améliorations UX
+- **Comportement de l'accordéon** : Correction du problème d'affichage des sous-tâches lors du dé-check d'un élément complet
+- **Affichage des listes** : Amélioration de la visibilité des listes de sous-tâches après avoir décoché un élément
+- **Navigation plus fluide** : Optimisation des transitions d'état entre éléments complétés et non-complétés
+- **Interface plus réactive** : Meilleure gestion du reflow du contenu des accordéons
+
 ## Version 2.6.2 (Avril 2025)
 
 ### Améliorations de compatibilité

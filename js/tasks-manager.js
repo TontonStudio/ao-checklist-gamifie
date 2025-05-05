@@ -413,12 +413,21 @@ const TasksManager = {
         subtask.classList.remove('checked-subtask');
       }
       
-      // Si le livrable était complété, ouvrir l'accordéon après avoir décoché
+      // Si le livrable était complété ou est en train d'être décoché, ouvrir l'accordéon correctement
       const savedSubtasks = this.savedProgress[taskIndex] || [];
       const subtaskCount = tasks[taskIndex].subtasks.length;
-      if (savedSubtasks.length + 1 === subtaskCount) {
-        // La tâche vient de passer de complétée à non-complétée
+      
+      // Si l'élément était auparavant complet et qu'on vient de le décocher
+      // OU si c'est un décheckage normal
+      if (!checkbox.checked) {
+        // La tâche vient d'être décochée, on s'assure qu'elle est ouverte
         taskElement.classList.add('open');
+        
+        // Forcer un reflow pour s'assurer que le contenu est visible
+        const taskContent = taskElement.querySelector('.task-content');
+        if (taskContent) {
+          taskContent.style.display = 'block';
+        }
       }
     }
     

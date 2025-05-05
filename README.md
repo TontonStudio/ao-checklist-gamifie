@@ -1,9 +1,16 @@
-# AO Checklist - Tonton Studio (v2.6.2)
+# AO Checklist - Tonton Studio (v2.6.3)
 
 Outil de suivi gamifié de réponse aux marchés publics, inspiré par l'esthétique des jeux vidéo rétro de type Game Boy.
 
-![Version](https://img.shields.io/badge/version-2.6.2-green)
+![Version](https://img.shields.io/badge/version-2.6.3-green)
 ![License](https://img.shields.io/badge/license-MIT-blue)
+
+## Nouveautés de la version 2.6.3 (Avril 2025)
+
+- **Correction d'interface** : Résolution du problème d'affichage des sous-tâches lors de la décomplétation
+- **Navigation optimisée** : Meilleure gestion de l'état des accordéons après les changements d'état
+- **Comportement plus intuitif** : Les listes de sous-tâches restent visibles lors du décochage d'un élément complet
+- **Transition fluide** : Améliorations visuelles des changements d'état
 
 ## Nouveautés de la version 2.6.2 (Avril 2025)
 
